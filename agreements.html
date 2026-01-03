@@ -1,93 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RS Home Care – Service Agreements</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #f5f9ff;
-      color: #333;
-    }
-    header {
-      background: linear-gradient(135deg, #96ceff, #8cffbc);
-      color:#243879;
-      text-align: center;
-      padding: 50px 20px;
-    }
-    header img {
-      max-width: 120px;
-      margin-bottom: 10px;
-    }
-    section {
-      padding: 60px 10%;
-      text-align: center;
-    }
-    h2 {
-      color:#7cbaef;
-      margin-bottom: 20px;
-    }
-    .agreements {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 500px;
-      margin: auto;
-    }
-    .btn {
-      padding: 14px 25px;
-      border-radius: 30px;
-      background: #0f4c81;
-      color: #fff;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .btn:hover {
-      background: #2ecc71;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #fff;
-      font-size: 14px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RS Home Care – Service Agreements</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:#f5f9ff;
+  color:#333;
+}
+
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#96ceff,#8cffbc);
+  color:#243879;
+  text-align:center;
+  padding:55px 20px;
+}
+header img{
+  max-width:120px;
+  margin-bottom:10px;
+}
+header h1{font-size:2.5em}
+header p{font-size:1.1em}
+
+/* CONTENT */
+section{
+  padding:70px 20px;
+  display:flex;
+  justify-content:center;
+}
+.container{
+  max-width:600px;
+  width:100%;
+  text-align:center;
+}
+h2{color:#7cbaef;margin-bottom:15px}
+.container p{font-size:14px;margin-bottom:30px}
+
+/* AGREEMENTS */
+.agreements{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.agreement-card{
+  background:#fff;
+  padding:22px;
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+.agreement-card h3{
+  font-size:15px;
+  margin-bottom:14px;
+}
+
+.btn{
+  padding:14px 26px;
+  border-radius:30px;
+  background:#0f4c81;
+  color:#fff;
+  border:none;
+  font-weight:600;
+  font-size:14px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.btn:hover{
+  background:#2ecc71;
+  transform:translateY(-2px);
+}
+
+.btn.back{
+  background:#fff;
+  color:#0f4c81;
+  border:2px solid #0f4c81;
+}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+.modal{
+  background:#fff;
+  width:90%;
+  max-width:900px;
+  border-radius:16px;
+  overflow:hidden;
+}
+.modal-header{
+  background:#0f4c81;
+  color:#fff;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.modal-header span#modalTitle{
+  font-size:18px;
+  flex:1;
+}
+.modal-header .close{
+  font-size:22px;
+  cursor:pointer;
+}
+.modal-header #downloadBtn{
+  padding:6px 12px;
+  font-size:13px;
+  border-radius:8px;
+  background:#2ecc71;
+  text-decoration:none;
+  color:#fff;
+  font-weight:600;
+  transition:.3s;
+}
+.modal-header #downloadBtn:hover{
+  background:#0f4c81;
+}
+.modal-body iframe{
+  width:100%;
+  height:75vh;
+  border:none;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:20px;
+  background:#fff;
+  font-size:14px;
+  margin-top:40px;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  header h1{font-size:2.1em}
+}
+</style>
 </head>
+
 <body>
 
 <header>
-  <img src="logo.png" alt="RS Home Care Logo" style="filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));">
+  <img src="logo.png" alt="RS Home Care Logo">
   <h1>RS Home Care</h1>
   <p>Trusted Care • Comfort • Compassion</p>
 </header>
 
-
 <section>
-  <h2>Download Agreements</h2>
-  <p>Please download and review our official service agreements below.</p>
+  <div class="container">
+    <h2>Service Agreements</h2>
+    <p>Please click “View Agreement” to read our official documents or download them for your reference.</p>
 
-  <div class="agreements">
-    <a class="btn" href="Government Contract form final.pdf" target="_blank">
-      Government Contract Agreement (PDF)
-    </a>
-    <a class="btn" href="RS Home Care English.pdf" target="_blank">
-      RS Home Care Agreement – English (PDF)
-    </a>
-    <a class="btn" href="RS Home Care Tamil.pdf" target="_blank">
-      RS Home Care Agreement – Tamil (PDF)
-    </a>
-    <a class="btn" href="home.html">
-      ← Back to Home
-    </a>
+    <div class="agreements">
+
+      <div class="agreement-card">
+        <h3>Government Contract Agreement</h3>
+        <button class="btn"
+          onclick="openPDF('Government Contract form final.pdf','Government Contract Agreement')">
+          View Agreement
+        </button>
+      </div>
+
+      <div class="agreement-card">
+        <h3>RS Home Care Agreement – English</h3>
+        <button class="btn"
+          onclick="openPDF('RS Home Care English.pdf','RS Home Care Agreement – English')">
+          View Agreement
+        </button>
+      </div>
+
+      <div class="agreement-card">
+        <h3>RS Home Care Agreement – Tamil</h3>
+        <button class="btn"
+          onclick="openPDF('RS Home Care Tamil.pdf','RS Home Care Agreement – Tamil')">
+          View Agreement
+        </button>
+      </div>
+
+      <a class="btn back" href="index.html">← Back to Home</a>
+    </div>
   </div>
 </section>
 
 <footer>
   © 2025 RS Home Care. All Rights Reserved.
 </footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="pdfModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modalTitle"></span>
+      <a id="downloadBtn" download target="_blank">Download</a>
+      <span class="close" onclick="closePDF()">×</span>
+    </div>
+    <div class="modal-body">
+      <iframe id="pdfFrame"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+function openPDF(file,title){
+  document.getElementById("pdfFrame").src=file;
+  document.getElementById("modalTitle").innerText=title;
+  document.getElementById("pdfModal").style.display="flex";
+  document.body.style.overflow="hidden";
+
+  // Set download link
+  var downloadBtn = document.getElementById("downloadBtn");
+  downloadBtn.href = file;
+  downloadBtn.download = file.split('/').pop();
+}
+
+function closePDF(){
+  document.getElementById("pdfModal").style.display="none";
+  document.getElementById("pdfFrame").src="";
+  document.body.style.overflow="auto";
+}
+</script>
 
 </body>
 </html>
