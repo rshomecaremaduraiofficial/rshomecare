@@ -16,6 +16,17 @@ button:hover{background:#2ecc71}
 .checkbox{margin-top:15px;font-size:14px}
 .checkbox input{margin-right:6px}
 
+textarea{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #ccc;
+  font-family:Poppins;
+  font-size:14px;
+  resize:none;
+  margin-top:15px;
+}
+
 /* MODAL */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center}
 .modal-box{background:#fff;width:90%;max-width:900px;border-radius:14px;overflow:hidden}
@@ -32,8 +43,8 @@ iframe{width:100%;height:75vh;border:none}
 <h2>Service Agreements</h2>
 
 <div class="card">
-<h3>Government Contract form</h3>
-<button onclick="requestPassword('Government Contract form final.pdf','Government Contract form')">View Agreement</button>
+<h3>Government Contract Form</h3>
+<button onclick="requestPassword('Government Contract form final.pdf','Government Contract Form')">View Agreement</button>
 </div>
 
 <div class="card">
@@ -46,13 +57,27 @@ iframe{width:100%;height:75vh;border:none}
 <button onclick="requestPassword('RS Home Care Tamil.pdf','Tamil Agreement')">View Agreement</button>
 </div>
 
-<div class="checkbox">
-<input type="checkbox" id="agreeChk">
-<label>I have read and agree to the Service Agreement</label>
-</div>
+<!-- FORM -->
+<form action="https://formsubmit.co/rshomecaremaduraiofficial@gmail.com" method="POST" onsubmit="return submitEnquiry()">
 
-<br>
-<button onclick="submitEnquiry()">Send Enquiry</button>
+  <!-- Message Box -->
+  <textarea name="message" rows="4" placeholder="Write your message here..." required></textarea>
+
+  <!-- Agreement Checkbox -->
+  <div class="checkbox">
+    <input type="checkbox" id="agreeChk">
+    <label for="agreeChk">I have read and agree to the Service Agreement</label>
+  </div>
+
+  <!-- Hidden Fields -->
+  <input type="hidden" name="_subject" value="New Agreement Enquiry - RS Home Care">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="Agreement Accepted" value="Yes">
+
+  <br>
+  <button type="submit">Send Enquiry</button>
+
+</form>
 </div>
 
 <!-- MODAL -->
@@ -91,10 +116,8 @@ function openPDF(file,title){
   document.getElementById("pdfModal").style.display="flex";
 }
 
-/* FORCE DOWNLOAD + TRACK */
+/* DOWNLOAD */
 function downloadPDF(){
-  trackDownload(agreementName);
-
   const a = document.createElement("a");
   a.href = currentPDF;
   a.download = currentPDF.split("/").pop();
@@ -103,21 +126,13 @@ function downloadPDF(){
   document.body.removeChild(a);
 }
 
-/* TRACK DOWNLOAD */
-function trackDownload(name){
-  const logs = JSON.parse(localStorage.getItem("downloads") || "[]");
-  logs.push({agreement:name,time:new Date().toLocaleString()});
-  localStorage.setItem("downloads",JSON.stringify(logs));
-}
-
-/* ACCEPT AGREEMENT */
+/* SUBMIT VALIDATION */
 function submitEnquiry(){
   if(!document.getElementById("agreeChk").checked){
-    alert("You must accept the agreement before proceeding.");
-    return;
+    alert("You must accept the agreement before submitting.");
+    return false;
   }
-  localStorage.setItem("agreementAccepted","yes");
-  alert("Agreement accepted. Enquiry submitted.");
+  return true; // allow form submit
 }
 
 /* CLOSE */
