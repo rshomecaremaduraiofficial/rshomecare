@@ -2,31 +2,70 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>RS Home Care – Agreements</title>
+<title>RS Home Care – Digital Agreement</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 body{font-family:Poppins;background:#f5f9ff;margin:0}
-.container{max-width:600px;margin:80px auto;text-align:center}
+.container{max-width:650px;margin:60px auto;text-align:center}
 .card{background:#fff;padding:25px;border-radius:18px;margin-bottom:20px;box-shadow:0 10px 25px rgba(0,0,0,.1)}
-button{padding:12px 25px;border:none;border-radius:30px;background:#0f4c81;color:#fff;font-weight:600;cursor:pointer}
-button:hover{background:#2ecc71}
-.checkbox{margin-top:15px;font-size:14px}
-.checkbox input{margin-right:6px}
 
-textarea{
+input,textarea{
   width:100%;
   padding:12px;
   border-radius:12px;
   border:1px solid #ccc;
-  font-family:Poppins;
   font-size:14px;
-  resize:none;
-  margin-top:15px;
+  margin-top:12px;
 }
 
+button{
+  padding:12px 26px;
+  border:none;
+  border-radius:30px;
+  background:#0f4c81;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+}
+button:hover{background:#2ecc71}
+
+.checkbox{
+  margin-top:15px;
+  font-size:14px;
+  display:flex;
+  justify-content:center;
+  gap:8px;
+}
+
+.error{
+  color:red;
+  font-size:13px;
+  display:none;
+  margin-top:8px;
+}
+
+/* SIGNATURE */
+.signature-box{
+  margin-top:15px;
+  border:2px dashed #0f4c81;
+  border-radius:12px;
+  padding:10px;
+}
+canvas{
+  width:100%;
+  height:160px;
+  border-radius:10px;
+  background:#fff;
+  touch-action:none;
+}
+.clear-btn{
+  margin-top:8px;
+  background:#e74c3c;
+}
+.clear-btn:hover{background:#c0392b}
 /* MODAL */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center}
 .modal-box{background:#fff;width:90%;max-width:900px;border-radius:14px;overflow:hidden}
@@ -57,30 +96,41 @@ iframe{width:100%;height:75vh;border:none}
 <button onclick="requestPassword('RS Home Care Tamil.pdf','Tamil Agreement')">View Agreement</button>
 </div>
 
-<!-- FORM -->
-<form action="https://formsubmit.co/rshomecaremaduraiofficial@gmail.com" method="POST" onsubmit="return submitEnquiry()">
+<div class="container">
+<h2>Service Agreement – Digital Signature</h2>
 
-  <!-- Message Box -->
-  <textarea name="message" rows="4" placeholder="Write your message here..." required></textarea>
+<div class="card">
 
-  <!-- Agreement Checkbox -->
-  <div class="checkbox">
-    <input type="checkbox" id="agreeChk">
-    <label for="agreeChk">I have read and agree to the Service Agreement</label>
-  </div>
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="tel" id="phone" placeholder="Phone Number" required>
 
-  <!-- Hidden Fields -->
-  <input type="hidden" name="_subject" value="New Agreement Enquiry - RS Home Care">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="Agreement Accepted" value="Yes">
+<textarea id="message" rows="4" placeholder="Message" required></textarea>
 
-  <br>
-  <button type="submit">Send Enquiry</button>
+<input type="file" id="doc"
+ accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
 
-</form>
+<!-- SIGNATURE -->
+<div class="signature-box">
+  <p style="font-size:14px;margin-bottom:8px;">Draw Your Digital Signature</p>
+  <canvas id="signature"></canvas>
+  <button type="button" class="clear-btn" onclick="clearSignature()">Clear Signature</button>
 </div>
 
-<!-- MODAL -->
+<div class="checkbox">
+  <input type="checkbox" id="agree">
+  <label>I agree to the Service Agreement</label>
+</div>
+
+<div class="error" id="errorMsg">
+  Please fill the agreement box and sign before submitting
+</div>
+
+<br>
+<button onclick="submitForm()">Submit Agreement</button>
+
+</div>
+</div>
+<!-- PDF MODAL -->
 <div class="modal" id="pdfModal">
 <div class="modal-box">
 <div class="modal-header">
@@ -90,12 +140,10 @@ iframe{width:100%;height:75vh;border:none}
 </div>
 <iframe id="viewer"></iframe>
 </div>
-</div>
 
 <script>
-const AGREEMENT_PASSWORD = "RShomecare";
+  const AGREEMENT_PASSWORD = "RShomecare";
 let currentPDF = "";
-let agreementName = "";
 
 /* PASSWORD GATE */
 function requestPassword(file,title){
@@ -104,16 +152,10 @@ function requestPassword(file,title){
     alert("Incorrect password");
     return;
   }
-  openPDF(file,title);
-}
-
-/* OPEN PDF */
-function openPDF(file,title){
-  currentPDF = file;
-  agreementName = title;
   document.getElementById("viewer").src = file;
   document.getElementById("title").innerText = title;
   document.getElementById("pdfModal").style.display="flex";
+  currentPDF = file;
 }
 
 /* DOWNLOAD */
@@ -126,19 +168,113 @@ function downloadPDF(){
   document.body.removeChild(a);
 }
 
-/* SUBMIT VALIDATION */
-function submitEnquiry(){
-  if(!document.getElementById("agreeChk").checked){
-    alert("You must accept the agreement before submitting.");
+/* FORM VALIDATION */
+function validateForm(){
+  const agree = document.getElementById("agreeChk");
+  const error = document.getElementById("agreeError");
+
+  if(!agree.checked){
+    error.style.display = "block";
     return false;
   }
-  return true; // allow form submit
+
+  error.style.display = "none";
+  alert("Agreement submitted successfully!");
+  return true;
 }
 
-/* CLOSE */
+/* CLOSE MODAL */
 function closeModal(){
   document.getElementById("pdfModal").style.display="none";
   document.getElementById("viewer").src="";
+}
+
+const canvas = document.getElementById("signature");
+const ctx = canvas.getContext("2d");
+let drawing = false;
+
+function resizeCanvas(){
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+canvas.addEventListener("mousedown", start);
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseup", stop);
+canvas.addEventListener("mouseleave", stop);
+
+canvas.addEventListener("touchstart", start);
+canvas.addEventListener("touchmove", draw);
+canvas.addEventListener("touchend", stop);
+
+function start(e){
+  drawing = true;
+  ctx.beginPath();
+}
+
+function draw(e){
+  if(!drawing) return;
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+  const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+  ctx.lineWidth = 2;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = "#000";
+  ctx.lineTo(x,y);
+  ctx.stroke();
+}
+
+function stop(){
+  drawing = false;
+}
+
+function clearSignature(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function isSignatureEmpty(){
+  const blank = document.createElement("canvas");
+  blank.width = canvas.width;
+  blank.height = canvas.height;
+  return canvas.toDataURL() === blank.toDataURL();
+}
+
+/* SUBMIT */
+function submitForm(){
+  const agree = document.getElementById("agree");
+  const error = document.getElementById("errorMsg");
+
+  if(!agree.checked || isSignatureEmpty()){
+    error.style.display="block";
+    return;
+  }
+
+  error.style.display="none";
+
+  canvas.toBlob(blob=>{
+    const formData = new FormData();
+    formData.append("Name", document.getElementById("name").value);
+    formData.append("Phone", document.getElementById("phone").value);
+    formData.append("Message", document.getElementById("message").value);
+    formData.append("Digital Signature", blob, "signature.png");
+
+    const doc = document.getElementById("doc").files[0];
+    if(doc) formData.append("Agreement Document", doc);
+
+    formData.append("_subject","New Digital Agreement – RS Home Care");
+    formData.append("_captcha","false");
+
+    fetch("https://formsubmit.co/rshomecaremaduraiofficial@gmail.com",{
+      method:"POST",
+      body:formData
+    }).then(()=>{
+      alert("Agreement submitted successfully!");
+      location.reload();
+    });
+  });
 }
 </script>
 
