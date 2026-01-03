@@ -9,6 +9,8 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+
+/* BODY */
 body{
   font-family:'Poppins',sans-serif;
   color:#333;
@@ -70,10 +72,14 @@ h2{
 
 /* AGREEMENT SECTION */
 .agreement-section{
-  text-align:center;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+  margin:30px 0;
 }
 
-/* CARD */
+/* AGREEMENT CARD */
 .card{
   background:#fff;
   padding:25px;
@@ -82,6 +88,17 @@ h2{
   box-shadow:0 15px 35px rgba(0,0,0,.08);
   animation:fadeUp .6s ease;
   max-width:420px;
+  width:100%;
+  text-align:center;
+}
+
+.agreement-section .card{
+  max-width:320px;
+}
+
+.card h3{
+  margin-bottom:15px;
+  color:#0f4c81;
 }
 
 @keyframes fadeUp{
@@ -134,14 +151,20 @@ button:hover{
   font-size:14px;
 }
 
-/* CHECKBOX */
+/* CHECKBOX (INLINE FIX) */
 .checkbox{
   margin-top:18px;
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
   gap:8px;
   font-size:14px;
+}
+.checkbox input{
+  width:16px;
+  height:16px;
+  margin:0;
+  cursor:pointer;
 }
 
 /* ERROR */
@@ -171,6 +194,62 @@ canvas{
   margin-top:10px;
   background:#e74c3c;
 }
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+.modal-box{
+  background:#fff;
+  width:95%;
+  max-width:900px;
+  border-radius:16px;
+  overflow:hidden;
+}
+.modal-header{
+  background:#0f4c81;
+  color:#fff;
+  padding:12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.modal-header span{
+  flex:1;
+  font-weight:600;
+}
+.modal-header button{
+  padding:6px 14px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  background:#2ecc71;
+  color:#fff;
+}
+.modal-header .close{
+  background:#e74c3c;
+}
+iframe{
+  width:100%;
+  height:75vh;
+  border:none;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  header h1{font-size:2.2em}
+  .agreement-section{
+    flex-direction:column;
+    align-items:center;
+  }
+}
+
 </style>
 </head>
 
@@ -188,26 +267,35 @@ canvas{
 
 <div class="agreement-section">
 
-<div class="card">
-<h3>Government Contract Form</h3>
-<a href="Government Contract form final.pdf" download>
-<button onclick="requestPassword('Government Contract form final.pdf','Government Contract Form')">View Agreement</button>
-</a>
-</div>
+  <div class="card">
+    <h3>Government Contract Form</h3>
+    <button onclick="requestPassword(
+      'Government Contract form final.pdf',
+      'Government Contract Form'
+    )">
+      View Agreement
+    </button>
+  </div>
 
-<div class="card">
-  <h3>RS Home Care English</h3>
-<a href="RS Home Care English.pdf" download>
-<button onclick="requestPassword('RS Home Care English.pdf','RS Home Care English')">View Agreement</button>
-</a>
-</div>
+  <div class="card">
+    <h3>RS Home Care English</h3>
+    <button onclick="requestPassword(
+      'RS Home Care English.pdf',
+      'RS Home Care English'
+    )">
+      View Agreement
+    </button>
+  </div>
 
-<div class="card">
- <h3>RS Home Care Tamil</h3>
-<a href="RS Home Care Tamil.pdf" download>
-<button onclick="requestPassword('RS Home Care Tamil.pdf','RS Home Care Tamil')">View Agreement</button>
-</a>
-</div>
+  <div class="card">
+    <h3>RS Home Care Tamil</h3>
+    <button onclick="requestPassword(
+      'RS Home Care Tamil.pdf',
+      'RS Home Care Tamil'
+    )">
+      View Agreement
+    </button>
+  </div>
 
 </div>
 
@@ -220,7 +308,7 @@ canvas{
 <textarea id="message" rows="4" placeholder="Message"></textarea>
 
 <div class="file-wrap">
-  <div class="file-ui">📎 Upload Signed Agreement</div>
+  <div class="file-ui">📎 Upload Image or PDF Agreement</div>
   <input type="file" id="doc">
 </div>
 
@@ -231,8 +319,8 @@ canvas{
 </div>
 
 <div class="checkbox">
-<input type="checkbox" id="agree">
-<label>I agree to the Service Agreement</label>
+  <input type="checkbox" id="agree">
+  <label for="agree">I agree to the Service Agreement</label>
 </div>
 
 <div class="error" id="errorMsg">
@@ -244,22 +332,37 @@ Please agree and sign before submitting
 
 </div>
 </div>
+<div class="modal" id="pdfModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span id="pdfTitle"></span>
+      <button onclick="downloadPDF()">Download</button>
+      <button class="close" onclick="closePDF()">✕</button>
+    </div>
+    <iframe id="pdfViewer"></iframe>
+  </div>
+</div>
 
 <script>
-    const AGREEMENT_PASSWORD = "RShomecare";
+const AGREEMENT_PASSWORD = "RShomecare";
 let currentPDF = "";
 
-/* PASSWORD GATE */
-function requestPassword(file,title){
+/* ASK PASSWORD */
+function requestPassword(file, title){
   const pwd = prompt("Enter agreement password:");
   if(pwd !== AGREEMENT_PASSWORD){
     alert("Incorrect password");
     return;
   }
-  document.getElementById("viewer").src = file;
-  document.getElementById("title").innerText = title;
-  document.getElementById("pdfModal").style.display="flex";
+  openPDF(file, title);
+}
+
+/* OPEN PDF */
+function openPDF(file, title){
   currentPDF = file;
+  document.getElementById("pdfViewer").src = file;
+  document.getElementById("pdfTitle").innerText = title;
+  document.getElementById("pdfModal").style.display = "flex";
 }
 
 /* DOWNLOAD */
@@ -272,26 +375,12 @@ function downloadPDF(){
   document.body.removeChild(a);
 }
 
-/* FORM VALIDATION */
-function validateForm(){
-  const agree = document.getElementById("agreeChk");
-  const error = document.getElementById("agreeError");
-
-  if(!agree.checked){
-    error.style.display = "block";
-    return false;
-  }
-
-  error.style.display = "none";
-  alert("Agreement submitted successfully!");
-  return true;
+/* CLOSE */
+function closePDF(){
+  document.getElementById("pdfModal").style.display = "none";
+  document.getElementById("pdfViewer").src = "";
 }
 
-/* CLOSE MODAL */
-function closeModal(){
-  document.getElementById("pdfModal").style.display="none";
-  document.getElementById("viewer").src="";
-}
 /* SIGNATURE */
 const canvas=document.getElementById("signature");
 const ctx=canvas.getContext("2d");
