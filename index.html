@@ -293,23 +293,44 @@ h2{text-align:center;color:#4b8fca;margin-bottom:30px}
 
 <div class="contact-form">
   <form action="https://formsubmit.co/rshomecaremaduraiofficial@gmail.com" method="POST">
+
+    <!-- REQUIRED FOR EMAIL DELIVERY -->
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_subject" value="New Enquiry – RS Home Care Website">
+    <input type="hidden" name="_template" value="table">
+
     <div class="form-group">
-      <input type="text" name="name" required placeholder=" ">
+      <input type="text" name="Client Name" required placeholder=" ">
       <label>Your Name</label>
     </div>
+
     <div class="form-group">
-      <input type="email" name="email" required placeholder=" ">
+      <input type="email" name="Client Email" required placeholder=" ">
       <label>Your Email</label>
     </div>
+
     <div class="form-group">
-      <textarea name="message" required placeholder=" "></textarea>
+      <textarea name="Client Message" required placeholder=" "></textarea>
       <label>How can we help you?</label>
     </div>
+
+    <!-- IMPORTANT: Reply To Client -->
+    <input type="hidden" name="_autoresponse" value="Dear Client,
+
+    Thank you for contacting RS Home Care.
+
+    We have received your enquiry and our team will contact you shortly.
+
+    Warm regards,
+    RS Home Care
+     Madurai">
+
     <!-- Submit + View Agreement Buttons -->
     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
       <button type="submit">Send Enquiry</button>
       <a href="agreements.html" target="_blank" class="view-agreement">View Agreement</a>
     </div>
+
   </form>
 </div>
   </div>
