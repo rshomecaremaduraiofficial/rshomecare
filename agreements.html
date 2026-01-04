@@ -136,6 +136,7 @@ button:hover{
 .file-wrap{
   margin-top:14px;
   position:relative;
+  cursor:pointer;
 }
 .file-wrap input{
   opacity:0;
@@ -149,6 +150,7 @@ button:hover{
   text-align:center;
   color:#0f4c81;
   font-size:14px;
+  pointer-events:none; /* IMPORTANT */
 }
 
 /* CHECKBOX (INLINE FIX) */
@@ -303,14 +305,26 @@ iframe{
 
 <div class="card">
 
-<input id="name" placeholder="Full Name">
-<input id="phone" placeholder="Phone Number">
-<textarea id="message" rows="4" placeholder="Message"></textarea>
+<input id="name" name="name" placeholder="Full Name" required>
+
+<input id="phone" name="phone" placeholder="Phone Number" required>
+
+<textarea id="message" name="message" rows="4" placeholder="Message"></textarea>
 
 <div class="file-wrap">
-  <div class="file-ui">📎 Upload Image or PDF Agreement</div>
-  <input type="file" id="doc" accept=".pdf,.jpg,.jpeg,.png" required>
+  <div class="file-ui" id="fileLabel">
+    📎 Upload Image or PDF Agreement
+  </div>
+  <input 
+    type="file" 
+    id="doc"
+    accept=".pdf,.jpg,.jpeg,.png"
+    required
+    onchange="showFileName(this)">
 </div>
+
+<div id="filePreview"
+     style="margin-top:10px;font-size:14px;color:#0f4c81;"></div>
 
 <div class="signature-box">
 <p style="font-size:14px">Digital Signature</p>
@@ -406,10 +420,42 @@ canvas.onmousemove=canvas.ontouchmove=e=>{
 function clearSignature(){ctx.clearRect(0,0,canvas.width,canvas.height);}
 function emptySign(){
   const b=document.createElement("canvas");
+  document.getElementById("signature").value = canvas.toDataURL();
   b.width=canvas.width;b.height=canvas.height;
   return canvas.toDataURL()===b.toDataURL();
 }
+function showFileName(input){
+  const preview = document.getElementById("filePreview");
+  const label = document.getElementById("fileLabel");
 
+  if(!input.files || !input.files[0]){
+    preview.innerHTML = "";
+    label.innerText = "📎 Upload Image or PDF Agreement";
+    return;
+  }
+
+  const file = input.files[0];
+  label.innerText = "✔ File Selected";
+
+  // IMAGE PREVIEW
+  if(file.type.startsWith("image/")){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      preview.innerHTML = `
+        <strong>Selected Image:</strong> ${file.name}<br><br>
+        <img src="${e.target.result}"
+             style="max-width:100%;border-radius:12px;
+             box-shadow:0 8px 20px rgba(0,0,0,.15)">
+      `;
+    };
+    reader.readAsDataURL(file);
+  }
+  else{
+    preview.innerHTML = `
+      <strong>Selected File:</strong> ${file.name}
+    `;
+  }
+}
 /* SUBMIT */
 function submitForm(){
   if(!agree.checked || !doc.files.length){
@@ -423,9 +469,9 @@ function submitForm(){
   canvas.toBlob(function(blob){
     const fd = new FormData();
 
-    fd.append("Name", name.value);
-    fd.append("Phone", phone.value);
-    fd.append("Message", message.value);
+   fd.append("name", document.getElementById("name").value);
+   fd.append("phone", document.getElementById("phone").value);
+   fd.append("message", document.getElementById("message").value);
 
     // REAL IMAGE FILE
     fd.append("Signature", blob, "signature.png");
