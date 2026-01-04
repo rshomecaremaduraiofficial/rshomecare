@@ -309,7 +309,7 @@ iframe{
 
 <div class="file-wrap">
   <div class="file-ui">📎 Upload Image or PDF Agreement</div>
-  <input type="file" id="doc">
+  <input type="file" id="doc" accept=".pdf,.jpg,.jpeg,.png" required>
 </div>
 
 <div class="signature-box">
@@ -412,26 +412,39 @@ function emptySign(){
 
 /* SUBMIT */
 function submitForm(){
-  if(!agree.checked || emptySign()){
-    errorMsg.style.display="block";return;
+  if(!agree.checked || !doc.files.length){
+    errorMsg.style.display="block";
+    errorMsg.innerText="Please agree and upload signed document";
+    return;
   }
+
   errorMsg.style.display="none";
 
-  const fd=new FormData();
-  fd.append("Name",name.value);
-  fd.append("Phone",phone.value);
-  fd.append("Message",message.value);
+  canvas.toBlob(function(blob){
+    const fd = new FormData();
 
-  if(doc.files[0]) fd.append("Uploaded File Name",doc.files[0].name);
+    fd.append("Name", name.value);
+    fd.append("Phone", phone.value);
+    fd.append("Message", message.value);
 
-  fd.append("_subject","New Digital Agreement – RS Home Care");
-  fd.append("_captcha","false");
+    // REAL IMAGE FILE
+    fd.append("Signature", blob, "signature.png");
 
-  fetch("https://formsubmit.co/rshomecaremaduraiofficial@gmail.com",{
-    method:"POST",body:fd
-  }).then(()=>{
-    alert("Agreement submitted successfully!");
-    location.reload();
+    // Optional uploaded agreement
+    if(doc.files[0]){
+      fd.append("Agreement File", doc.files[0]);
+    }
+
+    fd.append("_subject", "New Digital Agreement – RS Home Care");
+    fd.append("_captcha", "false");
+
+    fetch("https://formsubmit.co/rshomecaremaduraiofficial@gmail.com", {
+      method: "POST",
+      body: fd
+    }).then(() => {
+      alert("Agreement submitted successfully!");
+      location.reload();
+    });
   });
 }
 </script>
