@@ -358,6 +358,20 @@ Please agree and sign before submitting
 </div>
 
 <script>
+  (function(){
+  const PAGE_PASSWORD = "RShomecarepage";
+
+  if (sessionStorage.getItem("agreement_access") !== "true") {
+    const pwd = prompt("🔒This websit has been protected by RS Home Care Enter Agreement Access Password:");
+    if (pwd !== PAGE_PASSWORD) {
+      alert("Access Denied");
+      document.body.innerHTML = "";
+      window.location.href = "/";
+    } else {
+      sessionStorage.setItem("agreement_access","true");
+    }
+  }
+})();
 const AGREEMENT_PASSWORD = "RShomecare";
 let currentPDF = "";
 
