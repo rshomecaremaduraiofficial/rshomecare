@@ -333,8 +333,8 @@ iframe{
 </div>
 
 <div class="checkbox">
-  <input type="checkbox" id="agree">
-  <label for="agree">I agree to the Service Agreement</label>
+<input type="checkbox" id="agree">
+<label for="agree">I agree to the Service Agreement</label>
 </div>
 
 <div class="error" id="errorMsg">
@@ -347,14 +347,14 @@ Please agree and sign before submitting
 </div>
 </div>
 <div class="modal" id="pdfModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <span id="pdfTitle"></span>
-      <button onclick="downloadPDF()">Download</button>
-      <button class="close" onclick="closePDF()">✕</button>
-    </div>
-    <iframe id="pdfViewer"></iframe>
-  </div>
+<div class="modal-box">
+<div class="modal-header">
+<span id="pdfTitle"></span>
+<button onclick="downloadPDF()">Download</button>
+<button class="close" onclick="closePDF()">✕</button>
+</div>
+<iframe id="pdfViewer"></iframe>
+</div>
 </div>
 
 <script>
@@ -396,33 +396,82 @@ function closePDF(){
 }
 
 /* SIGNATURE */
-const canvas=document.getElementById("signature");
-const ctx=canvas.getContext("2d");
-let draw=false;
+const canvas = document.getElementById("signature");
+const ctx = canvas.getContext("2d");
 
-function resize(){
-  canvas.width=canvas.offsetWidth;
-  canvas.height=canvas.offsetHeight;
+let drawing = false;
+let lastX = 0;
+let lastY = 0;
+
+/* High DPI support */
+function resizeCanvas(){
+  const ratio = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * ratio;
+  canvas.height = rect.height * ratio;
+  ctx.scale(ratio, ratio);
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.strokeStyle = "#000";
 }
-resize();window.onresize=resize;
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
-canvas.onmousedown=canvas.ontouchstart=()=>{draw=true;ctx.beginPath();}
-canvas.onmouseup=canvas.onmouseleave=canvas.ontouchend=()=>draw=false;
-canvas.onmousemove=canvas.ontouchmove=e=>{
-  if(!draw)return;
+/* Get position */
+function getPos(e){
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches ? e.touches[0] : e;
+  return {
+    x: touch.clientX - rect.left,
+    y: touch.clientY - rect.top
+  };
+}
+
+/* Start drawing */
+function start(e){
+  drawing = true;
+  const pos = getPos(e);
+  lastX = pos.x;
+  lastY = pos.y;
+}
+
+/* Draw smoothly */
+function draw(e){
+  if(!drawing) return;
   e.preventDefault();
-  const r=canvas.getBoundingClientRect();
-  const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
-  const y=(e.touches?e.touches[0].clientY:e.clientY)-r.top;
-  ctx.lineWidth=2;ctx.lineCap="round";
-  ctx.lineTo(x,y);ctx.stroke();
-};
-function clearSignature(){ctx.clearRect(0,0,canvas.width,canvas.height);}
-function emptySign(){
-  const b=document.createElement("canvas");
-  document.getElementById("signature").value = canvas.toDataURL();
-  b.width=canvas.width;b.height=canvas.height;
-  return canvas.toDataURL()===b.toDataURL();
+  const pos = getPos(e);
+  ctx.beginPath();
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(pos.x, pos.y);
+  ctx.stroke();
+  lastX = pos.x;
+  lastY = pos.y;
+}
+
+/* Stop */
+function stop(){
+  drawing = false;
+}
+
+canvas.addEventListener("mousedown", start);
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseup", stop);
+canvas.addEventListener("mouseleave", stop);
+
+canvas.addEventListener("touchstart", start, {passive:false});
+canvas.addEventListener("touchmove", draw, {passive:false});
+canvas.addEventListener("touchend", stop);
+
+function clearSignature(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function isSignatureEmpty(){
+  const blank = document.createElement("canvas");
+  blank.width = canvas.width;
+  blank.height = canvas.height;
+  return canvas.toDataURL() === blank.toDataURL();
 }
 function showFileName(input){
   const preview = document.getElementById("filePreview");
