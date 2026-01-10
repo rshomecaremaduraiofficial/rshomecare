@@ -358,19 +358,156 @@ Please agree and sign before submitting
 </div>
 
 <script>
-  (function(){
+(() => {
   const PAGE_PASSWORD = "RShomecarepage";
+  const STORAGE_KEY = "agreement_access";
 
-  if (sessionStorage.getItem("agreement_access") !== "true") {
-    const pwd = prompt("🔒This websit has been protected by RS Home Care Enter Agreement Access Password:");
-    if (pwd !== PAGE_PASSWORD) {
-      alert("Access Denied");
-      document.body.innerHTML = "";
-      window.location.href = "/";
+  if (sessionStorage.getItem(STORAGE_KEY) === "true") return;
+
+  const overlay = document.createElement("div");
+  overlay.innerHTML = `
+    <style>
+      .rs-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        font-family: system-ui, sans-serif;
+      }
+      .rs-modal {
+        background: #fff;
+        padding: 24px;
+        border-radius: 14px;
+        width: 340px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      }
+      .rs-modal h2 {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 6px;
+      }
+      .rs-modal p {
+        text-align: center;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 16px;
+      }
+      .rs-field {
+        margin-bottom: 12px;
+      }
+      .rs-field input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+      }
+ .rs-show {
+   display: block;
+  justify-content: flex-end;   /* RIGHT SIDE */
+  margin-bottom: 12px;
+}
+.rs-show label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+      .rs-show input {
+        margin: 0;
+        cursor: pointer;
+      }
+      .rs-modal button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        display: block;
+        margin-top: 10px; 
+        border-radius: 8px;
+        background: #2563eb;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .rs-error {
+        color: #dc2626;
+        font-size: 13px;
+        text-align: center;
+        margin-top: 10px;
+        display: none;
+      }
+    </style>
+
+    <div class="rs-overlay">
+      <div class="rs-modal">
+        <h2>🔒 Agreement Access</h2>
+        <p>Enter your details to continue</p>
+        <p style="font-size:13px; color:#444; text-align:center; margin-bottom:16px;">
+        If you want the Access password, contact an RS Home Care team member.<br>
+      Phone No: <strong>+91 7550052799</strong><br>
+      Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
+       </p>
+
+        <div class="rs-field">
+          <input type="text" id="rs-name" placeholder="Full Name" />
+        </div>
+
+        <div class="rs-field">
+          <input type="tel" id="rs-phone" placeholder="Phone Number" />
+        </div>
+
+        <div class="rs-field">
+          <input type="password" id="rs-password" placeholder="Access Password" />
+        </div>
+
+        <!-- SAME LINE -->
+        <div class="rs-show">
+  <div class="rs-show">
+  <label>
+    <input type="checkbox" id="rs-toggle">
+    <span>Show password</span>
+  </label>
+</div>
+
+        <button id="rs-submit">Continue</button>
+        <div class="rs-error">Please enter valid details</div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  const passwordInput = overlay.querySelector("#rs-password");
+  const toggle = overlay.querySelector("#rs-toggle");
+  const button = overlay.querySelector("#rs-submit");
+  const error = overlay.querySelector(".rs-error");
+  const nameInput = overlay.querySelector("#rs-name");
+  const phoneInput = overlay.querySelector("#rs-phone");
+
+  toggle.addEventListener("change", () => {
+    passwordInput.type = toggle.checked ? "text" : "password";
+  });
+
+  const validate = () => {
+    if (
+      nameInput.value.trim() &&
+      phoneInput.value.trim() &&
+      passwordInput.value === PAGE_PASSWORD
+    ) {
+      sessionStorage.setItem(STORAGE_KEY, "true");
+      overlay.remove();
     } else {
-      sessionStorage.setItem("agreement_access","true");
+      error.style.display = "block";
     }
-  }
+  };
+
+  button.addEventListener("click", validate);
 })();
 const AGREEMENT_PASSWORD = "RShomecare";
 let currentPDF = "";
