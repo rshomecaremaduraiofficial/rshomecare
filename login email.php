@@ -36,7 +36,7 @@ $time
 ";
 
 /* -------- HEADERS -------- */
-$headers  = "From: RS Home Care <no-reply@yourdomain.com>\r\n";
+$headers  = "From: RS Home Care <rshomecaremaduraiofficial@gmail.com>\r\n";
 $headers .= "Reply-To: rshomecaremaduraiofficial@gmail.com\r\n";
 
 /* -------- SEND EMAIL -------- */
