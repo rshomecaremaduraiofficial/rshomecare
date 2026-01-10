@@ -225,6 +225,13 @@ h2{text-align:center;color:#4b8fca;margin-bottom:30px}
     margin-bottom:10px;
   }
 }
+.rs-footer {
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 13px;
+  color: #555;
+  background: #f8f9fa;
+}
 </style>
 </head>
 
@@ -249,9 +256,17 @@ h2{text-align:center;color:#4b8fca;margin-bottom:30px}
   <h2>About Us</h2>
   <div class="about">
     <p>
-      RS Home Care is committed to providing compassionate and professional care tailored to the unique needs of each client. 
-      With our main branch located in Theni and a second branch in Madurai, we ensure our services are easily accessible.
-      Our management, led by Subasini, brings years of experience and a personal touch to every aspect of care.
+  RS Home Care is dedicated to delivering compassionate, professional, and personalized care that addresses the unique needs of every client.
+  We understand that each individual requires a different level of attention, support, and care, which is why our services are carefully tailored to ensure comfort,
+  dignity, and well-being. Our main branch in Theni and our second branch in Madurai allow us to provide accessible,
+  community-focused care to families across the region.
+    </p>
+    <p>
+     Under the guidance of our experienced management team, led by Subasini, we combine years of expertise with a deeply personal approach, 
+     ensuring that every client feels valued, respected, and supported. From routine daily assistance to specialized healthcare support, 
+     RS Home Care prioritizes safety, reliability, and the highest standards of professional care. Our team is trained to handle a wide range of needs, 
+     including elderly care, post-hospital recovery, and chronic condition support, 
+     making us a trusted partner for families seeking peace of mind and exceptional home care services. 
     </p>
   </div>
 </section>
@@ -323,7 +338,7 @@ h2{text-align:center;color:#4b8fca;margin-bottom:30px}
 
     Warm regards,
     RS Home Care
-     Madurai">
+    Madurai">
 
     <!-- Submit + View Agreement Buttons -->
     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
@@ -335,9 +350,15 @@ h2{text-align:center;color:#4b8fca;margin-bottom:30px}
 </div>
   </div>
 </section>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
 
 <a href="https://wa.me/917550052799" class="fab whatsapp">💬</a>
 <a href="tel:+917550052799" class="fab call">📞</a>
 
+<footer class="rs-footer">
+   © 2026 RS Home Care. All Rights Reserved. | Designed & Developed by RS Home Care
+</footer>
 </body>
 </html>
