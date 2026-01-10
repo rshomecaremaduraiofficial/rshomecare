@@ -121,7 +121,7 @@ button{
   padding:14px 28px;
   border:none;
   border-radius:30px;
-  background:linear-gradient(135deg,#0f4c81,#2ecc71);
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
   color:#fff;
   font-weight:600;
   cursor:pointer;
@@ -182,6 +182,8 @@ button:hover{
 .signature-box{
   margin-top:20px;
   border:2px dashed #2ecc71;
+  background: url('logo-light.png') no-repeat center;
+  background-size: 120px;
   border-radius:14px;
   padding:12px;
 }
@@ -333,7 +335,7 @@ iframe{
   <img src="logo.png">
   <h1>RS Home Care</h1>
   <p>Trusted Care • Comfort • Compassion</p>
-  <h2>Agreements</h2>
+  <h2> Agreements</h2>
 </header>
 
 <div class="container">
@@ -403,6 +405,9 @@ iframe{
 <p style="font-size:14px">Digital Signature</p>
 <canvas id="signature"></canvas>
 <button class="clear-btn" onclick="clearSignature()">Clear Signature</button>
+<p style="font-size:12px;color:#555;margin-top:8px">
+By signing above, I confirm that this digital signature is legally binding.
+</p>
 </div>
 
 <div class="checkbox">
@@ -432,7 +437,7 @@ Please agree and sign before submitting
 <div id="passwordOverlay" class="password-overlay">
   <div class="password-modal">
     <h3>Enter Agreement Password</h3>
-    If you want the password, please contact an RS Home Care team member.<br>
+    <p>If you want the password, please contact an RS Home Care team member.<br>
       Phone No: <strong>+91 7550052799</strong><br>
       Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
        </p>
@@ -463,7 +468,7 @@ Please agree and sign before submitting
         font-family: system-ui, sans-serif;
       }
       .rs-modal {
-        background: #fff;
+        background:#fff;
         padding: 24px;
         border-radius: 14px;
         width: 340px;
@@ -477,7 +482,6 @@ Please agree and sign before submitting
       .rs-modal p {
         text-align: center;
         font-size: 14px;
-        color: #555;
         margin-bottom: 16px;
       }
       .rs-field {
@@ -490,18 +494,17 @@ Please agree and sign before submitting
         border: 1px solid #ccc;
         font-size: 14px;
       }
- .rs-show {
-   margin-top:18px;
+.rs-show {
+  margin-top:18px;
   display:flex;
   align-items:center;
-  justify-content:flex-start;
   gap:8px;
-  font-size:14px;
 }
 }
 .rs-show label {
   display: inline-flex;
   align-items: center;
+  color:#fff;
   gap: 6px;
   font-size: 13px;
   cursor: pointer;
@@ -550,8 +553,8 @@ Please agree and sign before submitting
         <div class="rs-field">
           <input type="tel" id="rs-phone" placeholder="Phone Number" />
         </div>
-
-        <div class="rs-field">
+        
+<div class="rs-field">
           <input type="password" id="rs-password" placeholder="Access Password" />
         </div>
 
@@ -577,31 +580,18 @@ Please agree and sign before submitting
  toggle.addEventListener("change", () => {
   passwordInput.type = toggle.checked ? "text" : "password";
 });
-  const validate = async () => {
-  const isValid =
-    nameInput.value.trim() &&
-    phoneInput.value.trim() &&
-    passwordInput.value === PAGE_PASSWORD;
-
-  const formData = new FormData();
-  formData.append("name", nameInput.value.trim());
-  formData.append("phone", phoneInput.value.trim());
-  formData.append("success", isValid ? "YES" : "NO");
-  formData.append("page", window.location.href);
-
-  // Send details to email (always)
-  await fetch("login email.php", {
-    method: "POST",
-    body: formData
-  });
-
-  if (isValid) {
-    sessionStorage.setItem(STORAGE_KEY, "true");
-    overlay.remove();
-  } else {
-    error.style.display = "block";
-  }
-};
+  const validate = () => {
+    if (
+      nameInput.value.trim() &&
+      phoneInput.value.trim() &&
+      passwordInput.value === PAGE_PASSWORD
+    ) {
+      sessionStorage.setItem(STORAGE_KEY, "true");
+      overlay.remove();
+    } else {
+      error.style.display = "block";
+    }
+  };
 
   button.addEventListener("click", validate);
 })();
@@ -628,7 +618,7 @@ document.getElementById("passwordSubmit").addEventListener("click", submitPasswo
 document.getElementById("passwordInput").addEventListener("keydown", e => {
   if (e.key === "Enter") submitPassword();
 });
-
+let attempts = 0;
 function submitPassword() {
   const input = document.getElementById("passwordInput");
   const error = document.getElementById("passwordError");
@@ -636,10 +626,16 @@ function submitPassword() {
 
   if (input.value !== AGREEMENT_PASSWORD) {
     error.style.display = "block";
+
+    if (attempts >= 3) {
+      alert("Too many attempts. Please contact RS Home Care.");
+      overlay.classList.remove("active"); // optionally hide the overlay
+    }
     return;
   }
 
   overlay.classList.remove("active");
+  attempts = 0; // reset attempts
   openPDF(currentFile, currentTitle);
 }
 
@@ -804,6 +800,7 @@ function submitForm(){
     // Optional uploaded agreement
     if(doc.files[0]){
       fd.append("Agreement File", doc.files[0]);
+      fd.append("signed_date", new Date().toLocaleString());
     }
 
     fd.append("_subject", "New Digital Agreement – RS Home Care");
@@ -813,14 +810,23 @@ function submitForm(){
       method: "POST",
       body: fd
     }).then(() => {
-      alert("Agreement submitted successfully!");
+      alert(`
+Thank you for signing with RS Home Care.
+
+✔ Agreement received
+✔ Digital signature recorded
+✔ Confirmation will be sent to you
+
+For support: +91 7550052799
+`);
       location.reload();
     });
   });
 }
 </script>
 <footer class="rs-footer">
-   © 2026 RS Home Care. All Rights Reserved. | Designed & Developed by RS Home Care
+  © 2026 RS Home Care Pvt Ltd  
+Digital Agreement System • ISO-Style Workflow
 </footer>
 </body>
 </html>
