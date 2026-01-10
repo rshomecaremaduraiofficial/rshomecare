@@ -251,6 +251,13 @@ iframe{
     align-items:center;
   }
 }
+.rs-footer {
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 13px;
+  color: #555;
+  background: #f8f9fa;
+}
 
 </style>
 </head>
@@ -450,7 +457,7 @@ Please agree and sign before submitting
 
     <div class="rs-overlay">
       <div class="rs-modal">
-        <h2>🔒 Agreement Access</h2>
+        <h2>Agreement Access</h2>
         <p>Enter your details to continue</p>
         <p style="font-size:13px; color:#444; text-align:center; margin-bottom:16px;">
         If you want the Access password, contact an RS Home Care team member.<br>
@@ -470,9 +477,9 @@ Please agree and sign before submitting
           <input type="password" id="rs-password" placeholder="Access Password" />
         </div>
 
-<div class="checkbox">
-  <input type="checkbox" id="rs-toggle">
-<label for="rs-toggle">Show password</label>
+        <div class="checkbox">
+        <input type="checkbox" id="rs-toggle">
+        <label for="rs-toggle">Show password</label>
 </div>
         <button id="rs-submit">Continue</button>
         <div class="rs-error">Please enter valid details</div>
@@ -692,6 +699,8 @@ function submitForm(){
   });
 }
 </script>
-
+<footer class="rs-footer">
+   © 2026 RS Home Care. All Rights Reserved. | Designed & Developed by RS Home Care
+</footer>
 </body>
 </html>
