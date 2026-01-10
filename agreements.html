@@ -406,9 +406,13 @@ Please agree and sign before submitting
         font-size: 14px;
       }
  .rs-show {
-   display: block;
-  justify-content: flex-end;   /* RIGHT SIDE */
-  margin-bottom: 12px;
+   margin-top:18px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+  font-size:14px;
+}
 }
 .rs-show label {
   display: inline-flex;
@@ -466,15 +470,10 @@ Please agree and sign before submitting
           <input type="password" id="rs-password" placeholder="Access Password" />
         </div>
 
-        <!-- SAME LINE -->
-        <div class="rs-show">
-  <div class="rs-show">
-  <label>
-    <input type="checkbox" id="rs-toggle">
-    <span>Show password</span>
-  </label>
+<div class="checkbox">
+  <input type="checkbox" id="rs-toggle">
+<label for="rs-toggle">Show password</label>
 </div>
-
         <button id="rs-submit">Continue</button>
         <div class="rs-error">Please enter valid details</div>
       </div>
@@ -490,10 +489,9 @@ Please agree and sign before submitting
   const nameInput = overlay.querySelector("#rs-name");
   const phoneInput = overlay.querySelector("#rs-phone");
 
-  toggle.addEventListener("change", () => {
-    passwordInput.type = toggle.checked ? "text" : "password";
-  });
-
+ toggle.addEventListener("change", () => {
+  passwordInput.type = toggle.checked ? "text" : "password";
+});
   const validate = () => {
     if (
       nameInput.value.trim() &&
