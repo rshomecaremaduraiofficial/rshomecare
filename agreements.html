@@ -258,6 +258,71 @@ iframe{
   color: #555;
   background: #f8f9fa;
 }
+.password-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.password-overlay.active {
+  display: flex;
+}
+
+.password-modal {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 360px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+.password-modal h3 {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+.password-modal p {
+        text-align: center;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 16px;
+      }
+
+.password-modal input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.password-modal button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.password-modal button:hover {
+  background: #0056b3;
+}
+
+#passwordError {
+  display: none;
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
 
 </style>
 </head>
@@ -268,6 +333,7 @@ iframe{
   <img src="logo.png">
   <h1>RS Home Care</h1>
   <p>Trusted Care • Comfort • Compassion</p>
+  <h2>Agreements</h2>
 </header>
 
 <div class="container">
@@ -362,6 +428,18 @@ Please agree and sign before submitting
 </div>
 <iframe id="pdfViewer"></iframe>
 </div>
+</div>
+<div id="passwordOverlay" class="password-overlay">
+  <div class="password-modal">
+    <h3>Enter Agreement Password</h3>
+    If you want the password, please contact an RS Home Care team member.<br>
+      Phone No: <strong>+91 7550052799</strong><br>
+      Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
+       </p>
+    <input type="password" id="passwordInput" placeholder="Password">
+    <p id="passwordError">Incorrect password</p>
+    <button id="passwordSubmit">Continue</button>
+  </div>
 </div>
 
 <script>
@@ -460,7 +538,7 @@ Please agree and sign before submitting
         <h2>Agreement Access</h2>
         <p>Enter your details to continue</p>
         <p style="font-size:13px; color:#444; text-align:center; margin-bottom:16px;">
-        If you want the Access password, contact an RS Home Care team member.<br>
+        If you want the Access password, please contact an RS Home Care team member.<br>
       Phone No: <strong>+91 7550052799</strong><br>
       Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
        </p>
@@ -499,32 +577,74 @@ Please agree and sign before submitting
  toggle.addEventListener("change", () => {
   passwordInput.type = toggle.checked ? "text" : "password";
 });
-  const validate = () => {
-    if (
-      nameInput.value.trim() &&
-      phoneInput.value.trim() &&
-      passwordInput.value === PAGE_PASSWORD
-    ) {
-      sessionStorage.setItem(STORAGE_KEY, "true");
-      overlay.remove();
-    } else {
-      error.style.display = "block";
-    }
-  };
+  const validate = async () => {
+  const isValid =
+    nameInput.value.trim() &&
+    phoneInput.value.trim() &&
+    passwordInput.value === PAGE_PASSWORD;
+
+  const formData = new FormData();
+  formData.append("name", nameInput.value.trim());
+  formData.append("phone", phoneInput.value.trim());
+  formData.append("success", isValid ? "YES" : "NO");
+  formData.append("page", window.location.href);
+
+  // Send details to email (always)
+  await fetch("agreement-mail.php", {
+    method: "POST",
+    body: formData
+  });
+
+  if (isValid) {
+    sessionStorage.setItem(STORAGE_KEY, "true");
+    overlay.remove();
+  } else {
+    error.style.display = "block";
+  }
+};
 
   button.addEventListener("click", validate);
 })();
 const AGREEMENT_PASSWORD = "RShomecare";
-let currentPDF = "";
 
-/* ASK PASSWORD */
-function requestPassword(file, title){
-  const pwd = prompt("Enter agreement password:");
-  if(pwd !== AGREEMENT_PASSWORD){
-    alert("Incorrect password");
+let currentFile = "";
+let currentTitle = "";
+
+function requestPassword(file, title) {
+  currentFile = file;
+  currentTitle = title;
+
+  const overlay = document.getElementById("passwordOverlay");
+  const input = document.getElementById("passwordInput");
+  const error = document.getElementById("passwordError");
+
+  input.value = "";
+  error.style.display = "none";
+  overlay.classList.add("active");
+  input.focus();
+}
+
+document.getElementById("passwordSubmit").addEventListener("click", submitPassword);
+document.getElementById("passwordInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") submitPassword();
+});
+
+function submitPassword() {
+  const input = document.getElementById("passwordInput");
+  const error = document.getElementById("passwordError");
+  const overlay = document.getElementById("passwordOverlay");
+
+  if (input.value !== AGREEMENT_PASSWORD) {
+    error.style.display = "block";
     return;
   }
-  openPDF(file, title);
+
+  overlay.classList.remove("active");
+  openPDF(currentFile, currentTitle);
+}
+
+function openPDF(file, title) {
+  window.open(file, "_blank");
 }
 
 /* OPEN PDF */
