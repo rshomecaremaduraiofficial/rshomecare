@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Book Appointment – RS Home Care</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* BODY */
+body{
+  font-family:'Poppins',sans-serif;
+  background:#f5f9ff;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px; /* IMPORTANT FOR MOBILE */
+}
+
+/* APPOINTMENT BOX */
+.appointment-box{
+  background:#fff;
+  width:100%;
+  max-width:480px;
+  padding:32px;
+  border-radius:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* LOGO */
+.appointment-box img{
+  max-width:120px;
+  display:block;
+  margin:0 auto 12px;
+}
+
+/* TITLE */
+h2{
+  text-align:center;
+  color:#0f4c81;
+  margin-bottom:22px;
+}
+
+/* FORM */
+.form-group{
+  margin-bottom:16px;
+}
+.form-group input,
+.form-group textarea{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+textarea{
+  resize:vertical;
+  min-height:90px;
+}
+
+/* BUTTON */
+button{
+  width:100%;
+  padding:14px;
+  background:#2ecc71;
+  border:none;
+  border-radius:30px;
+  color:#fff;
+  font-weight:600;
+  font-size:15px;
+  cursor:pointer;
+  transition:.3s;
+}
+button:hover{
+  box-shadow:0 8px 20px rgba(0,0,0,.2);
+}
+
+/* MOBILE FIX */
+@media (max-width: 480px){
+  .appointment-box{
+    padding:24px;
+  }
+  h2{
+    font-size:1.4em;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="appointment-box">
+  <img src="logo.png" alt="RS Home Care Logo">
+  <h2>Book an Appointment</h2>
+
+  <form action="https://formsubmit.co/rshomecaremaduraiofficial@gmail.com" method="POST">
+
+    <!-- REQUIRED -->
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_subject" value="New Appointment Request – RS Home Care">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="thankyou.html">
+
+    <!-- AUTO RESPONSE -->
+    <input type="hidden" name="_autoresponse" value="Dear Client,
+
+Thank you for booking an appointment with RS Home Care.
+
+We have received your appointment request and our team will contact you shortly.
+
+Warm regards,
+RS Home Care
+Madurai
+Phone: +91 7550052799">
+
+    <div class="form-group">
+      <input type="text" name="Client Name" placeholder="Your Name" required>
+    </div>
+
+    <div class="form-group">
+      <input type="email" name="Client Email" placeholder="Your Email" required>
+    </div>
+
+    <div class="form-group">
+      <input type="text" name="Client Phone" placeholder="Phone Number" required>
+    </div>
+
+    <div class="form-group">
+      <textarea name="Appointment Details" placeholder="What is this appointment about?" required></textarea>
+    </div>
+
+    <button type="submit">Submit Appointment</button>
+  </form>
+</div>
+
+</body>
+</html>
