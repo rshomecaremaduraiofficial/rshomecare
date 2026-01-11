@@ -45,23 +45,110 @@ header p{font-size:1.2em;margin-bottom:20px}
   font-weight:600;
 }
 
-/* NAV */
-nav{
+/* MODERN NAVBAR */
+.rs-nav{
   background:#fff;
-  padding:15px;
-  text-align:center;
-  box-shadow:0 4px 10px rgba(0,0,0,0.08);
   position:sticky;
   top:0;
-  z-index:2;
-}
-nav a{
-  margin:0 15px;
-  text-decoration:none;
-  color:#0f4c81;
-  font-weight:600;
+  z-index:1000;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 
+.nav-container{
+  max-width:1200px;
+  margin:auto;
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.nav-logo a{
+  font-weight:600;
+  font-size:18px;
+  color:#0f4c81;
+  text-decoration:none;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+
+.nav-links a{
+  text-decoration:none;
+  color:#0f4c81;
+  font-weight:500;
+  font-size:14px;
+  position:relative;
+}
+
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-4px;
+  width:0;
+  height:2px;
+  background:#0f4c81;
+  transition:.3s;
+}
+
+.nav-links a:hover::after{
+  width:100%;
+}
+
+/* CTA BUTTON */
+.nav-cta{
+  background:#0f4c81;
+  color:#fff !important;
+  padding:10px 20px;
+  border-radius:30px;
+  font-size:13px;
+}
+
+.nav-cta:hover{
+  background:#08345d;
+}
+
+/* HAMBURGER */
+.menu-toggle{
+  display:none;
+  font-size:26px;
+  cursor:pointer;
+  color:#0f4c81;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .menu-toggle{
+    display:block;
+  }
+
+  .nav-links{
+    position:absolute;
+    top:65px;
+    left:0;
+    width:100%;
+    background:#fff;
+    flex-direction:column;
+    align-items:center;
+    gap:15px;
+    padding:25px 0;
+    display:none;
+    box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  }
+
+  .nav-links.active{
+    display:flex;
+  }
+
+  .nav-cta{
+    width:90%;
+    text-align:center;
+  }
+}
 /* SECTIONS */
 section{padding:70px 10%}
 h2{text-align:center;color:#4b8fca;margin-bottom:30px}
@@ -249,12 +336,22 @@ h2{text-align:center;color:#4b8fca;margin-bottom:30px}
   <a href="#contact" class="cta">Get Care Today</a>
 </header>
 
-<nav>
-  <a href="#about">About</a>
-  <a href="#services">Services</a>
-  <a href="#work">Our Work</a>
-  <a href="#contact">Contact</a>
-  <a href="appointment.html" class="cta">Book Appointment</a>
+<nav class="rs-nav">
+  <div class="nav-container">
+    <div class="nav-logo">
+      <a href="#">RS Home Care</a>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#work">Our Work</a>
+      <a href="#contact">Contact</a>
+      <a href="appointment.html" class="nav-cta">Book Appointment</a>
+    </div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  </div>
 </nav>
 
 <!-- ABOUT -->
