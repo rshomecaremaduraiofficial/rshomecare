@@ -15,7 +15,7 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
+  min-height:100vh;
 }
 .box{
   background:#fff;
@@ -26,30 +26,26 @@ body{
   text-align:center;
   box-shadow:0 15px 40px rgba(0,0,0,.15);
 }
-img{
-  max-width:120px;
-  margin-bottom:15px;
-}
+img{max-width:120px;margin-bottom:15px}
 .info-box{
   margin-top:20px;
-  text-align:left;
   background:#f5f9ff;
   padding:20px;
   border-radius:12px;
+  text-align:left;
   font-size:14px;
-  line-height:1.8;
 }
 .info-row{
   display:flex;
   justify-content:space-between;
-  margin-bottom:6px;
+  margin-bottom:8px;
 }
 .info-label{
   font-weight:600;
   color:#0f4c81;
 }
 button{
-  margin-top:20px;
+  margin-top:22px;
   padding:14px 28px;
   border:none;
   border-radius:30px;
@@ -69,21 +65,21 @@ button{
 
   <div id="clientInfo" class="info-box"></div>
 
-  <button id="downloadBtn">Download Confirmation Letter</button>
+  <button id="downloadBtn">Download Confirmation PDF</button>
 </div>
 
 <script>
-// Generate numbers
-function generateReferenceNumber(){
+/* ===== GENERATORS ===== */
+function genRef(){
   const d = new Date().toISOString().slice(0,10).replace(/-/g,"");
   return `RS-${d}-${Math.random().toString(36).substring(2,7).toUpperCase()}`;
 }
-function generateAppointmentNumber(){
+function genAppt(){
   return `APT-${Math.floor(1000 + Math.random()*9000)}`;
 }
 
-const referenceNumber = generateReferenceNumber();
-const appointmentNumber = generateAppointmentNumber();
+const referenceNumber = genRef();
+const appointmentNumber = genAppt();
 const appointmentStatus = "Confirmed";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -98,26 +94,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.getElementById("clientInfo").innerHTML = `
-    <div class="info-row">
-      <span class="info-label">Name</span>
-      <span>${name}</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">Phone</span>
-      <span>${phone}</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">Reference No</span>
-      <span>${referenceNumber}</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">Appointment No</span>
-      <span>${appointmentNumber}</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">Status</span>
-      <span>${appointmentStatus}</span>
-    </div>
+    <div class="info-row"><span class="info-label">Name</span><span>${name}</span></div>
+    <div class="info-row"><span class="info-label">Phone</span><span>${phone}</span></div>
+    <div class="info-row"><span class="info-label">Appointment No</span><span>${appointmentNumber}</span></div>
+    <div class="info-row"><span class="info-label">Reference No</span><span>${referenceNumber}</span></div>
+    <div class="info-row"><span class="info-label">Status</span><span>${appointmentStatus}</span></div>
   `;
 
   document.getElementById("downloadBtn").addEventListener("click", generatePDF);
@@ -126,81 +107,113 @@ document.addEventListener("DOMContentLoaded", () => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF("p","mm","a4");
 
-    const date = new Date().toLocaleDateString("en-GB", {
-      day:"2-digit", month:"long", year:"numeric"
+    const date = new Date().toLocaleDateString("en-GB",{
+      day:"2-digit",month:"long",year:"numeric"
     });
 
-    /* HEADER */
+    /* ===== QR URL (NO DATABASE) ===== */
+    const qrData =
+      `RS HOME CARE\n` +
+      `Appointment No: ${appointmentNumber}\n` +
+      `Reference No: ${referenceNumber}\n` +
+      `Status: ${appointmentStatus}\n` +
+      `Client: ${name}\n` +
+      `Phone: ${phone}\n\n` +
+      `Contact:\n` +
+      `+91 7550052799\n` +
+      `rshomecaremaduraiofficial@gmail.com`;
+
+    const qrUrl =
+      "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" +
+      encodeURIComponent(qrData);
+
+    /* ===== HEADER ===== */
     doc.setFillColor(15,76,129);
-    doc.rect(0,0,210,28,"F");
+    doc.rect(0,0,210,32,"F");
 
-    doc.setFont("helvetica","bold");
-    doc.setFontSize(18);
-    doc.setTextColor(255,255,255);
-    doc.text("RS HOME CARE",105,18,{align:"center"});
+    const logo = new Image();
+    logo.src = "logo.png";
 
-    doc.setFontSize(11);
-    doc.text("Appointment Confirmation",105,24,{align:"center"});
-    doc.setTextColor(0,0,0);
+    logo.onload = () => {
+      doc.addImage(logo,"PNG",15,6,22,22);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(18);
+      doc.setTextColor(255,255,255);
+      doc.text("RS HOME CARE",105,18,{align:"center"});
+      doc.setFontSize(11);
+      doc.text("Appointment Confirmation",105,25,{align:"center"});
+      doc.setTextColor(0,0,0);
+      body();
+    };
 
-    /* SUMMARY */
-    doc.setFillColor(245,247,250);
-    doc.rect(15,36,180,20,"F");
+    function body(){
+      doc.setFillColor(245,247,250);
+      doc.rect(15,40,180,20,"F");
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(11);
+      doc.text("Appointment No:",20,52);
+      doc.text(appointmentNumber,70,52);
+      doc.text("Status:",120,52);
+      doc.text(appointmentStatus,145,52);
 
-    doc.setFontSize(11);
-    doc.setFont("helvetica","bold");
-    doc.text("Appointment No:",20,48);
-    doc.text(appointmentNumber,70,48);
-    doc.text("Status:",120,48);
-    doc.text(appointmentStatus,145,48);
+      doc.setFontSize(13);
+      doc.text("Client Information",15,74);
+      doc.rect(15,79,180,45);
 
-    /* CLIENT DETAILS */
-    doc.setFontSize(13);
-    doc.text("Client Information",15,70);
-    doc.rect(15,75,180,45);
+      doc.setFont("helvetica","normal");
+      let y = 89;
+      doc.text("Client Name",20,y); doc.text(":",65,y); doc.text(name,70,y);
+      y+=8;
+      doc.text("Phone",20,y); doc.text(":",65,y); doc.text(phone,70,y);
+      y+=8;
+      doc.text("Reference No",20,y); doc.text(":",65,y); doc.text(referenceNumber,70,y);
+      y+=8;
+      doc.text("Date",20,y); doc.text(":",65,y); doc.text(date,70,y);
 
-    doc.setFontSize(11);
-    doc.setFont("helvetica","normal");
+      /* ===== QR IMAGE ===== */
+      const qr = new Image();
+      qr.src = qrUrl;
+      qr.onload = () => {
+        doc.addImage(qr,"PNG",140,85,40,40);
+        message();
+      };
+    }
 
-    let y = 85;
-    doc.text("Client Name",20,y);   doc.text(":",65,y); doc.text(name,70,y);
-    y+=8;
-    doc.text("Phone Number",20,y); doc.text(":",65,y); doc.text(phone,70,y);
-    y+=8;
-    doc.text("Reference No",20,y);  doc.text(":",65,y); doc.text(referenceNumber,70,y);
-    y+=8;
-    doc.text("Date",20,y);          doc.text(":",65,y); doc.text(date,70,y);
+    function message(){
+      const msg =
+        "This document confirms your appointment with RS Home Care.\n\n" +
+        "Please present this confirmation during service. " +
+        "The QR code contains appointment verification details.\n\n" +
+        "Thank you for choosing RS Home Care.";
 
-    /* MESSAGE */
-    const msg =
-      "Thank you for choosing RS Home Care.\n\n" +
-      "Your appointment request has been successfully received. " +
-      "Our team will contact you shortly for confirmation.\n\n" +
-      "We assure professional, compassionate, and reliable care.";
+      doc.text(doc.splitTextToSize(msg,170),20,135);
+      signature();
+    }
 
-    doc.text(doc.splitTextToSize(msg,170),20,135);
+    function signature(){
+      doc.setFont("helvetica","bold");
+      doc.text("For RS Home Care",20,180);
 
-    /* SIGNATURE */
-    doc.setFont("helvetica","bold");
-    doc.text("For RS Home Care",20,175);
+      const sign = new Image();
+      sign.src = "signature.png";
 
-    const img = new Image();
-    img.src = "signature.png";
+      sign.onload = () => {
+        doc.addImage(sign,"PNG",20,183,55,22);
+        footer();
+      };
+      sign.onerror = footer;
+    }
 
-    img.onload = () => {
-      doc.addImage(img,"PNG",20,178,55,22);
+    function footer(){
       doc.setFontSize(10);
+      doc.setFont("helvetica","normal");
       doc.text("RS Home Care Pvt Ltd",105,260,{align:"center"});
       doc.text(
         "Phone: +91 7550052799 | Email: rshomecaremaduraiofficial@gmail.com",
         105,266,{align:"center"}
       );
       doc.save(`RS_Home_Care_Appointment_${name.replace(/\s+/g,'_')}.pdf`);
-    };
-
-    img.onerror = () => {
-      doc.save(`RS_Home_Care_Appointment_${name.replace(/\s+/g,'_')}.pdf`);
-    };
+    }
   }
 });
 </script>
