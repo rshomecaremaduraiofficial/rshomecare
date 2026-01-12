@@ -99,47 +99,48 @@ button:hover{
   <img src="logo.png" alt="RS Home Care Logo">
   <h2>Book an Appointment</h2>
 
-<form id="appointmentForm" action="submit_appointment.php" method="POST">
+  <form action="https://formsubmit.co/rshomecaremaduraiofficial@gmail.com" method="POST">
 
     <!-- REQUIRED -->
     <input type="hidden" name="_captcha" value="false">
     <input type="hidden" name="_subject" value="New Appointment Request – RS Home Care">
     <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_next"
-value="https://rshomecare.vercel.app/thankyou.html">
+    <input type="hidden" name="_next" value="https://rshomecare.vercel.app/thankyou.html">
 
+   
+<form id="appointmentForm">
 
-    <div class="form-group">
-      <input type="text" id="clientName" name="client_name" placeholder="Your Name" required>
-    </div>
+  <div class="form-group">
+    <input type="text" id="clientName" placeholder="Your Name" required>
+  </div>
 
-    <div class="form-group">
-      <input type="email" id="clientEmail" name="client_email" placeholder="Your Email" required>
-    </div>
+  <div class="form-group">
+    <input type="email" id="clientEmail" placeholder="Your Email" required>
+  </div>
 
-    <div class="form-group">
-      <input type="text" id="clientPhone" name="client_phone" placeholder="Phone Number" required>
-    </div>
+  <div class="form-group">
+    <input type="text" id="clientPhone" placeholder="Phone Number" required>
+  </div>
 
-    <div class="form-group">
-      <textarea id="appointmentDetails" name="appointment_details" placeholder="What is this appointment about?" required></textarea>
-    </div>
+  <div class="form-group">
+    <textarea id="appointmentDetails" placeholder="What is this appointment about?" required></textarea>
+  </div>
 
-    <button type="submit">Submit Appointment</button>
-  </form>
+  <button type="submit">Submit Appointment</button>
+</form>
 </div>
 <script>
 document.getElementById("appointmentForm").addEventListener("submit", function(e){
   e.preventDefault();
 
-  const name  = document.getElementById("clientName").value.trim();
-  const phone = document.getElementById("clientPhone").value.trim();
-  const email = document.getElementById("clientEmail").value.trim();
-  const details = document.getElementById("appointmentDetails").value.trim();
+  const name = document.getElementById("clientName").value;
+  const phone = document.getElementById("clientPhone").value;
+  const email = document.getElementById("clientEmail").value;
+  const details = document.getElementById("appointmentDetails").value;
 
-  // SAVE FOR THANK YOU PAGE
-  sessionStorage.setItem("rs_name", name);
-  sessionStorage.setItem("rs_phone", phone);
+  // save for thank you page
+  sessionStorage.setItem("clientName", name);
+  sessionStorage.setItem("clientPhone", phone);
 
   const fd = new FormData();
   fd.append("Client Name", name);
@@ -149,7 +150,7 @@ document.getElementById("appointmentForm").addEventListener("submit", function(e
   fd.append("_captcha", "false");
   fd.append("_subject", "New Appointment Request – RS Home Care");
 
-  fetch("submit_appointment.php", {
+  fetch("https://formsubmit.co/rshomecaremaduraiofficial@gmail.com", {
     method: "POST",
     body: fd
   }).then(() => {
