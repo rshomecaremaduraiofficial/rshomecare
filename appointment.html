@@ -4,15 +4,12 @@
 <meta charset="UTF-8">
 <title>Book Appointment – RS Home Care</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
 
+<link rel="icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-
-/* BODY */
 body{
   font-family:'Poppins',sans-serif;
   background:#f5f9ff;
@@ -20,10 +17,8 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:20px; /* IMPORTANT FOR MOBILE */
+  padding:20px;
 }
-
-/* APPOINTMENT BOX */
 .appointment-box{
   background:#fff;
   width:100%;
@@ -32,39 +27,27 @@ body{
   border-radius:20px;
   box-shadow:0 15px 40px rgba(0,0,0,0.15);
 }
-
-/* LOGO */
 .appointment-box img{
   max-width:120px;
   display:block;
   margin:0 auto 12px;
 }
-
-/* TITLE */
 h2{
   text-align:center;
   color:#0f4c81;
   margin-bottom:22px;
 }
-
-/* FORM */
 .form-group{
   margin-bottom:16px;
 }
-.form-group input,
-.form-group textarea{
+input, textarea{
   width:100%;
   padding:14px;
   border-radius:12px;
   border:1px solid #ccc;
   font-size:14px;
 }
-textarea{
-  resize:vertical;
-  min-height:90px;
-}
-
-/* BUTTON */
+textarea{resize:vertical;min-height:90px}
 button{
   width:100%;
   padding:14px;
@@ -73,22 +56,7 @@ button{
   border-radius:30px;
   color:#fff;
   font-weight:600;
-  font-size:15px;
   cursor:pointer;
-  transition:.3s;
-}
-button:hover{
-  box-shadow:0 8px 20px rgba(0,0,0,.2);
-}
-
-/* MOBILE FIX */
-@media (max-width: 480px){
-  .appointment-box{
-    padding:24px;
-  }
-  h2{
-    font-size:1.4em;
-  }
 }
 </style>
 </head>
@@ -99,69 +67,44 @@ button:hover{
   <img src="logo.png" alt="RS Home Care Logo">
   <h2>Book an Appointment</h2>
 
-  <form id="appointmentForm"
-      action="https://formsubmit.co/rshomecaremaduraiofficial@gmail.com"
-      method="POST">
+  <form id="appointmentForm">
 
-    <!-- REQUIRED -->
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_subject" value="New Appointment Request – RS Home Care">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_next"
-value="https://rshomecare.vercel.app/thankyou.html">
+    <div class="form-group">
+      <input type="text" id="clientName" name="Client Name" placeholder="Your Name" required>
+    </div>
 
-    
-<form id="appointmentForm">
+    <div class="form-group">
+      <input type="email" id="clientEmail" name="Client Email" placeholder="Your Email" required>
+    </div>
 
-  <div class="form-group">
-    <input type="text" id="clientName" placeholder="Your Name" required>
-  </div>
+    <div class="form-group">
+      <input type="text" id="clientPhone" name="Client Phone" placeholder="Phone Number" required>
+    </div>
 
-  <div class="form-group">
-    <input type="email" id="clientEmail" placeholder="Your Email" required>
-  </div>
+    <div class="form-group">
+      <input type="text" id="clientAddress" name="Client Address" placeholder="Your Address" required>
+    </div>
 
-  <div class="form-group">
-    <input type="text" id="clientPhone" placeholder="Phone Number" required>
-  </div>
+    <div class="form-group">
+      <textarea id="appointmentDetails" name="Appointment Details"
+        placeholder="What is this appointment about?" required></textarea>
+    </div>
 
-  <div class="form-group">
-    <textarea id="appointmentDetails" placeholder="What is this appointment about?" required></textarea>
-  </div>
-
-  <button type="submit">Submit Appointment</button>
-</form>
+    <button type="submit">Submit Appointment</button>
+  </form>
 </div>
+
 <script>
-document.getElementById("appointmentForm").addEventListener("submit", function () {
-  const name = document.querySelector('[name="Client Name"]').value;
-  const phone = document.querySelector('[name="Client Phone"]').value;
-
-  const nextUrl = `https://rshomecare.vercel.app/thankyou.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`;
-
-  const nextInput = document.createElement("input");
-  nextInput.type = "hidden";
-  nextInput.name = "_next";
-  nextInput.value = nextUrl;
-
-  this.appendChild(nextInput);
-});
-document.querySelector("form").addEventListener("submit", function () {
-  const name  = document.querySelector('input[name="Client Name"]').value;
-  const phone = document.querySelector('input[name="Client Phone"]').value;
-
-  sessionStorage.setItem("rs_client_name", name);
-  sessionStorage.setItem("rs_client_phone", phone);
-});
 document.getElementById("appointmentForm").addEventListener("submit", function(e){
   e.preventDefault();
 
   const name    = document.getElementById("clientName").value;
   const phone   = document.getElementById("clientPhone").value;
   const email   = document.getElementById("clientEmail").value;
+  const address = document.getElementById("clientAddress").value;
   const details = document.getElementById("appointmentDetails").value;
 
-  // save for thank you page
+  // Save for PDF page
   sessionStorage.setItem("clientName", name);
   sessionStorage.setItem("clientPhone", phone);
 
@@ -169,6 +112,7 @@ document.getElementById("appointmentForm").addEventListener("submit", function(e
   fd.append("Client Name", name);
   fd.append("Client Email", email);
   fd.append("Client Phone", phone);
+  fd.append("Client Address", address);
   fd.append("Appointment Details", details);
   fd.append("_captcha", "false");
   fd.append("_subject", "New Appointment Request – RS Home Care");
@@ -178,6 +122,8 @@ document.getElementById("appointmentForm").addEventListener("submit", function(e
     body: fd
   }).then(() => {
     window.location.href = "thankyou.html";
+  }).catch(() => {
+    alert("Submission failed. Please try again.");
   });
 });
 </script>
