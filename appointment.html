@@ -107,38 +107,57 @@ button:hover{
     <input type="hidden" name="_template" value="table">
     <input type="hidden" name="_next" value="https://rshomecare.vercel.app/thankyou.html">
 
-    <!-- AUTO RESPONSE -->
-    <input type="hidden" name="_autoresponse" value="Dear Client,
+   
+<form id="appointmentForm">
 
-Thank you for booking an appointment with RS Home Care.
+  <div class="form-group">
+    <input type="text" id="clientName" placeholder="Your Name" required>
+  </div>
 
-We have received your appointment request and our team will contact you shortly.
+  <div class="form-group">
+    <input type="email" id="clientEmail" placeholder="Your Email" required>
+  </div>
 
-Warm regards,
-RS Home Care
-Madurai
-Phone: +91 7550052799">
+  <div class="form-group">
+    <input type="text" id="clientPhone" placeholder="Phone Number" required>
+  </div>
 
-    <div class="form-group">
-      <input type="text" name="Client Name" placeholder="Your Name" required>
-    </div>
+  <div class="form-group">
+    <textarea id="appointmentDetails" placeholder="What is this appointment about?" required></textarea>
+  </div>
 
-    <div class="form-group">
-      <input type="email" name="Client Email" placeholder="Your Email" required>
-    </div>
-
-    <div class="form-group">
-      <input type="text" name="Client Phone" placeholder="Phone Number" required>
-    </div>
-
-    <div class="form-group">
-      <textarea name="Appointment Details" placeholder="What is this appointment about?" required></textarea>
-    </div>
-
-    <button type="submit">Submit Appointment</button>
-  </form>
+  <button type="submit">Submit Appointment</button>
+</form>
 </div>
+<script>
+document.getElementById("appointmentForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const name = document.getElementById("clientName").value;
+  const phone = document.getElementById("clientPhone").value;
+  const email = document.getElementById("clientEmail").value;
+  const details = document.getElementById("appointmentDetails").value;
+
+  // save for thank you page
+  sessionStorage.setItem("clientName", name);
+  sessionStorage.setItem("clientPhone", phone);
+
+  const fd = new FormData();
+  fd.append("Client Name", name);
+  fd.append("Client Email", email);
+  fd.append("Client Phone", phone);
+  fd.append("Appointment Details", details);
+  fd.append("_captcha", "false");
+  fd.append("_subject", "New Appointment Request – RS Home Care");
+
+  fetch("https://formsubmit.co/rshomecaremaduraiofficial@gmail.com", {
+    method: "POST",
+    body: fd
+  }).then(() => {
+    window.location.href = "thankyou.html";
+  });
+});
+</script>
 
 </body>
 </html>
-
