@@ -80,8 +80,10 @@ const appointmentStatus = "Confirmed";
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const name  = sessionStorage.getItem("clientName");
-  const phone = sessionStorage.getItem("clientPhone");
+  const name    = sessionStorage.getItem("clientName");
+  const phone   = sessionStorage.getItem("clientPhone");
+  const email   = sessionStorage.getItem("clientEmail");
+  const address = sessionStorage.getItem("clientAddress");
 
   if(!name || !phone){
     alert("Client details missing. Please book appointment again.");
@@ -92,6 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("clientInfo").innerHTML = `
     <div class="info-row"><strong>Name</strong><span>${name}</span></div>
     <div class="info-row"><strong>Phone</strong><span>${phone}</span></div>
+    <div class="info-row"><strong>Email</strong><span>${email || "-"}</span></div>
+    <div class="info-row"><strong>Address</strong><span>${address || "-"}</span></div>
     <div class="info-row"><strong>Appointment No</strong><span>${appointmentNumber}</span></div>
     <div class="info-row"><strong>Reference No</strong><span>${referenceNumber}</span></div>
     <div class="info-row"><strong>Status</strong><span>${appointmentStatus}</span></div>
@@ -106,20 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const date = new Date().toLocaleDateString("en-GB",{
       day:"2-digit",month:"long",year:"numeric"
     });
-
-    /* ===== QR DATA ===== */
-    const qrData =
-      `RS HOME CARE\n` +
-      `Appointment No: ${appointmentNumber}\n` +
-      `Reference No: ${referenceNumber}\n` +
-      `Status: ${appointmentStatus}\n` +
-      `Client: ${name}\n` +
-      `Phone: ${phone}\n\n` +
-      `Contact:\n+91 7550052799\nrshomecaremaduraiofficial@gmail.com`;
-
-    const qrUrl =
-      "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" +
-      encodeURIComponent(qrData);
 
     /* ===== HEADER ===== */
     const logo = new Image();
@@ -147,33 +137,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
       doc.setFont("helvetica","normal");
       let y = 82;
-      doc.text("Client Name",20,y);     doc.text(":",70,y); doc.text(name,75,y);
-      y+=8;
-      doc.text("Phone Number",20,y);   doc.text(":",70,y); doc.text(phone,75,y);
-      y+=8;
-      doc.text("Appointment No",20,y); doc.text(":",70,y); doc.text(appointmentNumber,75,y);
-      y+=8;
-      doc.text("Reference No",20,y);   doc.text(":",70,y); doc.text(referenceNumber,75,y);
-      y+=8;
-      doc.text("Status",20,y);         doc.text(":",70,y); doc.text(appointmentStatus,75,y);
-      y+=8;
-      doc.text("Date",20,y);           doc.text(":",70,y); doc.text(date,75,y);
 
-      /* ===== QR BOX ===== */
-      doc.setFont("helvetica","bold");
-      doc.text("Scan for Details",155,75,{align:"center"});
-      doc.rect(130,78,50,50);
+      function row(label,value){
+        doc.text(label,20,y);
+        doc.text(":",70,y);
+        doc.text(value || "-",75,y,{maxWidth:95});
+        y += 8;
+      }
 
-      const qr = new Image();
-      qr.src = qrUrl;
-      qr.onload = () => {
-        doc.addImage(qr,"PNG",135,83,40,40);
-        contentAndSignature();
-      };
+      row("Client Name", name);
+      row("Phone Number", phone);
+      row("Email Address", email);
+      row("Residential Address", address);
+      row("Appointment No", appointmentNumber);
+      row("Reference No", referenceNumber);
+      row("Status", appointmentStatus);
+      row("Date", date);
+
+      contentAndSignature(y + 8);
     }
 
-    function contentAndSignature(){
-      doc.line(20,145,190,145);
+    function contentAndSignature(startY){
+      doc.line(20,startY,190,startY);
 
       doc.setFont("helvetica","normal");
       doc.setFontSize(11);
@@ -190,11 +175,9 @@ document.addEventListener("DOMContentLoaded", () => {
         "care is always delivered with warmth, understanding, and genuine concern.";
 
       const lines = doc.splitTextToSize(text,170);
-      const startY = 155;
-      doc.text(lines,20,startY);
+      doc.text(lines,20,startY+10);
 
-      const textHeight = lines.length * 6;
-      const signY = startY + textHeight + 12;
+      const signY = startY + 10 + (lines.length * 6) + 12;
 
       doc.setFont("helvetica","bold");
       doc.text("For RS Home Care",20,signY);
@@ -212,7 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function footer(y){
       doc.line(20,y+8,190,y+8);
       doc.setFontSize(10);
-      doc.setFont("helvetica","normal");
       doc.text("RS Home Care Pvt Ltd",105,y+18,{align:"center"});
       doc.text(
         "Phone: +91 7550052799 | Email: rshomecaremaduraiofficial@gmail.com",
