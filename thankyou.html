@@ -81,12 +81,12 @@ function genRef(){
   return `RS-${d}-${Math.random().toString(36).substring(2,7).toUpperCase()}`;
 }
 function genAppt(){
-   return `RSHC-${Math.floor(1000 + Math.random()*9000)}`;
+  return `RSHC-${Math.floor(1000 + Math.random()*9000)}`;
 }
 
-const referenceNumber = genRef();
-const appointmentNumber = genAppt();
-const appointmentStatus = "Confirmed";
+const referenceNumber = sessionStorage.getItem("referenceNumber");
+const appointmentNumber = sessionStorage.getItem("appointmentNumber");
+const appointmentStatus = sessionStorage.getItem("appointmentStatus") || "Confirmed";
 
 const RS_PHONE = "+91 7550052799";
 const RS_EMAIL = "rshomecaremaduraiofficial@gmail.com";
@@ -228,7 +228,7 @@ const qrBoxY = signY;
       // QR label + box
       doc.setFontSize(9);
       doc.setFont("helvetica","normal");
-       doc.text("Scan and Track", qrBoxX + (qrBoxSize/2), qrBoxY - 2, {align:"center"});
+      doc.text("Scan and Track", qrBoxX + (qrBoxSize/2), qrBoxY - 2, {align:"center"});
       doc.rect(qrBoxX, qrBoxY, qrBoxSize, qrBoxSize);
 
       // Load QR image and then signature image
@@ -271,5 +271,3 @@ const qrBoxY = signY;
 
 </body>
 </html>
-
-
