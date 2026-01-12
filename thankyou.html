@@ -54,8 +54,13 @@ button{
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const name  = sessionStorage.getItem("rs_client_name") || "Client";
-  const phone = sessionStorage.getItem("rs_client_phone") || "N/A";
+  const name  = sessionStorage.getItem("rs_name");
+  const phone = sessionStorage.getItem("rs_phone");
+
+  if(!name || !phone){
+    alert("Client details missing. Please book appointment again.");
+    return;
+  }
 
   document.getElementById("clientInfo").innerHTML =
     `<strong>Name:</strong> ${name}<br><strong>Phone:</strong> ${phone}`;
@@ -66,49 +71,49 @@ document.addEventListener("DOMContentLoaded", () => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // HEADER
-    doc.setFont("helvetica","bold");
-    doc.setFontSize(18);
-    doc.text("RS HOME CARE",105,20,{align:"center"});
-
-    doc.setFontSize(12);
-    doc.setFont("helvetica","normal");
-    doc.text("Appointment Confirmation Letter",105,30,{align:"center"});
-    doc.line(20,35,190,35);
-
-    const date = new Date().toLocaleDateString("en-GB",{
+    const date = new Date().toLocaleDateString("en-GB", {
       day:"2-digit",
       month:"long",
       year:"numeric"
     });
 
+    // HEADER
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(18);
+    doc.text("RS HOME CARE",105,18,{align:"center"});
+
+    doc.setFontSize(12);
+    doc.setFont("helvetica","normal");
+    doc.text("Appointment Confirmation Letter",105,28,{align:"center"});
+    doc.line(20,32,190,32);
+
     // CLIENT DETAILS
     doc.setFont("helvetica","bold");
-    doc.text("Client Details",20,50);
+    doc.text("Client Details",20,45);
 
     doc.setFont("helvetica","normal");
-    doc.text(`Name : ${name}`,20,60);
-    doc.text(`Phone: ${phone}`,20,68);
-    doc.text(`Date : ${date}`,20,76);
+    doc.text(`Name   : ${name}`,20,55);
+    doc.text(`Phone  : ${phone}`,20,63);
+    doc.text(`Date   : ${date}`,20,71);
 
-    // BODY
+    // MESSAGE
     doc.text(
       "Thank you for booking an appointment with RS Home Care.\n\n" +
-      "Your appointment request has been successfully received.\n" +
-      "Our care team will contact you shortly to confirm the details.\n\n" +
-      "We look forward to serving you with compassion and care.",
-      20,95
+      "Your request has been successfully received.\n" +
+      "Our team will contact you shortly to confirm the appointment.\n\n" +
+      "We are committed to providing compassionate and professional care.",
+      20,90
     );
 
     // SIGNATURE
-    doc.text("For RS Home Care,",20,145);
-    doc.text("Management",20,153);
+    doc.text("For RS Home Care,",20,140);
+    doc.text("Management",20,148);
 
     const img = new Image();
     img.src = "signature.png";
 
     img.onload = () => {
-      doc.addImage(img,"PNG",20,158,60,25);
+      doc.addImage(img,"PNG",20,152,60,25);
 
       doc.setFontSize(10);
       doc.text("RS Home Care Pvt Ltd",105,190,{align:"center"});
@@ -117,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
         105,197,{align:"center"}
       );
 
-      doc.save("RS_Home_Care_Appointment_Confirmation.pdf");
+      doc.save(`RS_Home_Care_Appointment_${name}.pdf`);
     };
   }
 });
