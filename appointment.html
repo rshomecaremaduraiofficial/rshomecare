@@ -105,8 +105,10 @@ document.getElementById("appointmentForm").addEventListener("submit", function(e
   const details = document.getElementById("appointmentDetails").value;
 
   // Save for PDF page
-  sessionStorage.setItem("clientName", name);
+   sessionStorage.setItem("clientName", name);
   sessionStorage.setItem("clientPhone", phone);
+  sessionStorage.setItem("clientEmail", email);
+  sessionStorage.setItem("clientAddress", address);
 
   const fd = new FormData();
   fd.append("Client Name", name);
