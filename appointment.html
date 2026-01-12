@@ -116,6 +116,19 @@ document.getElementById("appointmentForm").addEventListener("submit", function(e
   const appointmentNumber = genAppt();
   const appointmentStatus = "Confirmed";
 
+  // Save to localStorage tracker list (same device tracking)
+const list = JSON.parse(localStorage.getItem("rs_appointments") || "[]");
+list.unshift({
+  ref: referenceNumber,
+  appt: appointmentNumber,
+  status: appointmentStatus,
+  name,
+  phone,
+  email,
+  address,
+  date: new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"long",year:"numeric"})
+});
+localStorage.setItem("rs_appointments", JSON.stringify(list.slice(0,50)));
   // ✅ Save for thankyou.html / PDF (so client sees SAME values)
   sessionStorage.setItem("clientName", name);
   sessionStorage.setItem("clientPhone", phone);
