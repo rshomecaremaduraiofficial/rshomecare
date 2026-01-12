@@ -78,8 +78,8 @@ sessionStorage.setItem("rs_status", appointmentStatus);
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const name  = sessionStorage.getItem("rs_name");
-  const phone = sessionStorage.getItem("rs_phone");
+const name  = sessionStorage.getItem("clientName");
+const phone = sessionStorage.getItem("clientPhone");
 
   if(!name || !phone){
     alert("Client details missing. Please book appointment again.");
