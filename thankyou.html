@@ -21,7 +21,7 @@ body{
   background:#fff;
   padding:40px;
   border-radius:20px;
-  max-width:420px;
+  max-width:460px;
   width:100%;
   text-align:center;
   box-shadow:0 15px 40px rgba(0,0,0,.15);
@@ -38,7 +38,17 @@ img{max-width:120px;margin-bottom:15px}
 .info-row{
   display:flex;
   justify-content:space-between;
-  margin-bottom:8px;
+  gap:12px;
+  margin-bottom:10px;
+}
+.info-row strong{
+  min-width:120px;
+}
+.info-row span{
+  flex:1;
+  text-align:right;
+  word-break:break-word;   /* important for long address */
+  white-space:pre-wrap;    /* wraps address nicely */
 }
 button{
   margin-top:22px;
@@ -78,6 +88,9 @@ const referenceNumber = genRef();
 const appointmentNumber = genAppt();
 const appointmentStatus = "Confirmed";
 
+const RS_PHONE = "+91 7550052799";
+const RS_EMAIL = "rshomecaremaduraiofficial@gmail.com";
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const name    = sessionStorage.getItem("clientName");
@@ -91,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  // Neatly arranged submitted-page details (address wraps)
   document.getElementById("clientInfo").innerHTML = `
     <div class="info-row"><strong>Name</strong><span>${name}</span></div>
     <div class="info-row"><strong>Phone</strong><span>${phone}</span></div>
@@ -111,7 +125,26 @@ document.addEventListener("DOMContentLoaded", () => {
       day:"2-digit",month:"long",year:"numeric"
     });
 
-    /* ===== HEADER ===== */
+    // ===== QR should contain ALL info in the PDF + RS contact =====
+    const qrData =
+      `RS HOME CARE - Appointment Confirmation\n\n` +
+      `Client Name: ${name}\n` +
+      `Phone Number: ${phone}\n` +
+      `Email Address: ${email || "-"}\n` +
+      `Residential Address: ${address || "-"}\n\n` +
+      `Appointment No: ${appointmentNumber}\n` +
+      `Reference No: ${referenceNumber}\n` +
+      `Status: ${appointmentStatus}\n` +
+      `Date: ${date}\n\n` +
+      `RS Home Care Contact:\n` +
+      `Phone: ${RS_PHONE}\n` +
+      `Email: ${RS_EMAIL}`;
+
+    const qrUrl =
+      "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
+      encodeURIComponent(qrData);
+
+    /* ===== HEADER (no color text; logo only) ===== */
     const logo = new Image();
     logo.src = "logo.png";
 
@@ -141,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
       function row(label,value){
         doc.text(label,20,y);
         doc.text(":",70,y);
-        doc.text(value || "-",75,y,{maxWidth:95});
+        doc.text(String(value || "-"),75,y,{maxWidth:110});
         y += 8;
       }
 
@@ -177,29 +210,59 @@ document.addEventListener("DOMContentLoaded", () => {
       const lines = doc.splitTextToSize(text,170);
       doc.text(lines,20,startY+10);
 
+      // Calculate next Y safely
       const signY = startY + 10 + (lines.length * 6) + 12;
 
+      // --- QR + Signature layout ---
+      // QR box on LEFT, signature on RIGHT
+      const qrBoxX = 20;
+      const qrBoxY = signY;
+      const qrBoxSize = 38;
+
+      const signX = 70; // signature text starts after QR
+      const signTextY = signY + 8;
+
       doc.setFont("helvetica","bold");
-      doc.text("For RS Home Care",20,signY);
+      doc.text("For RS Home Care", signX, signTextY);
 
-      const sign = new Image();
-      sign.src = "signature.png";
+      // QR label + box
+      doc.setFontSize(9);
+      doc.setFont("helvetica","normal");
+      doc.text("Scan", qrBoxX + (qrBoxSize/2), qrBoxY - 2, {align:"center"});
+      doc.rect(qrBoxX, qrBoxY, qrBoxSize, qrBoxSize);
 
-      sign.onload = () => {
-        doc.addImage(sign,"PNG",20,signY+4,55,22);
-        footer(signY+32);
+      // Load QR image and then signature image
+      const qr = new Image();
+      qr.src = qrUrl;
+
+      qr.onload = () => {
+        doc.addImage(qr, "PNG", qrBoxX + 3, qrBoxY + 3, qrBoxSize - 6, qrBoxSize - 6);
+
+        const sign = new Image();
+        sign.src = "signature.png";
+
+        sign.onload = () => {
+          // Signature image on right side (aligned with QR)
+          doc.addImage(sign, "PNG", signX, signTextY + 4, 60, 22);
+          footer(qrBoxY + qrBoxSize + 12);
+        };
+
+        // If signature missing, still continue
+        sign.onerror = () => footer(qrBoxY + qrBoxSize + 12);
       };
-      sign.onerror = () => footer(signY+10);
+
+      // If QR fails, still continue
+      qr.onerror = () => footer(signY + 30);
     }
 
     function footer(y){
-      doc.line(20,y+8,190,y+8);
+      doc.line(20,y,190,y);
       doc.setFontSize(10);
-      doc.text("RS Home Care Pvt Ltd",105,y+18,{align:"center"});
-      doc.text(
-        "Phone: +91 7550052799 | Email: rshomecaremaduraiofficial@gmail.com",
-        105,y+24,{align:"center"}
-      );
+      doc.setFont("helvetica","normal");
+
+      doc.text("RS Home Care Pvt Ltd",105,y+10,{align:"center"});
+      doc.text(`Phone: ${RS_PHONE} | Email: ${RS_EMAIL}`,105,y+16,{align:"center"});
+
       doc.save(`RS_Home_Care_Appointment_${name.replace(/\s+/g,'_')}.pdf`);
     }
   }
