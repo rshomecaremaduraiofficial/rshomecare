@@ -109,21 +109,20 @@ button:hover{
 value="https://rshomecare.vercel.app/thankyou.html">
 
     
-<form id="appointmentForm">
   <div class="form-group">
-    <input type="text" id="clientName" placeholder="Your Name" required>
+    <input type="text" id="clientName" name="client_name" placeholder="Your Name" required>
   </div>
 
   <div class="form-group">
-    <input type="email" id="clientEmail" placeholder="Your Email" required>
+    <input type="email" id="clientEmail" name="client_email" placeholder="Your Email" required>
   </div>
 
   <div class="form-group">
-    <input type="text" id="clientPhone" placeholder="Phone Number" required>
+    <input type="text" id="clientPhone" name="client_phone" placeholder="Phone Number" required>
   </div>
 
   <div class="form-group">
-    <textarea id="appointmentDetails"
+    <textarea id="appointmentDetails" name="appoinment_about"
       placeholder="What is this appointment about?" required></textarea>
   </div>
 
@@ -163,4 +162,3 @@ document.getElementById("appointmentForm").addEventListener("submit", function(e
 
 </body>
 </html>
-
