@@ -175,15 +175,27 @@ document.addEventListener("DOMContentLoaded", () => {
     function signature(){
       doc.line(20,145,190,145);
 
-      doc.setFont("helvetica","normal");
-      doc.text(
-        "This document confirms your appointment with RS Home Care. " +
-        "Please keep this confirmation for your reference.",
-        20,
-        155,
-        { maxWidth:170 }
-      );
+     doc.setFont("helvetica","normal");
+doc.text(
+  "This document confirms your appointment with RS Home Care. " +
+  "Please keep this confirmation for your reference. " +
+  "Our team will contact you shortly to coordinate and confirm the service. " +
+  "Thank you for choosing RS Home Care.",
+  20,
+  155,
+  { maxWidth:170 }
+);
 
+doc.text(
+  "RS Home Care is committed to providing kind, reliable, and personalised home care services " +
+  "that help people live comfortably and independently in their own homes. Our caring approach " +
+  "focuses on treating every individual with respect, dignity, and compassion. We support daily " +
+  "living needs while building trusting relationships with clients and their families, ensuring " +
+  "care is always delivered with warmth, understanding, and genuine concern.",
+  20,
+  170,
+  { maxWidth:170 }
+);
       doc.setFont("helvetica","bold");
       doc.text("For RS Home Care",20,180);
 
