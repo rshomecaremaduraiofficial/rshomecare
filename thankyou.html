@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Appointment Confirmed – RS Home Care</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="logo.png">
+<link rel="icon" type="image/png" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const phone   = sessionStorage.getItem("clientPhone");
   const email   = sessionStorage.getItem("clientEmail");
   const address = sessionStorage.getItem("clientAddress");
+  const time = sessionStorage.getItem("preferredTime");
 
   if(!name || !phone){
     alert("Client details missing. Please book appointment again.");
@@ -115,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="info-row"><strong>Appointment No</strong><span>${appointmentNumber}</span></div>
     <div class="info-row"><strong>Reference No</strong><span>${referenceNumber}</span></div>
     <div class="info-row"><strong>Status</strong><span>${appointmentStatus}</span></div>
+    <div class="info-row"><strong>Preferred Time</strong><span>${time || "-"}</span></div>
   `;
 
   document.getElementById("downloadBtn").addEventListener("click", generatePDF);
@@ -126,7 +128,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const date = new Date().toLocaleDateString("en-GB",{
       day:"2-digit",month:"long",year:"numeric"
     });
-
+function formatTime(t){
+  if(!t) return "-";
+  const [h,m] = t.split(":");
+  const hour = parseInt(h);
+  const ampm = hour >= 12 ? "PM" : "AM";
+  const hr = hour % 12 || 12;
+  return `${hr}:${m} ${ampm}`;
+}
     // ===== QR should contain ALL info in the PDF + RS contact =====
  const trackerUrl =
   `${window.location.origin}/tracker.html` +
@@ -184,6 +193,7 @@ const qrUrl =
       row("Appointment No", appointmentNumber);
       row("Reference No", referenceNumber);
       row("Status", appointmentStatus);
+      row("Preferred Time", formatTime(time));
       row("Date", date);
 
       contentAndSignature(y + 8);
@@ -270,4 +280,3 @@ const qrBoxY = signY;
 
 </body>
 </html>
-
