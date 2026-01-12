@@ -120,8 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="info-row"><strong>Appointment No</strong><span>${appointmentNumber}</span></div>
     <div class="info-row"><strong>Reference No</strong><span>${referenceNumber}</span></div>
     <div class="info-row"><strong>Status</strong><span>${appointmentStatus}</span></div>
-    <div class="info-row"><strong>Day</strong><span>${day || "-"}</span></div>
-    <div class="info-row"><strong>Preferred Time</strong><span>${formatTime(time)}</span></div>
   `;
 
   document.getElementById("downloadBtn").addEventListener("click", generatePDF);
@@ -198,8 +196,6 @@ document.addEventListener("DOMContentLoaded", () => {
       row("Appointment No", appointmentNumber);
       row("Reference No", referenceNumber);
       row("Status", appointmentStatus);
-      row("Day", day);
-      row("Preferred Time", formatTime(time));
       row("Generated On", generatedOn);
 
       contentAndSignature(y + 8);
