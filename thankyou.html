@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" +
       encodeURIComponent(qrData);
 
-    /* ===== LOGO ===== */
+    /* ===== HEADER ===== */
     const logo = new Image();
     logo.src = "logo.png";
 
@@ -147,17 +147,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       doc.setFont("helvetica","normal");
       let y = 82;
-      doc.text("Client Name",20,y);      doc.text(":",70,y); doc.text(name,75,y);
+      doc.text("Client Name",20,y);     doc.text(":",70,y); doc.text(name,75,y);
       y+=8;
-      doc.text("Phone Number",20,y);    doc.text(":",70,y); doc.text(phone,75,y);
+      doc.text("Phone Number",20,y);   doc.text(":",70,y); doc.text(phone,75,y);
       y+=8;
-      doc.text("Appointment No",20,y);  doc.text(":",70,y); doc.text(appointmentNumber,75,y);
+      doc.text("Appointment No",20,y); doc.text(":",70,y); doc.text(appointmentNumber,75,y);
       y+=8;
-      doc.text("Reference No",20,y);    doc.text(":",70,y); doc.text(referenceNumber,75,y);
+      doc.text("Reference No",20,y);   doc.text(":",70,y); doc.text(referenceNumber,75,y);
       y+=8;
-      doc.text("Status",20,y);          doc.text(":",70,y); doc.text(appointmentStatus,75,y);
+      doc.text("Status",20,y);         doc.text(":",70,y); doc.text(appointmentStatus,75,y);
       y+=8;
-      doc.text("Date",20,y);            doc.text(":",70,y); doc.text(date,75,y);
+      doc.text("Date",20,y);           doc.text(":",70,y); doc.text(date,75,y);
 
       /* ===== QR BOX ===== */
       doc.setFont("helvetica","bold");
@@ -168,55 +168,55 @@ document.addEventListener("DOMContentLoaded", () => {
       qr.src = qrUrl;
       qr.onload = () => {
         doc.addImage(qr,"PNG",135,83,40,40);
-        signature();
+        contentAndSignature();
       };
     }
 
-    function signature(){
+    function contentAndSignature(){
       doc.line(20,145,190,145);
 
-     doc.setFont("helvetica","normal");
-doc.text(
-  "This document confirms your appointment with RS Home Care. " +
-  "Please keep this confirmation for your reference. " +
-  "Our team will contact you shortly to coordinate and confirm the service. " +
-  "Thank you for choosing RS Home Care.",
-  20,
-  155,
-  { maxWidth:170 }
-);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(11);
 
-doc.text(
-  "RS Home Care is committed to providing kind, reliable, and personalised home care services " +
-  "that help people live comfortably and independently in their own homes. Our caring approach " +
-  "focuses on treating every individual with respect, dignity, and compassion. We support daily " +
-  "living needs while building trusting relationships with clients and their families, ensuring " +
-  "care is always delivered with warmth, understanding, and genuine concern.",
-  20,
-  170,
-  { maxWidth:170 }
-);
+      const text =
+        "This document confirms your appointment with RS Home Care. " +
+        "Please keep this confirmation for your reference. " +
+        "Our team will contact you shortly to coordinate and confirm the service. " +
+        "Thank you for choosing RS Home Care.\n\n" +
+        "RS Home Care is committed to providing kind, reliable, and personalised home care services " +
+        "that help people live comfortably and independently in their own homes. Our caring approach " +
+        "focuses on treating every individual with respect, dignity, and compassion. We support daily " +
+        "living needs while building trusting relationships with clients and their families, ensuring " +
+        "care is always delivered with warmth, understanding, and genuine concern.";
+
+      const lines = doc.splitTextToSize(text,170);
+      const startY = 155;
+      doc.text(lines,20,startY);
+
+      const textHeight = lines.length * 6;
+      const signY = startY + textHeight + 12;
+
       doc.setFont("helvetica","bold");
-      doc.text("For RS Home Care",20,180);
+      doc.text("For RS Home Care",20,signY);
 
       const sign = new Image();
       sign.src = "signature.png";
 
       sign.onload = () => {
-        doc.addImage(sign,"PNG",20,183,55,22);
-        footer();
+        doc.addImage(sign,"PNG",20,signY+4,55,22);
+        footer(signY+32);
       };
-      sign.onerror = footer;
+      sign.onerror = () => footer(signY+10);
     }
 
-    function footer(){
-      doc.line(20,210,190,210);
+    function footer(y){
+      doc.line(20,y+8,190,y+8);
       doc.setFontSize(10);
       doc.setFont("helvetica","normal");
-      doc.text("RS Home Care Pvt Ltd",105,220,{align:"center"});
+      doc.text("RS Home Care Pvt Ltd",105,y+18,{align:"center"});
       doc.text(
         "Phone: +91 7550052799 | Email: rshomecaremaduraiofficial@gmail.com",
-        105,226,{align:"center"}
+        105,y+24,{align:"center"}
       );
       doc.save(`RS_Home_Care_Appointment_${name.replace(/\s+/g,'_')}.pdf`);
     }
