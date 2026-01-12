@@ -52,23 +52,6 @@ button{
 </div>
 
 <script>
-    function getQueryParams() {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    reference: params.get('ref'),
-    appointment: params.get('apt')
-  };
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const { reference, appointment } = getQueryParams();
-  const status = "Confirmed"; // same as in PHP
-
-  document.getElementById("clientInfo").innerHTML =
-    `<strong>Reference No:</strong> ${reference}<br>
-     <strong>Appointment No:</strong> ${appointment}<br>
-     <strong>Status:</strong> ${status}`;
-});
 // Generate unique reference number
 function generateReferenceNumber() {
   const now = new Date();
