@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Appointment Submitted – RS Home Care</title>
+<title>Appointment Confirmed – RS Home Care</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
 
 <style>
 body{
@@ -14,29 +12,79 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
-  text-align:center;
+  min-height:100vh;
 }
 .box{
   background:#fff;
   padding:40px;
   border-radius:20px;
   box-shadow:0 15px 40px rgba(0,0,0,0.15);
+  max-width:480px;
+  text-align:center;
 }
-img{max-width:140px;margin-bottom:20px}
-h2{color:#2ecc71}
-p{font-size:14px;color:#555}
+img{max-width:120px;margin-bottom:15px}
+button{
+  margin-top:20px;
+  padding:12px 28px;
+  border:none;
+  border-radius:30px;
+  background:#2ecc71;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
-<div class="box">
-  <img src="logo.png" alt="RS Home Care">
-  <h2>Appointment Request Sent!</h2>
-  <p>Thank you for contacting RS Home Care.<br>
-  Our team will reach you shortly.</p>
+<div class="box" id="letter">
+  <img src="logo.png">
+  <h2 style="color:#2ecc71">Appointment Confirmed</h2>
+
+  <p id="clientInfo"></p>
+
+  <p style="font-size:14px;color:#555;margin-top:12px">
+    Thank you for choosing RS Home Care.  
+    Our team will contact you shortly.
+  </p>
+
+  <p style="font-size:13px;margin-top:15px">
+    📞 +91 7550052799<br>
+    ✉️ rshomecaremaduraiofficial@gmail.com
+  </p>
+
+  <img src="signature.png"
+       style="max-width:180px;margin-top:20px">
+
+  <p style="font-size:12px;color:#777">
+    Authorized Signature – Management
+  </p>
+
+  <button onclick="downloadLetter()">Download Confirmation Letter</button>
 </div>
+
+<script>
+const name = sessionStorage.getItem("clientName");
+const phone = sessionStorage.getItem("clientPhone");
+
+document.getElementById("clientInfo").innerHTML =
+  `<strong>Client Name:</strong> ${name}<br>
+   <strong>Phone:</strong> ${phone}<br>
+   <strong>Date:</strong> ${new Date().toLocaleDateString()}`;
+
+function downloadLetter(){
+  const content = document.getElementById("letter").innerHTML;
+  const blob = new Blob([`
+    <html><body>${content}</body></html>
+  `], {type:"text/html"});
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "RS-Home-Care-Appointment-Confirmation.html";
+  a.click();
+}
+</script>
 
 </body>
 </html>
