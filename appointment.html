@@ -112,7 +112,6 @@ value="https://rshomecare.vercel.app/thankyou.html">
 
     
 <form id="appointmentForm">
-
   <div class="form-group">
     <input type="text" id="clientName" placeholder="Your Name" required>
   </div>
@@ -126,44 +125,26 @@ value="https://rshomecare.vercel.app/thankyou.html">
   </div>
 
   <div class="form-group">
-    <textarea id="appointmentDetails" placeholder="What is this appointment about?" required></textarea>
+    <textarea id="appointmentDetails"
+      placeholder="What is this appointment about?" required></textarea>
   </div>
 
   <button type="submit">Submit Appointment</button>
 </form>
+
 </div>
 <script>
-    document.getElementById("appointmentForm").addEventListener("submit", function () {
-  const name = document.querySelector('[name="Client Name"]').value;
-  const phone = document.querySelector('[name="Client Phone"]').value;
-
-  const nextUrl = `https://rshomecare.vercel.app/thankyou.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`;
-
-  const nextInput = document.createElement("input");
-  nextInput.type = "hidden";
-  nextInput.name = "_next";
-  nextInput.value = nextUrl;
-
-  this.appendChild(nextInput);
-});
-document.querySelector("form").addEventListener("submit", function () {
-  const name  = document.querySelector('input[name="Client Name"]').value;
-  const phone = document.querySelector('input[name="Client Phone"]').value;
-
-  sessionStorage.setItem("rs_client_name", name);
-  sessionStorage.setItem("rs_client_phone", phone);
-});
 document.getElementById("appointmentForm").addEventListener("submit", function(e){
   e.preventDefault();
 
-  const name = document.getElementById("clientName").value;
-  const phone = document.getElementById("clientPhone").value;
-  const email = document.getElementById("clientEmail").value;
-  const details = document.getElementById("appointmentDetails").value;
+  const name  = document.getElementById("clientName").value.trim();
+  const phone = document.getElementById("clientPhone").value.trim();
+  const email = document.getElementById("clientEmail").value.trim();
+  const details = document.getElementById("appointmentDetails").value.trim();
 
-  // save for thank you page
-  sessionStorage.setItem("clientName", name);
-  sessionStorage.setItem("clientPhone", phone);
+  // SAVE FOR THANK YOU PAGE
+  sessionStorage.setItem("rs_name", name);
+  sessionStorage.setItem("rs_phone", phone);
 
   const fd = new FormData();
   fd.append("Client Name", name);
