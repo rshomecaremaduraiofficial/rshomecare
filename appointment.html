@@ -37,9 +37,7 @@ h2{
   color:#0f4c81;
   margin-bottom:22px;
 }
-.form-group{
-  margin-bottom:16px;
-}
+.form-group{margin-bottom:16px}
 input, textarea{
   width:100%;
   padding:14px;
@@ -68,7 +66,6 @@ button{
   <h2>Book an Appointment</h2>
 
   <form id="appointmentForm">
-
     <div class="form-group">
       <input type="text" id="clientName" name="Client Name" placeholder="Your Name" required>
     </div>
@@ -95,29 +92,55 @@ button{
 </div>
 
 <script>
+/* ✅ Generate SAME numbers for Email + ThankYou PDF */
+function genRef(){
+  const d = new Date().toISOString().slice(0,10).replace(/-/g,""); // YYYYMMDD
+  const r = Math.random().toString(36).substring(2,7).toUpperCase();
+  return `RS-${d}-${r}`;
+}
+function genAppt(){
+  return `APT-${Math.floor(1000 + Math.random()*9000)}`;
+}
+
 document.getElementById("appointmentForm").addEventListener("submit", function(e){
   e.preventDefault();
 
-  const name    = document.getElementById("clientName").value;
-  const phone   = document.getElementById("clientPhone").value;
-  const email   = document.getElementById("clientEmail").value;
-  const address = document.getElementById("clientAddress").value;
-  const details = document.getElementById("appointmentDetails").value;
+  const name    = document.getElementById("clientName").value.trim();
+  const phone   = document.getElementById("clientPhone").value.trim();
+  const email   = document.getElementById("clientEmail").value.trim();
+  const address = document.getElementById("clientAddress").value.trim();
+  const details = document.getElementById("appointmentDetails").value.trim();
 
-  // Save for PDF page
-   sessionStorage.setItem("clientName", name);
+  // ✅ Generate numbers HERE (so FormSubmit email receives them)
+  const referenceNumber  = genRef();
+  const appointmentNumber = genAppt();
+  const appointmentStatus = "Confirmed";
+
+  // ✅ Save for thankyou.html / PDF (so client sees SAME values)
+  sessionStorage.setItem("clientName", name);
   sessionStorage.setItem("clientPhone", phone);
   sessionStorage.setItem("clientEmail", email);
   sessionStorage.setItem("clientAddress", address);
 
+  sessionStorage.setItem("referenceNumber", referenceNumber);
+  sessionStorage.setItem("appointmentNumber", appointmentNumber);
+  sessionStorage.setItem("appointmentStatus", appointmentStatus);
+
+  // ✅ Send to FormSubmit email
   const fd = new FormData();
+  fd.append("Appointment No", appointmentNumber);
+  fd.append("Reference No", referenceNumber);
+  fd.append("Status", appointmentStatus);
+
   fd.append("Client Name", name);
   fd.append("Client Email", email);
   fd.append("Client Phone", phone);
   fd.append("Client Address", address);
   fd.append("Appointment Details", details);
+
   fd.append("_captcha", "false");
-  fd.append("_subject", "New Appointment Request – RS Home Care");
+  fd.append("_subject", `New Appointment – ${appointmentNumber} (${referenceNumber})`);
+  fd.append("_template", "table");
 
   fetch("https://formsubmit.co/rshomecaremaduraiofficial@gmail.com", {
     method: "POST",
