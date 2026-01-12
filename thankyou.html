@@ -52,6 +52,20 @@ button{
 </div>
 
 <script>
+function generateReferenceNumber() {
+  const now = new Date();
+  const datePart = now.toISOString().slice(0,10).replace(/-/g,""); // YYYYMMDD
+  const randomPart = Math.random().toString(36).substring(2,7).toUpperCase(); // 5-char
+  return `RS-${datePart}-${randomPart}`;
+}
+function generateAppointmentNumber() {
+  return `APT-${Math.floor(1000 + Math.random() * 9000)}`; // 1000–9999
+}
+const referenceNumber = generateReferenceNumber();
+const appointmentNumber = generateAppointmentNumber();
+
+sessionStorage.setItem("rs_ref", referenceNumber);
+sessionStorage.setItem("rs_apt", appointmentNumber);
 document.addEventListener("DOMContentLoaded", () => {
 
   const name  = sessionStorage.getItem("rs_name");
@@ -63,7 +77,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.getElementById("clientInfo").innerHTML =
-    `<strong>Name:</strong> ${name}<br><strong>Phone:</strong> ${phone}`;
+    `<strong>Name:</strong> ${name}<br><strong>Phone:</strong> ${phone}
+    <strong>Reference No:</strong> ${referenceNumber}<br>
+   <strong>Appointment No:</strong> ${appointmentNumber}`;
 
   document.getElementById("downloadBtn").addEventListener("click", generatePDF);
 
@@ -95,6 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
     doc.text(`Name   : ${name}`,20,55);
     doc.text(`Phone  : ${phone}`,20,63);
     doc.text(`Date   : ${date}`,20,71);
+    doc.text(`Reference No : ${referenceNumber}`,20,79);
+    doc.text(`Appointment No : ${appointmentNumber}`,20,87);
 
     // MESSAGE
     doc.text(
