@@ -152,7 +152,7 @@ document.getElementById("appointmentForm").addEventListener("submit", function(e
   fd.append("_captcha", "false");
   fd.append("_subject", "New Appointment Request – RS Home Care");
 
-  fetch("https://formsubmit.co/rshomecaremaduraiofficial@gmail.com", {
+  fetch("submit_appointment.php", {
     method: "POST",
     body: fd
   }).then(() => {
@@ -163,3 +163,4 @@ document.getElementById("appointmentForm").addEventListener("submit", function(e
 
 </body>
 </html>
+
