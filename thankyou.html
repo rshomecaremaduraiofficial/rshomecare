@@ -213,14 +213,14 @@ document.addEventListener("DOMContentLoaded", () => {
       // Calculate next Y safely
       const signY = startY + 10 + (lines.length * 6) + 12;
 
-      // --- QR + Signature layout ---
-      // QR box on LEFT, signature on RIGHT
-      const qrBoxX = 20;
-      const qrBoxY = signY;
-      const qrBoxSize = 38;
+      /// --- QR + Signature layout ---
+// Signature on LEFT, QR on RIGHT
+const signX = 20;
+const signTextY = signY + 8;
 
-      const signX = 70; // signature text starts after QR
-      const signTextY = signY + 8;
+const qrBoxSize = 38;
+const qrBoxX = 190 - qrBoxSize; // right aligned
+const qrBoxY = signY;
 
       doc.setFont("helvetica","bold");
       doc.text("For RS Home Care", signX, signTextY);
