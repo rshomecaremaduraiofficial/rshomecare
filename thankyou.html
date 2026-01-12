@@ -228,7 +228,7 @@ const qrBoxY = signY;
       // QR label + box
       doc.setFontSize(9);
       doc.setFont("helvetica","normal");
-      doc.text("Scan", qrBoxX + (qrBoxSize/2), qrBoxY - 2, {align:"center"});
+       doc.text("Scan and Track", qrBoxX + (qrBoxSize/2), qrBoxY - 2, {align:"center"});
       doc.rect(qrBoxX, qrBoxY, qrBoxSize, qrBoxSize);
 
       // Load QR image and then signature image
@@ -271,3 +271,4 @@ const qrBoxY = signY;
 
 </body>
 </html>
+
