@@ -44,7 +44,6 @@ img{max-width:120px;margin-bottom:15px}
 }
 .info-label{
   font-weight:600;
-  color:#0f4c81;
 }
 button{
   margin-top:22px;
@@ -96,11 +95,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.getElementById("clientInfo").innerHTML = `
-    <div class="info-row"><span class="info-label">Name</span><span>${name}</span></div>
-    <div class="info-row"><span class="info-label">Phone</span><span>${phone}</span></div>
-    <div class="info-row"><span class="info-label">Appointment No</span><span>${appointmentNumber}</span></div>
-    <div class="info-row"><span class="info-label">Reference No</span><span>${referenceNumber}</span></div>
-    <div class="info-row"><span class="info-label">Status</span><span>${appointmentStatus}</span></div>
+    <div class="info-row"><strong>Name</strong><span>${name}</span></div>
+    <div class="info-row"><strong>Phone</strong><span>${phone}</span></div>
+    <div class="info-row"><strong>Appointment No</strong><span>${appointmentNumber}</span></div>
+    <div class="info-row"><strong>Reference No</strong><span>${referenceNumber}</span></div>
+    <div class="info-row"><strong>Status</strong><span>${appointmentStatus}</span></div>
   `;
 
   document.getElementById("downloadBtn").addEventListener("click", generatePDF);
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
       day:"2-digit",month:"long",year:"numeric"
     });
 
-    /* ===== QR URL (NO DATABASE) ===== */
+    /* ===== QR DATA ===== */
     const qrData =
       `RS HOME CARE\n` +
       `Appointment No: ${appointmentNumber}\n` +
@@ -121,98 +120,71 @@ document.addEventListener("DOMContentLoaded", () => {
       `Status: ${appointmentStatus}\n` +
       `Client: ${name}\n` +
       `Phone: ${phone}\n\n` +
-      `Contact:\n` +
-      `+91 7550052799\n` +
-      `rshomecaremaduraiofficial@gmail.com`;
+      `Contact:\n+91 7550052799\nrshomecaremaduraiofficial@gmail.com`;
 
     const qrUrl =
       "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" +
       encodeURIComponent(qrData);
 
-    /* ===== HEADER ===== */
-    doc.setFillColor(15,76,129);
-    doc.rect(0,0,210,32,"F");
-
+    /* ===== LOGO ONLY (NO COLORS) ===== */
     const logo = new Image();
     logo.src = "logo.png";
 
     logo.onload = () => {
-      doc.addImage(logo,"PNG",15,6,22,22);
+      doc.addImage(logo,"PNG",90,10,30,30);
+
       doc.setFont("helvetica","bold");
-      doc.setFontSize(18);
-      doc.setTextColor(255,255,255);
-      doc.text("RS HOME CARE",105,18,{align:"center"});
-      doc.setFontSize(11);
-      doc.text("Appointment Confirmation",105,25,{align:"center"});
+      doc.setFontSize(16);
       doc.setTextColor(0,0,0);
+      doc.text("RS HOME CARE",105,50,{align:"center"});
+
+      doc.setFontSize(11);
+      doc.setFont("helvetica","normal");
+      doc.text("Appointment Confirmation",105,57,{align:"center"});
+
+      doc.line(20,60,190,60);
+
       body();
     };
 
     function body(){
-      doc.setFillColor(245,247,250);
-      doc.rect(15,40,180,20,"F");
       doc.setFont("helvetica","bold");
-      doc.setFontSize(11);
-      doc.text("Appointment No:",20,52);
-      doc.text(appointmentNumber,70,52);
-      doc.text("Status:",120,52);
-      doc.text(appointmentStatus,145,52);
-
-      doc.setFontSize(13);
-      doc.text("Client Information",15,74);
-      doc.rect(15,79,180,45);
+      doc.text("Appointment Details",20,72);
 
       doc.setFont("helvetica","normal");
-      let y = 89;
-      doc.text("Client Name",20,y); doc.text(":",65,y); doc.text(name,70,y);
+      let y = 82;
+      doc.text("Client Name",20,y);      doc.text(":",70,y); doc.text(name,75,y);
       y+=8;
-      doc.text("Phone",20,y); doc.text(":",65,y); doc.text(phone,70,y);
+      doc.text("Phone Number",20,y);    doc.text(":",70,y); doc.text(phone,75,y);
       y+=8;
-      doc.text("Reference No",20,y); doc.text(":",65,y); doc.text(referenceNumber,70,y);
+      doc.text("Appointment No",20,y);  doc.text(":",70,y); doc.text(appointmentNumber,75,y);
       y+=8;
-      doc.text("Date",20,y); doc.text(":",65,y); doc.text(date,70,y);
+      doc.text("Reference No",20,y);    doc.text(":",70,y); doc.text(referenceNumber,75,y);
+      y+=8;
+      doc.text("Status",20,y);          doc.text(":",70,y); doc.text(appointmentStatus,75,y);
+      y+=8;
+      doc.text("Date",20,y);            doc.text(":",70,y); doc.text(date,75,y);
 
-      /* ===== QR IMAGE ===== */
+      /* ===== QR BOX ===== */
+      doc.rect(130,78,50,50); // QR container box
+      doc.setFontSize(9);
+      doc.text("Scan for Details",155,75,{align:"center"});
+
       const qr = new Image();
       qr.src = qrUrl;
       qr.onload = () => {
-        doc.addImage(qr,"PNG",140,85,40,40);
-        message();
-      };
-    }
-
-    function message(){
-      const msg =
-        "This document confirms your appointment with RS Home Care.\n\n" +
-        "Please present this confirmation during service. " +
-        "The QR code contains appointment verification details.\n\n" +
-        "Thank you for choosing RS Home Care.";
-
-      doc.text(doc.splitTextToSize(msg,170),20,135);
-      signature();
-    }
-
-    function signature(){
-      doc.setFont("helvetica","bold");
-      doc.text("For RS Home Care",20,180);
-
-      const sign = new Image();
-      sign.src = "signature.png";
-
-      sign.onload = () => {
-        doc.addImage(sign,"PNG",20,183,55,22);
+        doc.addImage(qr,"PNG",135,83,40,40);
         footer();
       };
-      sign.onerror = footer;
     }
 
     function footer(){
+      doc.line(20,200,190,200);
       doc.setFontSize(10);
-      doc.setFont("helvetica","normal");
-      doc.text("RS Home Care Pvt Ltd",105,260,{align:"center"});
+      doc.text("RS Home Care Pvt Ltd",105,210,{align:"center"});
       doc.text(
         "Phone: +91 7550052799 | Email: rshomecaremaduraiofficial@gmail.com",
-        105,266,{align:"center"}
+        105,216,{align:"center"}
       );
       doc.save(`RS_Home_Care_Appointment_${name.replace(/\s+/g,'_')}.pdf`);
     }
@@ -222,4 +194,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
-
