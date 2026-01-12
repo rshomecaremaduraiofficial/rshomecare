@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Appointment – RS Home Care</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Poppins',sans-serif;
+    background:#f5f9ff;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:18px;
+    color:#111;
+  }
+  .card{
+    background:#fff;
+    width:100%;
+    max-width:520px;
+    border-radius:18px;
+    padding:28px;
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
+  }
+  .brand{
+    text-align:center;
+    margin-bottom:16px;
+  }
+  .brand img{max-width:110px;display:block;margin:0 auto 10px}
+  .brand h2{font-size:20px}
+  .brand p{font-size:13px;color:#444}
+
+  .status{
+    margin:16px 0 10px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:12px 14px;
+    font-weight:600;
+  }
+
+  .grid{
+    margin-top:12px;
+    border:1px solid #eee;
+    border-radius:12px;
+    padding:14px;
+    background:#fafcff;
+  }
+  .row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:8px 0;
+    border-bottom:1px dashed #e8e8e8;
+    font-size:14px;
+  }
+  .row:last-child{border-bottom:none}
+  .label{font-weight:600;color:#0f4c81;min-width:140px}
+  .value{
+    text-align:right;
+    flex:1;
+    word-break:break-word;
+    white-space:pre-wrap;
+    color:#111;
+  }
+
+  .footer{
+    margin-top:16px;
+    font-size:12px;
+    color:#444;
+    text-align:center;
+  }
+
+  .form{
+    margin-top:14px;
+    border:1px solid #eee;
+    border-radius:12px;
+    padding:14px;
+  }
+  .form p{font-size:13px;color:#444;margin-bottom:10px}
+  .form input{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:14px;
+    margin-bottom:10px;
+  }
+  .btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:#2ecc71;
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .note{
+    margin-top:10px;
+    font-size:12px;
+    color:#666;
+    line-height:1.4;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="brand">
+    <img src="logo.png" alt="RS Home Care">
+    <h2>Track Your Appointment</h2>
+    <p>Scan QR from your PDF to view details</p>
+  </div>
+
+  <div id="statusBox" class="status">Status: —</div>
+
+  <div id="detailsBox" class="grid" style="display:none;"></div>
+
+  <!-- Optional local lookup (same device only) -->
+  <div class="form" id="lookupForm">
+    <p>If you don’t have the QR link, you can try tracking using your numbers (works only on the same device/browser where you booked).</p>
+    <input id="refInput" placeholder="Reference No (e.g., RS-20260112-ABCDE)" />
+    <input id="aptInput" placeholder="Appointment No (e.g., APT-1234)" />
+    <button class="btn" id="findBtn" type="button">Find Appointment</button>
+    <div class="note">
+      Without a database, the website cannot search appointments globally. For all-devices tracking, you’ll need a backend later.
+    </div>
+  </div>
+
+  <div class="footer">
+    RS Home Care • Phone: +91 7550052799 • Email: rshomecaremaduraiofficial@gmail.com
+  </div>
+</div>
+
+<script>
+function getParam(key){
+  return new URLSearchParams(window.location.search).get(key);
+}
+
+function showDetails(data){
+  document.getElementById("detailsBox").style.display = "block";
+  document.getElementById("detailsBox").innerHTML = `
+    <div class="row"><div class="label">Client Name</div><div class="value">${data.name || "-"}</div></div>
+    <div class="row"><div class="label">Phone</div><div class="value">${data.phone || "-"}</div></div>
+    <div class="row"><div class="label">Email</div><div class="value">${data.email || "-"}</div></div>
+    <div class="row"><div class="label">Address</div><div class="value">${data.address || "-"}</div></div>
+    <div class="row"><div class="label">Appointment No</div><div class="value">${data.appt || "-"}</div></div>
+    <div class="row"><div class="label">Reference No</div><div class="value">${data.ref || "-"}</div></div>
+    <div class="row"><div class="label">Status</div><div class="value">${data.status || "-"}</div></div>
+    <div class="row"><div class="label">Date</div><div class="value">${data.date || "-"}</div></div>
+  `;
+}
+
+function setStatus(status){
+  document.getElementById("statusBox").textContent = `Status: ${status || "—"}`;
+}
+
+function decodeSafe(v){
+  try { return decodeURIComponent(v || ""); } catch(e){ return v || ""; }
+}
+
+/* 1) If opened via QR link (URL params), show directly */
+const dataFromUrl = {
+  ref: decodeSafe(getParam("ref")),
+  appt: decodeSafe(getParam("appt")),
+  status: decodeSafe(getParam("status")),
+  name: decodeSafe(getParam("name")),
+  phone: decodeSafe(getParam("phone")),
+  email: decodeSafe(getParam("email")),
+  address: decodeSafe(getParam("address")),
+  date: decodeSafe(getParam("date"))
+};
+
+if (dataFromUrl.ref || dataFromUrl.appt) {
+  setStatus(dataFromUrl.status || "Confirmed");
+  showDetails(dataFromUrl);
+  // If opened from QR, hide manual lookup box
+  document.getElementById("lookupForm").style.display = "none";
+}
+
+/* 2) Optional: localStorage lookup (same device only) */
+document.getElementById("findBtn").addEventListener("click", () => {
+  const ref = document.getElementById("refInput").value.trim();
+  const appt = document.getElementById("aptInput").value.trim();
+
+  const list = JSON.parse(localStorage.getItem("rs_appointments") || "[]");
+  const match = list.find(x => x.ref === ref && x.appt === appt);
+
+  if(!match){
+    setStatus("Not Found");
+    document.getElementById("detailsBox").style.display = "block";
+    document.getElementById("detailsBox").innerHTML =
+      `<div class="row"><div class="label">Result</div><div class="value">No matching appointment found on this device.</div></div>`;
+    return;
+  }
+
+  setStatus(match.status || "Confirmed");
+  showDetails(match);
+});
+</script>
+
+</body>
+</html>
