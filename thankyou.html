@@ -81,7 +81,7 @@ function genRef(){
   return `RS-${d}-${Math.random().toString(36).substring(2,7).toUpperCase()}`;
 }
 function genAppt(){
-  return `APT-${Math.floor(1000 + Math.random()*9000)}`;
+   return `RSHC-${Math.floor(1000 + Math.random()*9000)}`;
 }
 
 const referenceNumber = genRef();
@@ -271,4 +271,5 @@ const qrBoxY = signY;
 
 </body>
 </html>
+
 
