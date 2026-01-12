@@ -5,27 +5,32 @@
 <title>Appointment Confirmed – RS Home Care</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
 <style>
 body{
-  font-family:Poppins,sans-serif;
+  font-family:'Poppins',sans-serif;
   background:#f5f9ff;
   display:flex;
   justify-content:center;
   align-items:center;
-  min-height:100vh;
+  height:100vh;
 }
 .box{
   background:#fff;
   padding:40px;
   border-radius:20px;
-  box-shadow:0 15px 40px rgba(0,0,0,0.15);
-  max-width:480px;
+  max-width:420px;
+  width:100%;
   text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,.15);
 }
 img{max-width:120px;margin-bottom:15px}
 button{
   margin-top:20px;
-  padding:12px 28px;
+  padding:14px 28px;
   border:none;
   border-radius:30px;
   background:#2ecc71;
@@ -38,52 +43,95 @@ button{
 
 <body>
 
-<div class="box" id="letter">
-  <img src="logo.png">
-  <h2 style="color:#2ecc71">Appointment Confirmed</h2>
-
+<div class="box">
+  <img src="logo.png" alt="RS Home Care">
+  <h2>Appointment Submitted</h2>
   <p id="clientInfo"></p>
 
-  <p style="font-size:14px;color:#555;margin-top:12px">
-    Thank you for choosing RS Home Care.  
-    Our team will contact you shortly.
-  </p>
-
-  <p style="font-size:13px;margin-top:15px">
-    📞 +91 7550052799<br>
-    ✉️ rshomecaremaduraiofficial@gmail.com
-  </p>
-
-  <img src="signature.png"
-       style="max-width:180px;margin-top:20px">
-
-  <p style="font-size:12px;color:#777">
-    Authorized Signature – Management
-  </p>
-
-  <button onclick="downloadLetter()">Download Confirmation Letter</button>
+  <button id="downloadBtn">Download Confirmation Letter</button>
 </div>
 
 <script>
-const name = sessionStorage.getItem("clientName");
-const phone = sessionStorage.getItem("clientPhone");
+document.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById("clientInfo").innerHTML =
-  `<strong>Client Name:</strong> ${name}<br>
-   <strong>Phone:</strong> ${phone}<br>
-   <strong>Date:</strong> ${new Date().toLocaleDateString()}`;
+  const params = new URLSearchParams(window.location.search);
 
-function downloadLetter(){
-  const content = document.getElementById("letter").innerHTML;
-  const blob = new Blob([`
-    <html><body>${content}</body></html>
-  `], {type:"text/html"});
+  // IMPORTANT: match form field names
+  const name  = params.get("Client Name") || "Client";
+  const phone = params.get("Client Phone") || "N/A";
 
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "RS-Home-Care-Appointment-Confirmation.html";
-  a.click();
-}
+  document.getElementById("clientInfo").innerHTML =
+    `<strong>Name:</strong> ${name}<br><strong>Phone:</strong> ${phone}`;
+
+  document.getElementById("downloadBtn").addEventListener("click", generatePDF);
+
+  function generatePDF(){
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // HEADER
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(18);
+    doc.text("RS HOME CARE",105,20,{align:"center"});
+
+    doc.setFontSize(12);
+    doc.setFont("helvetica","normal");
+    doc.text("Appointment Confirmation Letter",105,30,{align:"center"});
+    doc.line(20,35,190,35);
+
+    // DATE FORMAT
+    const date = new Date().toLocaleDateString("en-GB",{
+      day:"2-digit",
+      month:"long",
+      year:"numeric"
+    });
+
+    // CLIENT DETAILS
+    doc.setFont("helvetica","bold");
+    doc.text("Client Details",20,50);
+
+    doc.setFont("helvetica","normal");
+    doc.text(`Name : ${name}`,20,60);
+    doc.text(`Phone: ${phone}`,20,68);
+    doc.text(`Date : ${date}`,20,76);
+
+    // BODY
+    doc.text(
+      "Thank you for booking an appointment with RS Home Care.\n\n" +
+      "We confirm that your request has been successfully received.\n" +
+      "Our care team will contact you shortly to finalize the details.\n\n" +
+      "We are committed to providing compassionate, reliable, and\n" +
+      "professional home care services.",
+      20,95
+    );
+
+    // SIGNATURE TEXT
+    doc.text("For RS Home Care,",20,145);
+    doc.text("Management",20,153);
+
+    // LOAD SIGNATURE IMAGE SAFELY
+    const img = new Image();
+    img.src = "signature.png";
+
+    img.onload = () => {
+      doc.addImage(img,"PNG",20,158,60,25);
+
+      // FOOTER
+      doc.setFontSize(10);
+      doc.text("RS Home Care Pvt Ltd",105,190,{align:"center"});
+      doc.text(
+        "Phone: +91 7550052799 | Email: rshomecaremaduraiofficial@gmail.com",
+        105,197,{align:"center"}
+      );
+
+      doc.save("RS_Home_Care_Appointment_Confirmation.pdf");
+    };
+
+    img.onerror = () => {
+      alert("Signature image not found. Please upload signature.png");
+    };
+  }
+});
 </script>
 
 </body>
