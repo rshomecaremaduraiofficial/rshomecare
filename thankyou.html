@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <title>Appointment Confirmed – RS Home Care</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -41,9 +39,6 @@ img{max-width:120px;margin-bottom:15px}
   display:flex;
   justify-content:space-between;
   margin-bottom:8px;
-}
-.info-label{
-  font-weight:600;
 }
 button{
   margin-top:22px;
@@ -126,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" +
       encodeURIComponent(qrData);
 
-    /* ===== LOGO ONLY (NO COLORS) ===== */
+    /* ===== LOGO ===== */
     const logo = new Image();
     logo.src = "logo.png";
 
@@ -141,7 +136,6 @@ document.addEventListener("DOMContentLoaded", () => {
       doc.setFontSize(11);
       doc.setFont("helvetica","normal");
       doc.text("Appointment Confirmation",105,57,{align:"center"});
-
       doc.line(20,60,190,60);
 
       body();
@@ -166,25 +160,51 @@ document.addEventListener("DOMContentLoaded", () => {
       doc.text("Date",20,y);            doc.text(":",70,y); doc.text(date,75,y);
 
       /* ===== QR BOX ===== */
-      doc.rect(130,78,50,50); // QR container box
-      doc.setFontSize(9);
+      doc.setFont("helvetica","bold");
       doc.text("Scan for Details",155,75,{align:"center"});
+      doc.rect(130,78,50,50);
 
       const qr = new Image();
       qr.src = qrUrl;
       qr.onload = () => {
         doc.addImage(qr,"PNG",135,83,40,40);
-        footer();
+        signature();
       };
     }
 
+    function signature(){
+      doc.line(20,145,190,145);
+
+      doc.setFont("helvetica","normal");
+      doc.text(
+        "This document confirms your appointment with RS Home Care. " +
+        "Please keep this confirmation for your reference.",
+        20,
+        155,
+        { maxWidth:170 }
+      );
+
+      doc.setFont("helvetica","bold");
+      doc.text("For RS Home Care",20,180);
+
+      const sign = new Image();
+      sign.src = "signature.png";
+
+      sign.onload = () => {
+        doc.addImage(sign,"PNG",20,183,55,22);
+        footer();
+      };
+      sign.onerror = footer;
+    }
+
     function footer(){
-      doc.line(20,200,190,200);
+      doc.line(20,210,190,210);
       doc.setFontSize(10);
-      doc.text("RS Home Care Pvt Ltd",105,210,{align:"center"});
+      doc.setFont("helvetica","normal");
+      doc.text("RS Home Care Pvt Ltd",105,220,{align:"center"});
       doc.text(
         "Phone: +91 7550052799 | Email: rshomecaremaduraiofficial@gmail.com",
-        105,216,{align:"center"}
+        105,226,{align:"center"}
       );
       doc.save(`RS_Home_Care_Appointment_${name.replace(/\s+/g,'_')}.pdf`);
     }
