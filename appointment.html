@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <title>Book Appointment – RS Home Care</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="logo.png">
+
+<link rel="icon" type="image/png" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
 
-<link rel="icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -58,6 +58,11 @@ button{
   font-weight:600;
   cursor:pointer;
 }
+.time-note{
+  font-size:12px;
+  color:#555;
+  margin-top:4px;
+}
 </style>
 </head>
 
@@ -68,24 +73,32 @@ button{
   <h2>Book an Appointment</h2>
 
   <form id="appointmentForm">
+
     <div class="form-group">
-      <input type="text" id="clientName" name="Client Name" placeholder="Your Name" required>
+      <input type="text" id="clientName" placeholder="Your Name" required>
     </div>
 
     <div class="form-group">
-      <input type="email" id="clientEmail" name="Client Email" placeholder="Your Email" required>
+      <input type="email" id="clientEmail" placeholder="Your Email" required>
     </div>
 
     <div class="form-group">
-      <input type="text" id="clientPhone" name="Client Phone" placeholder="Phone Number" required>
+      <input type="text" id="clientPhone" placeholder="Phone Number" required>
     </div>
 
     <div class="form-group">
-      <input type="text" id="clientAddress" name="Client Address" placeholder="Your Address" required>
+      <input type="text" id="clientAddress" placeholder="Your Address" required>
+    </div>
+
+    <!-- ✅ Preferred Time -->
+    <div class="form-group">
+      <input type="time" id="preferredTime"
+             min="10:00" max="18:00" required>
+      <div class="time-note">Available time: 10:00 AM – 6:00 PM</div>
     </div>
 
     <div class="form-group">
-      <textarea id="appointmentDetails" name="Appointment Details"
+      <textarea id="appointmentDetails"
         placeholder="What is this appointment about?" required></textarea>
     </div>
 
@@ -94,9 +107,9 @@ button{
 </div>
 
 <script>
-/* ✅ Generate SAME numbers for Email + ThankYou PDF */
+/* Generate numbers */
 function genRef(){
-  const d = new Date().toISOString().slice(0,10).replace(/-/g,""); // YYYYMMDD
+  const d = new Date().toISOString().slice(0,10).replace(/-/g,"");
   const r = Math.random().toString(36).substring(2,7).toUpperCase();
   return `RS-${d}-${r}`;
 }
@@ -107,45 +120,54 @@ function genAppt(){
 document.getElementById("appointmentForm").addEventListener("submit", function(e){
   e.preventDefault();
 
-  const name    = document.getElementById("clientName").value.trim();
-  const phone   = document.getElementById("clientPhone").value.trim();
-  const email   = document.getElementById("clientEmail").value.trim();
-  const address = document.getElementById("clientAddress").value.trim();
-  const details = document.getElementById("appointmentDetails").value.trim();
+  const name    = clientName.value.trim();
+  const phone   = clientPhone.value.trim();
+  const email   = clientEmail.value.trim();
+  const address = clientAddress.value.trim();
+  const details = appointmentDetails.value.trim();
+  const time    = preferredTime.value;
 
-  // ✅ Generate numbers HERE (so FormSubmit email receives them)
-  const referenceNumber  = genRef();
+  // ✅ Time validation
+  if(time < "10:00" || time > "18:00"){
+    alert("Please select a time between 10:00 AM and 6:00 PM");
+    return;
+  }
+
+  const referenceNumber   = genRef();
   const appointmentNumber = genAppt();
   const appointmentStatus = "Confirmed";
 
-  // Save to localStorage tracker list (same device tracking)
-const list = JSON.parse(localStorage.getItem("rs_appointments") || "[]");
-list.unshift({
-  ref: referenceNumber,
-  appt: appointmentNumber,
-  status: appointmentStatus,
-  name,
-  phone,
-  email,
-  address,
-  date: new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"long",year:"numeric"})
-});
-localStorage.setItem("rs_appointments", JSON.stringify(list.slice(0,50)));
-  // ✅ Save for thankyou.html / PDF (so client sees SAME values)
+  const dateStr = new Date().toLocaleDateString("en-GB",{
+    day:"2-digit",month:"long",year:"numeric"
+  });
+
+  // Save locally
+  const list = JSON.parse(localStorage.getItem("rs_appointments") || "[]");
+  list.unshift({
+    ref: referenceNumber,
+    appt: appointmentNumber,
+    status: appointmentStatus,
+    name, phone, email, address,
+    time, date: dateStr
+  });
+  localStorage.setItem("rs_appointments", JSON.stringify(list.slice(0,50)));
+
+  // Save for thankyou / PDF
   sessionStorage.setItem("clientName", name);
   sessionStorage.setItem("clientPhone", phone);
   sessionStorage.setItem("clientEmail", email);
   sessionStorage.setItem("clientAddress", address);
-
+  sessionStorage.setItem("preferredTime", time);
   sessionStorage.setItem("referenceNumber", referenceNumber);
   sessionStorage.setItem("appointmentNumber", appointmentNumber);
   sessionStorage.setItem("appointmentStatus", appointmentStatus);
 
-  // ✅ Send to FormSubmit email
+  // Send email
   const fd = new FormData();
   fd.append("Appointment No", appointmentNumber);
   fd.append("Reference No", referenceNumber);
   fd.append("Status", appointmentStatus);
+  fd.append("Preferred Time", time);
 
   fd.append("Client Name", name);
   fd.append("Client Email", email);
@@ -153,16 +175,16 @@ localStorage.setItem("rs_appointments", JSON.stringify(list.slice(0,50)));
   fd.append("Client Address", address);
   fd.append("Appointment Details", details);
 
-  fd.append("_captcha", "false");
-  fd.append("_subject", `New Appointment – ${appointmentNumber} (${referenceNumber})`);
-  fd.append("_template", "table");
+  fd.append("_captcha","false");
+  fd.append("_subject",`New Appointment – ${appointmentNumber} (${referenceNumber})`);
+  fd.append("_template","table");
 
   fetch("https://formsubmit.co/rshomecaremaduraiofficial@gmail.com", {
-    method: "POST",
-    body: fd
-  }).then(() => {
-    window.location.href = "thankyou.html";
-  }).catch(() => {
+    method:"POST",
+    body:fd
+  }).then(()=>{
+    window.location.href="thankyou.html";
+  }).catch(()=>{
     alert("Submission failed. Please try again.");
   });
 });
@@ -170,4 +192,3 @@ localStorage.setItem("rs_appointments", JSON.stringify(list.slice(0,50)));
 
 </body>
 </html>
-
