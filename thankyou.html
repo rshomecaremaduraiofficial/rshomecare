@@ -126,23 +126,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ===== QR should contain ALL info in the PDF + RS contact =====
-    const qrData =
-      `RS HOME CARE - Appointment Confirmation\n\n` +
-      `Client Name: ${name}\n` +
-      `Phone Number: ${phone}\n` +
-      `Email Address: ${email || "-"}\n` +
-      `Residential Address: ${address || "-"}\n\n` +
-      `Appointment No: ${appointmentNumber}\n` +
-      `Reference No: ${referenceNumber}\n` +
-      `Status: ${appointmentStatus}\n` +
-      `Date: ${date}\n\n` +
-      `RS Home Care Contact:\n` +
-      `Phone: ${RS_PHONE}\n` +
-      `Email: ${RS_EMAIL}`;
+ const trackerUrl =
+  `${window.location.origin}/tracker.html` +
+  `?ref=${encodeURIComponent(referenceNumber)}` +
+  `&appt=${encodeURIComponent(appointmentNumber)}` +
+  `&status=${encodeURIComponent(appointmentStatus)}` +
+  `&name=${encodeURIComponent(name)}` +
+  `&phone=${encodeURIComponent(phone)}` +
+  `&email=${encodeURIComponent(email || "")}` +
+  `&address=${encodeURIComponent(address || "")}` +
+  `&date=${encodeURIComponent(date)}`;
 
-    const qrUrl =
-      "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
-      encodeURIComponent(qrData);
+const qrUrl =
+  "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
+  encodeURIComponent(trackerUrl);
 
     /* ===== HEADER (no color text; logo only) ===== */
     const logo = new Image();
