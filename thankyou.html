@@ -18,6 +18,7 @@ body{
   justify-content:center;
   align-items:center;
   min-height:100vh;
+  padding:20px;
 }
 .box{
   background:#fff;
@@ -43,14 +44,12 @@ img{max-width:120px;margin-bottom:15px}
   gap:12px;
   margin-bottom:10px;
 }
-.info-row strong{
-  min-width:120px;
-}
+.info-row strong{min-width:120px}
 .info-row span{
   flex:1;
   text-align:right;
-  word-break:break-word;   /* important for long address */
-  white-space:pre-wrap;    /* wraps address nicely */
+  word-break:break-word;
+  white-space:pre-wrap;
 }
 button{
   margin-top:22px;
@@ -77,15 +76,6 @@ button{
 </div>
 
 <script>
-/* ===== GENERATORS ===== */
-function genRef(){
-  const d = new Date().toISOString().slice(0,10).replace(/-/g,"");
-  return `RS-${d}-${Math.random().toString(36).substring(2,7).toUpperCase()}`;
-}
-function genAppt(){
-  return `RSHC-${Math.floor(1000 + Math.random()*9000)}`;
-}
-
 const referenceNumber = sessionStorage.getItem("referenceNumber");
 const appointmentNumber = sessionStorage.getItem("appointmentNumber");
 const appointmentStatus = sessionStorage.getItem("appointmentStatus") || "Confirmed";
@@ -93,21 +83,35 @@ const appointmentStatus = sessionStorage.getItem("appointmentStatus") || "Confir
 const RS_PHONE = "+91 7550052799";
 const RS_EMAIL = "rshomecaremaduraiofficial@gmail.com";
 
+function formatTime(t){
+  if(!t) return "-";
+  const [h,m] = t.split(":");
+  const hour = parseInt(h, 10);
+  const ampm = hour >= 12 ? "PM" : "AM";
+  const hr = hour % 12 || 12;
+  return `${hr}:${m} ${ampm}`;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const name    = sessionStorage.getItem("clientName");
   const phone   = sessionStorage.getItem("clientPhone");
   const email   = sessionStorage.getItem("clientEmail");
   const address = sessionStorage.getItem("clientAddress");
-  const time = sessionStorage.getItem("preferredTime");
+  const time    = sessionStorage.getItem("preferredTime");
 
-  if(!name || !phone){
-    alert("Client details missing. Please book appointment again.");
+
+  // ✅ NEW: Appointment day from your form (Monday–Saturday)
+  const day     = sessionStorage.getItem("appointmentDay");
+
+  // ✅ If anything critical missing, send back
+  if(!name || !phone || !referenceNumber || !appointmentNumber){
+    alert("Appointment details missing. Please book appointment again.");
     window.location.href = "index.html";
     return;
   }
 
-  // Neatly arranged submitted-page details (address wraps)
+  // Show details
   document.getElementById("clientInfo").innerHTML = `
     <div class="info-row"><strong>Name</strong><span>${name}</span></div>
     <div class="info-row"><strong>Phone</strong><span>${phone}</span></div>
@@ -116,7 +120,8 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="info-row"><strong>Appointment No</strong><span>${appointmentNumber}</span></div>
     <div class="info-row"><strong>Reference No</strong><span>${referenceNumber}</span></div>
     <div class="info-row"><strong>Status</strong><span>${appointmentStatus}</span></div>
-    <div class="info-row"><strong>Preferred Time</strong><span>${time || "-"}</span></div>
+    <div class="info-row"><strong>Day</strong><span>${day || "-"}</span></div>
+    <div class="info-row"><strong>Preferred Time</strong><span>${formatTime(time)}</span></div>
   `;
 
   document.getElementById("downloadBtn").addEventListener("click", generatePDF);
@@ -125,34 +130,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF("p","mm","a4");
 
-    const date = new Date().toLocaleDateString("en-GB",{
+    // This is the PDF generated date (today) — OK to keep as “Generated On”
+    const generatedOn = new Date().toLocaleDateString("en-GB",{
       day:"2-digit",month:"long",year:"numeric"
     });
-function formatTime(t){
-  if(!t) return "-";
-  const [h,m] = t.split(":");
-  const hour = parseInt(h);
-  const ampm = hour >= 12 ? "PM" : "AM";
-  const hr = hour % 12 || 12;
-  return `${hr}:${m} ${ampm}`;
-}
-    // ===== QR should contain ALL info in the PDF + RS contact =====
- const trackerUrl =
-  `${window.location.origin}/tracker.html` +
-  `?ref=${encodeURIComponent(referenceNumber)}` +
-  `&appt=${encodeURIComponent(appointmentNumber)}` +
-  `&status=${encodeURIComponent(appointmentStatus)}` +
-  `&name=${encodeURIComponent(name)}` +
-  `&phone=${encodeURIComponent(phone)}` +
-  `&email=${encodeURIComponent(email || "")}` +
-  `&address=${encodeURIComponent(address || "")}` +
-  `&date=${encodeURIComponent(date)}`;
 
-const qrUrl =
-  "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
-  encodeURIComponent(trackerUrl);
+    // ✅ QR should contain booked day/time + IDs + client info
+    const trackerUrl =
+      `${window.location.origin}/tracker.html` +
+      `?ref=${encodeURIComponent(referenceNumber)}` +
+      `&appt=${encodeURIComponent(appointmentNumber)}` +
+      `&status=${encodeURIComponent(appointmentStatus)}` +
+      `&name=${encodeURIComponent(name)}` +
+      `&phone=${encodeURIComponent(phone)}` +
+      `&email=${encodeURIComponent(email || "")}` +
+      `&address=${encodeURIComponent(address || "")}` +
+      `&day=${encodeURIComponent(day || "")}` +
+      `&time=${encodeURIComponent(time || "")}` +
+      `&generatedOn=${encodeURIComponent(generatedOn)}`;
 
-    /* ===== HEADER (no color text; logo only) ===== */
+    const qrUrl =
+      "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
+      encodeURIComponent(trackerUrl);
+
     const logo = new Image();
     logo.src = "logo.png";
 
@@ -172,13 +172,18 @@ const qrUrl =
       body();
     };
 
+    // if logo fails, still generate pdf
+    logo.onerror = () => body();
+
     function body(){
       doc.setFont("helvetica","bold");
+      doc.setFontSize(12);
       doc.text("Appointment Details",20,72);
 
       doc.setFont("helvetica","normal");
-      let y = 82;
+      doc.setFontSize(11);
 
+      let y = 82;
       function row(label,value){
         doc.text(label,20,y);
         doc.text(":",70,y);
@@ -193,8 +198,9 @@ const qrUrl =
       row("Appointment No", appointmentNumber);
       row("Reference No", referenceNumber);
       row("Status", appointmentStatus);
+      row("Day", day);
       row("Preferred Time", formatTime(time));
-      row("Date", date);
+      row("Generated On", generatedOn);
 
       contentAndSignature(y + 8);
     }
@@ -219,28 +225,25 @@ const qrUrl =
       const lines = doc.splitTextToSize(text,170);
       doc.text(lines,20,startY+10);
 
-      // Calculate next Y safely
       const signY = startY + 10 + (lines.length * 6) + 12;
 
-      /// --- QR + Signature layout ---
-// Signature on LEFT, QR on RIGHT
-const signX = 20;
-const signTextY = signY + 8;
+      // Signature LEFT, QR RIGHT
+      const signX = 20;
+      const signTextY = signY + 8;
 
-const qrBoxSize = 38;
-const qrBoxX = 190 - qrBoxSize; // right aligned
-const qrBoxY = signY;
+      const qrBoxSize = 38;
+      const qrBoxX = 190 - qrBoxSize;
+      const qrBoxY = signY;
 
       doc.setFont("helvetica","bold");
+      doc.setFontSize(11);
       doc.text("For RS Home Care", signX, signTextY);
 
-      // QR label + box
       doc.setFontSize(9);
       doc.setFont("helvetica","normal");
       doc.text("Scan and Track", qrBoxX + (qrBoxSize/2), qrBoxY - 2, {align:"center"});
       doc.rect(qrBoxX, qrBoxY, qrBoxSize, qrBoxSize);
 
-      // Load QR image and then signature image
       const qr = new Image();
       qr.src = qrUrl;
 
@@ -251,16 +254,13 @@ const qrBoxY = signY;
         sign.src = "signature.png";
 
         sign.onload = () => {
-          // Signature image on right side (aligned with QR)
           doc.addImage(sign, "PNG", signX, signTextY + 4, 60, 22);
           footer(qrBoxY + qrBoxSize + 12);
         };
 
-        // If signature missing, still continue
         sign.onerror = () => footer(qrBoxY + qrBoxSize + 12);
       };
 
-      // If QR fails, still continue
       qr.onerror = () => footer(signY + 30);
     }
 
