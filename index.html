@@ -223,11 +223,16 @@ h2{text-align:center;color:#4b8fca;margin-bottom:30px}
   overflow:hidden;
   box-shadow:0 8px 20px rgba(0,0,0,0.1);
   transition:.3s;
+   cursor:pointer;
 }
 .card:hover{transform:translateY(-8px)}
 .card img{width:100%;height:200px;object-fit:cover}
 .card p{padding:15px;font-size:14px}
-
+.card-link{
+  text-decoration:none;
+  color:inherit;
+  display:block;
+}
 /* CONTACT */
 #contact{
   padding:90px 20px;
@@ -418,7 +423,12 @@ h2{text-align:center;color:#4b8fca;margin-bottom:30px}
 <section id="work">
   <h2>Our Care in Action</h2>
   <div class="gallery">
-    <div class="card"><img src="elderly1.jpg" alt=""><p>Compassionate elderly home care.</p></div>
+    <a href="compassionate-elderly-care.html" style="text-decoration:none;color:inherit;">
+  <div class="card">
+    <img src="elderly1.jpg" alt="Compassionate Elderly Home Care">
+    <p>Compassionate elderly home care.</p>
+  </div>
+</a>
     <div class="card"><img src="elderly2.jpg" alt=""><p>Professional caregivers at work.</p></div>
     <div class="card"><img src="workers.jpg" alt=""><p>Our trained and trusted care team.</p></div>
   </div>
