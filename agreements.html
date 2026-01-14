@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>RS Home Care – Digital Agreement</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="logo.png">
+<link rel="icon" type="image/png" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -459,191 +459,265 @@ Please agree and sign before submitting
   const overlay = document.createElement("div");
   overlay.innerHTML = `
     <style>
-      .rs-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        font-family: system-ui, sans-serif;
+      .rs-login-overlay{
+        position:fixed; inset:0;
+        display:flex; align-items:center; justify-content:center;
+        background: rgba(15, 23, 42, 0.60);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 99999;
+        padding: 18px;
+        font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       }
-      .rs-modal {
-        background:#fff;
-        padding: 24px;
-        border-radius: 14px;
-        width: 340px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+
+      .rs-login-card{
+        width: min(420px, 100%);
+        border-radius: 18px;
+        background: rgba(255,255,255,0.92);
+        box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+        overflow:hidden;
+        transform: translateY(10px);
+        opacity: 0;
+        animation: rsPop .35s ease forwards;
       }
-      .rs-modal h2 {
-        text-align: center;
+
+      @keyframes rsPop{
+        to{ transform: translateY(0); opacity: 1; }
+      }
+
+      .rs-login-head{
+        padding: 18px 18px 14px 18px;
+        background: linear-gradient(135deg,#96ceff,#8cffbc);
+        color:#0f4c81;
+      }
+
+      .rs-login-title{
         font-size: 18px;
-        margin-bottom: 6px;
+        font-weight: 700;
+        margin: 0;
       }
-      .rs-modal p {
-        text-align: center;
-        font-size: 14px;
-        margin-bottom: 16px;
+      .rs-login-sub{
+        margin: 6px 0 0 0;
+        font-size: 13px;
+        color: rgba(15,76,129,0.85);
+        line-height: 1.35;
       }
-      .rs-field {
+
+      .rs-login-body{
+        padding: 18px;
+      }
+
+      .rs-field{
         margin-bottom: 12px;
       }
-      .rs-field input {
-        width: 100%;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 14px;
-      }
-.rs-show {
-  margin-top:18px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-}
-.rs-show label {
-  display: inline-flex;
-  align-items: center;
-  color:#fff;
-  gap: 6px;
-  font-size: 13px;
-  cursor: pointer;
-  white-space: nowrap;
-}
 
-      .rs-show input {
-        margin: 0;
-        cursor: pointer;
+      .rs-label{
+        display:block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #0f172a;
+        margin-bottom: 6px;
       }
-      .rs-modal button {
-        width: 100%;
-        padding: 10px;
-        border: none;
-        display: block;
-        margin-top: 10px; 
-        border-radius: 8px;
-        background: #2563eb;
-        color: white;
+
+      .rs-input{
+        width:100%;
+        padding: 12px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(15,76,129,0.20);
+        background: #fff;
+        outline: none;
         font-size: 14px;
-        cursor: pointer;
+        transition: .2s;
       }
-      .rs-error {
-        color: #dc2626;
+      .rs-input:focus{
+        border-color: rgba(37,99,235,0.7);
+        box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
+      }
+
+      .rs-row{
+        display:flex;
+        gap: 10px;
+      }
+      .rs-row .rs-field{ flex:1; }
+
+      .rs-toggle{
+        display:flex;
+        align-items:center;
+        gap: 8px;
+        margin: 10px 0 14px 0;
         font-size: 13px;
-        text-align: center;
-        margin-top: 10px;
-        display: none;
+        color:#0f172a;
+      }
+      .rs-toggle input{
+        width: 16px; height: 16px;
+        cursor:pointer;
+      }
+
+      .rs-contact{
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 14px;
+        background: rgba(15,76,129,0.06);
+        border: 1px solid rgba(15,76,129,0.10);
+        font-size: 12.5px;
+        color: #0f4c81;
+        line-height: 1.35;
+      }
+      .rs-contact strong{ font-weight: 700; }
+
+      .rs-actions{
+        display:flex;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .rs-btn{
+        flex:1;
+        padding: 12px;
+        border: none;
+        border-radius: 14px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 14px;
+        transition: .2s;
+      }
+      .rs-btn-primary{
+        color:#fff;
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      }
+      .rs-btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.15); }
+
+      .rs-btn-ghost{
+        background: rgba(15,76,129,0.08);
+        color:#0f4c81;
+      }
+      .rs-btn-ghost:hover{ background: rgba(15,76,129,0.12); }
+
+      .rs-error{
+        display:none;
+        margin-top: 12px;
+        text-align:center;
+        font-size: 13px;
+        color: #dc2626;
+        font-weight: 600;
+      }
+
+      .rs-shake{
+        animation: rsShake .35s ease;
+      }
+      @keyframes rsShake{
+        0%,100%{ transform: translateX(0); }
+        20%{ transform: translateX(-8px); }
+        40%{ transform: translateX(8px); }
+        60%{ transform: translateX(-6px); }
+        80%{ transform: translateX(6px); }
       }
     </style>
 
-    <div class="rs-overlay">
-      <div class="rs-modal">
-        <h2>Agreement Access</h2>
-        <p>Enter your details to continue</p>
-        <p style="font-size:13px; color:#444; text-align:center; margin-bottom:16px;">
-        If you want the Access password, please contact an RS Home Care team member.<br>
-      Phone No: <strong>+91 7550052799</strong><br>
-      Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
-       </p>
-
-        <div class="rs-field">
-          <input type="text" id="rs-name" placeholder="Full Name" />
+    <div class="rs-login-overlay" role="dialog" aria-modal="true">
+      <div class="rs-login-card" id="rsCard">
+        <div class="rs-login-head">
+          <p class="rs-login-title">Agreement Access</p>
+          <p class="rs-login-sub">Enter your details to continue</p>
         </div>
 
-        <div class="rs-field">
-          <input type="tel" id="rs-phone" placeholder="Phone Number" />
-        </div>
-        
-<div class="rs-field">
-          <input type="password" id="rs-password" placeholder="Access Password" />
-        </div>
+        <div class="rs-login-body">
+          <div class="rs-row">
+            <div class="rs-field">
+              <label class="rs-label" for="rs-name">Full Name</label>
+              <input class="rs-input" type="text" id="rs-name" placeholder="Enter your name">
+            </div>
+            <div class="rs-field">
+              <label class="rs-label" for="rs-phone">Phone Number</label>
+              <input class="rs-input" type="tel" id="rs-phone" placeholder="+91 XXXXX XXXXX">
+            </div>
+          </div>
 
-        <div class="checkbox">
-        <input type="checkbox" id="rs-toggle">
-        <label for="rs-toggle">Show password</label>
-</div>
-        <button id="rs-submit">Continue</button>
-        <div class="rs-error">Please enter valid details</div>
+          <div class="rs-field">
+            <label class="rs-label" for="rs-password">Access Password</label>
+            <input class="rs-input" type="password" id="rs-password" placeholder="Enter password">
+          </div>
+
+          <div class="rs-toggle">
+            <input type="checkbox" id="rs-toggle">
+            <label for="rs-toggle">Show password</label>
+          </div>
+
+          <div class="rs-actions">
+            <button class="rs-btn rs-btn-ghost" id="rs-reset" type="button">Clear</button>
+            <button class="rs-btn rs-btn-primary" id="rs-submit" type="button">Continue</button>
+          </div>
+
+          <div class="rs-error" id="rs-error">Please enter valid details and correct password</div>
+
+          <div class="rs-contact">
+            If you want the access password, please contact an RS Home Care team member.<br>
+            Phone: <strong>+91 7550052799</strong><br>
+            Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
+          </div>
+        </div>
       </div>
     </div>
   `;
 
   document.body.appendChild(overlay);
 
-  const passwordInput = overlay.querySelector("#rs-password");
-  const toggle = overlay.querySelector("#rs-toggle");
-  const button = overlay.querySelector("#rs-submit");
-  const error = overlay.querySelector(".rs-error");
+  const card = overlay.querySelector("#rsCard");
   const nameInput = overlay.querySelector("#rs-name");
   const phoneInput = overlay.querySelector("#rs-phone");
+  const passwordInput = overlay.querySelector("#rs-password");
+  const toggle = overlay.querySelector("#rs-toggle");
+  const submitBtn = overlay.querySelector("#rs-submit");
+  const resetBtn = overlay.querySelector("#rs-reset");
+  const errorEl = overlay.querySelector("#rs-error");
 
- toggle.addEventListener("change", () => {
-  passwordInput.type = toggle.checked ? "text" : "password";
-});
+  const showError = () => {
+    errorEl.style.display = "block";
+    card.classList.remove("rs-shake");
+    void card.offsetWidth; // restart animation
+    card.classList.add("rs-shake");
+  };
+
+  toggle.addEventListener("change", () => {
+    passwordInput.type = toggle.checked ? "text" : "password";
+  });
+
+  resetBtn.addEventListener("click", () => {
+    nameInput.value = "";
+    phoneInput.value = "";
+    passwordInput.value = "";
+    toggle.checked = false;
+    passwordInput.type = "password";
+    errorEl.style.display = "none";
+    nameInput.focus();
+  });
+
   const validate = () => {
-    if (
-      nameInput.value.trim() &&
-      phoneInput.value.trim() &&
-      passwordInput.value === PAGE_PASSWORD
-    ) {
+    const ok =
+      nameInput.value.trim().length >= 2 &&
+      phoneInput.value.trim().length >= 6 &&
+      passwordInput.value === PAGE_PASSWORD;
+
+    if (ok) {
       sessionStorage.setItem(STORAGE_KEY, "true");
       overlay.remove();
     } else {
-      error.style.display = "block";
+      showError();
     }
   };
 
-  button.addEventListener("click", validate);
+  submitBtn.addEventListener("click", validate);
+
+  // Enter key submits
+  [nameInput, phoneInput, passwordInput].forEach(el => {
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") validate();
+    });
+  });
+
+  // Autofocus
+  setTimeout(() => nameInput.focus(), 50);
 })();
-const AGREEMENT_PASSWORD = "RShomecare";
-
-let currentFile = "";
-let currentTitle = "";
-
-function requestPassword(file, title) {
-  currentFile = file;
-  currentTitle = title;
-
-  const overlay = document.getElementById("passwordOverlay");
-  const input = document.getElementById("passwordInput");
-  const error = document.getElementById("passwordError");
-
-  input.value = "";
-  error.style.display = "none";
-  overlay.classList.add("active");
-  input.focus();
-}
-
-document.getElementById("passwordSubmit").addEventListener("click", submitPassword);
-document.getElementById("passwordInput").addEventListener("keydown", e => {
-  if (e.key === "Enter") submitPassword();
-});
-let attempts = 0;
-function submitPassword() {
-  const input = document.getElementById("passwordInput");
-  const error = document.getElementById("passwordError");
-  const overlay = document.getElementById("passwordOverlay");
-
-  if (input.value !== AGREEMENT_PASSWORD) {
-    error.style.display = "block";
-
-    if (attempts >= 3) {
-      alert("Too many attempts. Please contact RS Home Care.");
-      overlay.classList.remove("active"); // optionally hide the overlay
-    }
-    return;
-  }
-
-  overlay.classList.remove("active");
-  attempts = 0; // reset attempts
-  openPDF(currentFile, currentTitle);
-}
-
-function openPDF(file, title) {
-  window.open(file, "_blank");
-}
 
 /* OPEN PDF */
 function openPDF(file, title){
