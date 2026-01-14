@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>RS Home Care – Digital Agreement</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="logo.png" />
+<link rel="apple-touch-icon" href="logo.png" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -37,26 +36,8 @@ header{
 }
 header img{max-width:140px;margin-bottom:15px}
 header h1{font-size:2.8em;color:#243879}
-header p{font-size:1.2em;margin-bottom:20px}
-.cta{
-  background:#fff;
-  color:#0f4c81;
-  padding:12px 28px;
-  border-radius:30px;
-  text-decoration:none;
-  font-weight:600;
-}
-
-/* NAV */
-nav{
-  background:#fff;
-  padding:15px;
-  text-align:center;
-  box-shadow:0 4px 10px rgba(0,0,0,0.08);
-  position:sticky;
-  top:0;
-  z-index:2;
-}
+header p{font-size:1.2em;margin-bottom:10px}
+header h2{color:#0f4c81;margin-top:10px}
 
 /* CONTAINER */
 .container{
@@ -93,15 +74,9 @@ h2{
   width:100%;
   text-align:center;
 }
+.agreement-section .card{ max-width:320px; }
 
-.agreement-section .card{
-  max-width:320px;
-}
-
-.card h3{
-  margin-bottom:15px;
-  color:#0f4c81;
-}
+.card h3{ margin-bottom:15px; color:#0f4c81; }
 
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(20px)}
@@ -152,10 +127,10 @@ button:hover{
   text-align:center;
   color:#0f4c81;
   font-size:14px;
-  pointer-events:none; /* IMPORTANT */
+  pointer-events:none;
 }
 
-/* CHECKBOX (INLINE FIX) */
+/* CHECKBOX */
 .checkbox{
   margin-top:18px;
   display:flex;
@@ -201,7 +176,7 @@ canvas{
   background:#e74c3c;
 }
 
-/* MODAL */
+/* PDF MODAL */
 .modal{
   position:fixed;
   inset:0;
@@ -255,6 +230,8 @@ iframe{
     align-items:center;
   }
 }
+
+/* FOOTER */
 .rs-footer {
   text-align: center;
   padding: 15px 10px;
@@ -262,479 +239,694 @@ iframe{
   color: #555;
   background: #f8f9fa;
 }
-.password-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
 
-.password-overlay.active {
-  display: flex;
+/* ---------------------------
+   MODERN OTP LOGIN POPUP
+----------------------------*/
+.otp-overlay{
+  position: fixed; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  background: rgba(15, 23, 42, 0.60);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 99999;
+  padding: 18px;
 }
+.otp-card{
+  width: min(460px, 100%);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.94);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+  overflow:hidden;
+  transform: translateY(10px);
+  opacity: 0;
+  animation: otpPop .35s ease forwards;
+}
+@keyframes otpPop{ to{ transform: translateY(0); opacity: 1; } }
 
-.password-modal {
-  background: #fff;
-  padding: 24px;
+.otp-head{
+  padding: 16px 18px;
+  background: linear-gradient(135deg,#96ceff,#8cffbc);
+  color:#0f4c81;
+}
+.otp-head h3{ margin:0; font-size:18px; font-weight:700; }
+.otp-head p{ margin:6px 0 0; font-size:13px; opacity:.9; line-height:1.35; }
+
+.otp-body{ padding: 18px; }
+.otp-grid{ display:flex; gap:10px; }
+.otp-grid .otp-field{ flex:1; }
+
+.otp-field{ margin-bottom: 12px; }
+.otp-field label{
+  display:block; font-size:12px; font-weight:600;
+  margin-bottom:6px; color:#0f172a;
+}
+.otp-field input{
+  width:100%;
+  padding: 12px;
   border-radius: 12px;
-  width: 90%;
-  max-width: 360px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-}
-
-.password-modal h3 {
-  text-align: center;
-  font-size: 18px;
-  margin-bottom: 6px;
-}
-.password-modal p {
-        text-align: center;
-        font-size: 14px;
-        color: #555;
-        margin-bottom: 16px;
-      }
-
-.password-modal input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-.password-modal button {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  background: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.password-modal button:hover {
-  background: #0056b3;
-}
-
-#passwordError {
-  display: none;
-  color: red;
+  border: 1px solid rgba(15,76,129,0.20);
+  outline:none;
   font-size: 14px;
-  margin-bottom: 10px;
+}
+.otp-field input:focus{
+  border-color: rgba(37,99,235,0.7);
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
 }
 
+.otp-actions{ display:flex; gap:10px; margin-top: 10px; }
+.otp-btn{
+  flex:1;
+  padding: 12px;
+  border:none;
+  border-radius: 14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s;
+}
+.otp-btn.primary{
+  color:#fff;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+}
+.otp-btn.primary:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.15); }
+.otp-btn.ghost{
+  background: rgba(15,76,129,0.08);
+  color:#0f4c81;
+}
+.otp-btn.ghost:hover{ background: rgba(15,76,129,0.12); }
+
+.otp-error{
+  display:none;
+  margin-top: 10px;
+  text-align:center;
+  font-size: 13px;
+  color: #dc2626;
+  font-weight: 600;
+}
+.otp-note{
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(15,76,129,0.06);
+  border: 1px solid rgba(15,76,129,0.10);
+  font-size: 12.5px;
+  color: #0f4c81;
+  line-height: 1.35;
+}
+.otp-shake{ animation: otpShake .35s ease; }
+@keyframes otpShake{
+  0%,100%{ transform: translateX(0); }
+  20%{ transform: translateX(-8px); }
+  40%{ transform: translateX(8px); }
+  60%{ transform: translateX(-6px); }
+  80%{ transform: translateX(6px); }
+}
+@media(max-width:520px){
+  .otp-grid{ flex-direction: column; }
+}
+
+/* ---------------------------
+   MODERN AGREEMENT GATE POPUP
+----------------------------*/
+.a-overlay{
+  position:fixed; inset:0;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:99999;
+  padding:18px;
+}
+.a-card{
+  width:min(460px, 100%);
+  background: rgba(255,255,255,0.95);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,0.35);
+  transform: translateY(10px);
+  opacity:0;
+  animation: aPop .25s ease forwards;
+}
+@keyframes aPop{ to{ transform: translateY(0); opacity: 1; } }
+
+.a-head{
+  padding: 14px 16px;
+  background: linear-gradient(135deg,#1e3a8a,#2563eb);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.a-head h3{ margin:0; font-size:16px; flex:1; }
+.a-close{
+  border:none; background: rgba(255,255,255,0.15);
+  color:#fff; border-radius:10px;
+  padding:6px 10px; cursor:pointer;
+}
+
+.a-body{ padding:16px; }
+.a-field{ margin-bottom:12px; }
+.a-field label{
+  display:block; font-size:12px; font-weight:600;
+  margin-bottom:6px; color:#0f172a;
+}
+.a-field input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(15,76,129,0.20);
+  outline:none;
+  font-size:14px;
+}
+.a-field input:focus{
+  border-color: rgba(37,99,235,0.7);
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
+}
+
+/* checkbox + show text same line */
+.a-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  margin: 2px 0 12px;
+  color:#0f172a;
+}
+.a-toggle input{ width:16px; height:16px; margin:0; cursor:pointer; }
+.a-toggle label{ cursor:pointer; user-select:none; line-height:1; }
+
+.a-row{
+  display:flex;
+  gap:10px;
+}
+.a-row button{
+  flex:1;
+  border-radius:14px;
+  padding:12px;
+}
+
+.a-btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  font-weight:700;
+  cursor:pointer;
+  background: linear-gradient(135deg,#96ceff,#8cffbc);
+  color:#0f4c81;
+}
+.a-btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.15); }
+
+.a-error{
+  display:none;
+  margin: 10px 0;
+  text-align:center;
+  font-size:13px;
+  color:#dc2626;
+  font-weight:600;
+}
+.a-note{
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(15,76,129,0.06);
+  border: 1px solid rgba(15,76,129,0.10);
+  font-size: 12.5px;
+  color: #0f4c81;
+  line-height: 1.35;
+}
 </style>
 </head>
 
 <body>
 
-  <header>
-  <img src="logo.png">
+<header>
+  <img src="logo.png" alt="RS Home Care Logo" />
   <h1>RS Home Care</h1>
   <p>Trusted Care • Comfort • Compassion</p>
-  <h2> Agreements</h2>
+  <h2>Agreements</h2>
 </header>
 
 <div class="container">
+  <h2>Service Agreements</h2>
 
-<h2>Service Agreements</h2>
+  <div class="agreement-section">
+    <div class="card">
+      <h3>Government Contract Form</h3>
+      <button onclick="requestAgreementGate('Government Contract form final.pdf','Government Contract Form')">
+        View Agreement
+      </button>
+    </div>
 
-<div class="agreement-section">
+    <div class="card">
+      <h3>RS Home Care English</h3>
+      <button onclick="requestAgreementGate('RS Home Care English.pdf','RS Home Care English')">
+        View Agreement
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>RS Home Care Tamil</h3>
+      <button onclick="requestAgreementGate('RS Home Care Tamil.pdf','RS Home Care Tamil')">
+        View Agreement
+      </button>
+    </div>
+  </div>
+
+  <h2>Digital Agreement Submission</h2>
 
   <div class="card">
-    <h3>Government Contract Form</h3>
-    <button onclick="requestPassword(
-      'Government Contract form final.pdf',
-      'Government Contract Form'
-    )">
-      View Agreement
-    </button>
+    <input id="name" name="name" placeholder="Full Name" required />
+    <input id="phone" name="phone" placeholder="Phone Number" required />
+    <textarea id="message" name="message" rows="4" placeholder="Message"></textarea>
+
+    <div class="file-wrap">
+      <div class="file-ui" id="fileLabel">📎 Upload Image or PDF Agreement</div>
+      <input type="file" id="doc" accept=".pdf,.jpg,.jpeg,.png" required onchange="showFileName(this)" />
+    </div>
+
+    <div id="filePreview" style="margin-top:10px;font-size:14px;color:#0f4c81;"></div>
+
+    <div class="signature-box">
+      <p style="font-size:14px">Digital Signature</p>
+      <canvas id="signature"></canvas>
+      <button class="clear-btn" onclick="clearSignature()">Clear Signature</button>
+      <p style="font-size:12px;color:#555;margin-top:8px">
+        By signing above, I confirm that this digital signature is legally binding.
+      </p>
+    </div>
+
+    <div class="checkbox">
+      <input type="checkbox" id="agree" />
+      <label for="agree">I agree to the Service Agreement</label>
+    </div>
+
+    <div class="error" id="errorMsg">Please agree and sign before submitting</div>
+
+    <br />
+    <button onclick="submitForm()">Submit Agreement</button>
   </div>
-
-  <div class="card">
-    <h3>RS Home Care English</h3>
-    <button onclick="requestPassword(
-      'RS Home Care English.pdf',
-      'RS Home Care English'
-    )">
-      View Agreement
-    </button>
-  </div>
-
-  <div class="card">
-    <h3>RS Home Care Tamil</h3>
-    <button onclick="requestPassword(
-      'RS Home Care Tamil.pdf',
-      'RS Home Care Tamil'
-    )">
-      View Agreement
-    </button>
-  </div>
-
 </div>
 
-<h2>Digital Agreement Submission</h2>
-
-<div class="card">
-
-<input id="name" name="name" placeholder="Full Name" required>
-
-<input id="phone" name="phone" placeholder="Phone Number" required>
-
-<textarea id="message" name="message" rows="4" placeholder="Message"></textarea>
-
-<div class="file-wrap">
-  <div class="file-ui" id="fileLabel">
-    📎 Upload Image or PDF Agreement
-  </div>
-  <input 
-    type="file" 
-    id="doc"
-    accept=".pdf,.jpg,.jpeg,.png"
-    required
-    onchange="showFileName(this)">
-</div>
-
-<div id="filePreview"
-     style="margin-top:10px;font-size:14px;color:#0f4c81;"></div>
-
-<div class="signature-box">
-<p style="font-size:14px">Digital Signature</p>
-<canvas id="signature"></canvas>
-<button class="clear-btn" onclick="clearSignature()">Clear Signature</button>
-<p style="font-size:12px;color:#555;margin-top:8px">
-By signing above, I confirm that this digital signature is legally binding.
-</p>
-</div>
-
-<div class="checkbox">
-<input type="checkbox" id="agree">
-<label for="agree">I agree to the Service Agreement</label>
-</div>
-
-<div class="error" id="errorMsg">
-Please agree and sign before submitting
-</div>
-
-<br>
-<button onclick="submitForm()">Submit Agreement</button>
-
-</div>
-</div>
+<!-- PDF MODAL -->
 <div class="modal" id="pdfModal">
-<div class="modal-box">
-<div class="modal-header">
-<span id="pdfTitle"></span>
-<button onclick="downloadPDF()">Download</button>
-<button class="close" onclick="closePDF()">✕</button>
-</div>
-<iframe id="pdfViewer"></iframe>
-</div>
-</div>
-<div id="passwordOverlay" class="password-overlay">
-  <div class="password-modal">
-    <h3>Enter Agreement Password</h3>
-    <p>If you want the password, please contact an RS Home Care team member.<br>
-      Phone No: <strong>+91 7550052799</strong><br>
-      Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
-       </p>
-    <input type="password" id="passwordInput" placeholder="Password">
-    <p id="passwordError">Incorrect password</p>
-    <button id="passwordSubmit">Continue</button>
+  <div class="modal-box">
+    <div class="modal-header">
+      <span id="pdfTitle"></span>
+      <button onclick="downloadPDF()">Download</button>
+      <button class="close" onclick="closePDF()">✕</button>
+    </div>
+    <iframe id="pdfViewer"></iframe>
   </div>
 </div>
 
-<script>
-(() => {
-  const PAGE_PASSWORD = "RShomecarepage";
-  const STORAGE_KEY = "agreement_access";
+<!-- MODERN OTP LOGIN OVERLAY (PAGE ACCESS) -->
+<div id="otpLoginOverlay" class="otp-overlay" style="display:none;">
+  <div class="otp-card" id="otpCard">
+    <div class="otp-head">
+      <h3>Agreement Access</h3>
+      <p>Enter your details and verify OTP to access the page.</p>
+    </div>
 
-  if (sessionStorage.getItem(STORAGE_KEY) === "true") return;
-
-  const overlay = document.createElement("div");
-  overlay.innerHTML = `
-    <style>
-      .rs-login-overlay{
-        position:fixed; inset:0;
-        display:flex; align-items:center; justify-content:center;
-        background: rgba(15, 23, 42, 0.60);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        z-index: 99999;
-        padding: 18px;
-        font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      }
-
-      .rs-login-card{
-        width: min(420px, 100%);
-        border-radius: 18px;
-        background: rgba(255,255,255,0.92);
-        box-shadow: 0 24px 80px rgba(0,0,0,0.35);
-        overflow:hidden;
-        transform: translateY(10px);
-        opacity: 0;
-        animation: rsPop .35s ease forwards;
-      }
-
-      @keyframes rsPop{
-        to{ transform: translateY(0); opacity: 1; }
-      }
-
-      .rs-login-head{
-        padding: 18px 18px 14px 18px;
-        background: linear-gradient(135deg,#96ceff,#8cffbc);
-        color:#0f4c81;
-      }
-
-      .rs-login-title{
-        font-size: 18px;
-        font-weight: 700;
-        margin: 0;
-      }
-      .rs-login-sub{
-        margin: 6px 0 0 0;
-        font-size: 13px;
-        color: rgba(15,76,129,0.85);
-        line-height: 1.35;
-      }
-
-      .rs-login-body{
-        padding: 18px;
-      }
-
-      .rs-field{
-        margin-bottom: 12px;
-      }
-
-      .rs-label{
-        display:block;
-        font-size: 12px;
-        font-weight: 600;
-        color: #0f172a;
-        margin-bottom: 6px;
-      }
-
-      .rs-input{
-        width:100%;
-        padding: 12px 12px;
-        border-radius: 12px;
-        border: 1px solid rgba(15,76,129,0.20);
-        background: #fff;
-        outline: none;
-        font-size: 14px;
-        transition: .2s;
-      }
-      .rs-input:focus{
-        border-color: rgba(37,99,235,0.7);
-        box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
-      }
-
-      .rs-row{
-        display:flex;
-        gap: 10px;
-      }
-      .rs-row .rs-field{ flex:1; }
-
-      .rs-toggle{
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: #0f172a;
-  cursor: pointer;
-}
-    .rs-toggle input{
-  width: 16px;
-  height: 16px;
-  margin: 0;
-  cursor: pointer;
-}
-.rs-toggle label{
-  cursor: pointer;
-  user-select: none;
-  line-height: 1;
-}
-
-      .rs-contact{
-        margin-top: 12px;
-        padding: 12px;
-        border-radius: 14px;
-        background: rgba(15,76,129,0.06);
-        border: 1px solid rgba(15,76,129,0.10);
-        font-size: 12.5px;
-        color: #0f4c81;
-        line-height: 1.35;
-      }
-      .rs-contact strong{ font-weight: 700; }
-
-      .rs-actions{
-        display:flex;
-        gap: 10px;
-        margin-top: 14px;
-      }
-
-      .rs-btn{
-        flex:1;
-        padding: 12px;
-        border: none;
-        border-radius: 14px;
-        cursor: pointer;
-        font-weight: 700;
-        font-size: 14px;
-        transition: .2s;
-      }
-      .rs-btn-primary{
-        color:#fff;
-        background: linear-gradient(135deg, #1e3a8a, #2563eb);
-      }
-      .rs-btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.15); }
-
-      .rs-btn-ghost{
-        background: rgba(15,76,129,0.08);
-        color:#0f4c81;
-      }
-      .rs-btn-ghost:hover{ background: rgba(15,76,129,0.12); }
-
-      .rs-error{
-        display:none;
-        margin-top: 12px;
-        text-align:center;
-        font-size: 13px;
-        color: #dc2626;
-        font-weight: 600;
-      }
-
-      .rs-shake{
-        animation: rsShake .35s ease;
-      }
-      @keyframes rsShake{
-        0%,100%{ transform: translateX(0); }
-        20%{ transform: translateX(-8px); }
-        40%{ transform: translateX(8px); }
-        60%{ transform: translateX(-6px); }
-        80%{ transform: translateX(6px); }
-      }
-    </style>
-
-    <div class="rs-login-overlay" role="dialog" aria-modal="true">
-      <div class="rs-login-card" id="rsCard">
-        <div class="rs-login-head">
-          <p class="rs-login-title">Agreement Access</p>
-          <p class="rs-login-sub">Enter your details to continue</p>
+    <div class="otp-body">
+      <div class="otp-grid">
+        <div class="otp-field">
+          <label for="otpName">Full Name</label>
+          <input id="otpName" type="text" placeholder="Enter full name" />
         </div>
-
-        <div class="rs-login-body">
-          <div class="rs-row">
-            <div class="rs-field">
-              <label class="rs-label" for="rs-name">Full Name</label>
-              <input class="rs-input" type="text" id="rs-name" placeholder="Enter your name">
-            </div>
-            <div class="rs-field">
-              <label class="rs-label" for="rs-phone">Phone Number</label>
-              <input class="rs-input" type="tel" id="rs-phone" placeholder="+91 XXXXX XXXXX">
-            </div>
-          </div>
-
-          <div class="rs-field">
-            <label class="rs-label" for="rs-password">Access Password</label>
-            <input class="rs-input" type="password" id="rs-password" placeholder="Enter password">
-          </div>
-
-          <div class="rs-toggle">
-            <input type="checkbox" id="rs-toggle">
-            <label for="rs-toggle">Show password</label>
-          </div>
-
-          <div class="rs-actions">
-            <button class="rs-btn rs-btn-ghost" id="rs-reset" type="button">Clear</button>
-            <button class="rs-btn rs-btn-primary" id="rs-submit" type="button">Continue</button>
-          </div>
-
-          <div class="rs-error" id="rs-error">Please enter valid details and correct password</div>
-
-          <div class="rs-contact">
-            If you want the access password, please contact an RS Home Care team member.<br>
-            Phone: <strong>+91 7550052799</strong><br>
-            Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
-          </div>
+        <div class="otp-field">
+          <label for="otpPhone">Phone Number</label>
+          <input id="otpPhone" type="tel" placeholder="+91 XXXXX XXXXX" />
         </div>
       </div>
+
+      <div class="otp-actions">
+        <button class="otp-btn ghost" id="sendLoginOtpBtn" type="button">Send OTP</button>
+        <button class="otp-btn primary" id="verifyLoginOtpBtn" type="button">Verify</button>
+      </div>
+
+      <div class="otp-field" style="margin-top:12px;">
+        <label for="otpCode">Enter OTP</label>
+        <input id="otpCode" type="text" inputmode="numeric" placeholder="6-digit code" />
+      </div>
+
+      <div class="otp-error" id="otpError">Invalid details or OTP</div>
+
+      <div class="otp-note">
+        If you want the OTP access, please contact an RS Home Care team member.<br />
+        Phone: <strong>+91 7550052799</strong><br />
+        Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
+      </div>
     </div>
-  `;
+  </div>
+</div>
 
-  document.body.appendChild(overlay);
+<!-- MODERN AGREEMENT GATE (PASSWORD + OTP) -->
+<div id="agreementOverlay" class="a-overlay">
+  <div class="a-card" id="aCard">
+    <div class="a-head">
+      <h3 id="aTitle">Open Agreement</h3>
+      <button class="a-close" onclick="closeAgreementGate()">✕</button>
+    </div>
 
-  const card = overlay.querySelector("#rsCard");
-  const nameInput = overlay.querySelector("#rs-name");
-  const phoneInput = overlay.querySelector("#rs-phone");
-  const passwordInput = overlay.querySelector("#rs-password");
-  const toggle = overlay.querySelector("#rs-toggle");
-  const submitBtn = overlay.querySelector("#rs-submit");
-  const resetBtn = overlay.querySelector("#rs-reset");
-  const errorEl = overlay.querySelector("#rs-error");
+    <div class="a-body">
+      <div class="a-field">
+        <label for="agreementPassword">Agreement Password</label>
+        <input type="password" id="agreementPassword" placeholder="Enter agreement password" />
+      </div>
 
-  const showError = () => {
-    errorEl.style.display = "block";
-    card.classList.remove("rs-shake");
-    void card.offsetWidth; // restart animation
-    card.classList.add("rs-shake");
-  };
+      <div class="a-field">
+        <label for="agreementOtp">Access Code (OTP)</label>
+        <input type="text" id="agreementOtp" inputmode="numeric" placeholder="Enter OTP code" />
+      </div>
 
-  toggle.addEventListener("change", () => {
-    passwordInput.type = toggle.checked ? "text" : "password";
+      <div class="a-toggle">
+        <input type="checkbox" id="showAgreementPass" />
+        <label for="showAgreementPass">Show password</label>
+      </div>
+
+      <div class="a-row">
+        <button class="otp-btn ghost" id="sendAgreementOtpBtn" type="button" style="background: rgba(15,76,129,0.08); color:#0f4c81;">
+          Send OTP
+        </button>
+        <button class="otp-btn primary" id="verifyAgreementOtpBtn" type="button" style="background: linear-gradient(135deg,#1e3a8a,#2563eb); color:#fff;">
+          Verify OTP
+        </button>
+      </div>
+
+      <div class="a-error" id="aError">Incorrect password or OTP</div>
+
+      <button class="a-btn" id="aContinue" type="button">Open Agreement</button>
+
+      <div class="a-note">
+        Need OTP/password? Contact RS Home Care.<br />
+        Phone: <strong>+91 7550052799</strong><br />
+        Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="rs-footer">
+  © 2026 RS Home Care Pvt Ltd<br />
+  Digital Agreement System • ISO-Style Workflow
+</footer>
+
+<!-- Firebase needs a container to render (invisible) reCAPTCHA -->
+<div id="recaptcha-container"></div>
+
+<script>
+/* ============= YOUR SETTINGS ============= */
+/* Agreement password (still visible in page source; for stronger security move to server) */
+const AGREEMENT_PASSWORD = "RShomecare";
+
+/* sessionStorage keys */
+const KEY_OTP_VERIFIED = "rs_otp_verified";
+const KEY_NAME = "rs_name";
+const KEY_PHONE = "rs_phone";
+
+/* internal agreement open state */
+let currentPDF = "";
+let currentTitle = "";
+let agreementOtpVerified = false;
+
+/* ========= Helpers ========= */
+function normalizePhone(raw){
+  let p = (raw || "").trim();
+  if (!p) return "";
+  p = p.replace(/\s+/g, "");
+  if (/^\d{10}$/.test(p)) p = "+91" + p;
+  if (/^91\d{10}$/.test(p)) p = "+" + p;
+  return p;
+}
+function showOtpError(msg){
+  const err = document.getElementById("otpError");
+  const card = document.getElementById("otpCard");
+  err.textContent = msg;
+  err.style.display = "block";
+  card.classList.remove("otp-shake"); void card.offsetWidth; card.classList.add("otp-shake");
+}
+function showAgreementError(msg){
+  const err = document.getElementById("aError");
+  err.textContent = msg;
+  err.style.display = "block";
+}
+function hideAgreementError(){
+  document.getElementById("aError").style.display = "none";
+}
+</script>
+
+<!-- ========= FIREBASE OTP (REAL) ========= -->
+<script type="module">
+  // Use Firebase modular SDK from gstatic.
+  // If you prefer, you can also use cdnjs/jsdelivr, but gstatic is Firebase official host.
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+  /* =========================
+     1) PASTE YOUR FIREBASE CONFIG HERE
+     from Firebase Console -> Project settings -> Web app
+  ========================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBq6igCc9A3md3arNpfg5RYr4Yct-W-yJU",
+  authDomain: "rshomecare-a3909.firebaseapp.com",
+  projectId: "rshomecare-a3909",
+  storageBucket: "rshomecare-a3909.firebasestorage.app",
+  messagingSenderId: "313052429999",
+  appId: "1:313052429999:web:6186f2ff07f185b4e65e5a",
+  measurementId: "G-C0PP258H1L"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Recaptcha verifiers (one for login, one for agreement OTP)
+  let loginRecaptcha = null;
+  let agreementRecaptcha = null;
+
+  // Confirmation results
+  let loginConfirmation = null;
+  let agreementConfirmation = null;
+
+  // Elements (login)
+  const overlay = document.getElementById("otpLoginOverlay");
+  const nameEl = document.getElementById("otpName");
+  const phoneEl = document.getElementById("otpPhone");
+  const codeEl = document.getElementById("otpCode");
+  const sendLoginBtn = document.getElementById("sendLoginOtpBtn");
+  const verifyLoginBtn = document.getElementById("verifyLoginOtpBtn");
+
+  // Elements (agreement)
+  const sendAgreementBtn = document.getElementById("sendAgreementOtpBtn");
+  const verifyAgreementBtn = document.getElementById("verifyAgreementOtpBtn");
+
+  // Show login overlay unless already verified
+  window.addEventListener("load", () => {
+    const verified = sessionStorage.getItem(KEY_OTP_VERIFIED) === "true";
+    overlay.style.display = verified ? "none" : "flex";
+
+    // preload stored values
+    const storedName = sessionStorage.getItem(KEY_NAME) || "";
+    const storedPhone = sessionStorage.getItem(KEY_PHONE) || "";
+    if (storedName) nameEl.value = storedName;
+    if (storedPhone) phoneEl.value = storedPhone;
   });
 
-  resetBtn.addEventListener("click", () => {
-    nameInput.value = "";
-    phoneInput.value = "";
-    passwordInput.value = "";
-    toggle.checked = false;
-    passwordInput.type = "password";
-    errorEl.style.display = "none";
-    nameInput.focus();
-  });
+  function initLoginRecaptcha(){
+    if (loginRecaptcha) return;
+    loginRecaptcha = new RecaptchaVerifier(auth, "recaptcha-container", { size: "invisible" });
+  }
 
-  const validate = () => {
-    const ok =
-      nameInput.value.trim().length >= 2 &&
-      phoneInput.value.trim().length >= 6 &&
-      passwordInput.value === PAGE_PASSWORD;
+  function initAgreementRecaptcha(){
+    // reuse same container; if already rendered, Firebase may complain, so we re-create only when needed.
+    if (agreementRecaptcha) return;
+    agreementRecaptcha = new RecaptchaVerifier(auth, "recaptcha-container", { size: "invisible" });
+  }
 
-    if (ok) {
-      sessionStorage.setItem(STORAGE_KEY, "true");
-      overlay.remove();
-    } else {
-      showError();
+  // ======= LOGIN: Send OTP =======
+  sendLoginBtn.addEventListener("click", async () => {
+    document.getElementById("otpError").style.display = "none";
+
+    const name = nameEl.value.trim();
+    const phone = normalizePhone(phoneEl.value);
+
+    if (name.length < 2) return showOtpError("Please enter your full name");
+    if (!/^\+\d{10,15}$/.test(phone)) return showOtpError("Enter valid phone with country code (e.g. +91XXXXXXXXXX)");
+
+    try {
+      sessionStorage.setItem(KEY_NAME, name);
+      sessionStorage.setItem(KEY_PHONE, phone);
+
+      initLoginRecaptcha();
+      loginConfirmation = await signInWithPhoneNumber(auth, phone, loginRecaptcha);
+
+      alert("OTP sent to your phone.");
+      codeEl.focus();
+    } catch (e) {
+      console.error(e);
+      showOtpError("Unable to send OTP. Check: domain authorized in Firebase, HTTPS, phone format.");
+      try { loginRecaptcha?.clear(); } catch {}
+      loginRecaptcha = null;
     }
-  };
+  });
 
-  submitBtn.addEventListener("click", validate);
+  // ======= LOGIN: Verify OTP =======
+  verifyLoginBtn.addEventListener("click", async () => {
+    document.getElementById("otpError").style.display = "none";
+    const code = codeEl.value.trim();
 
-  // Enter key submits
-  [nameInput, phoneInput, passwordInput].forEach(el => {
+    if (!/^\d{4,8}$/.test(code)) return showOtpError("Enter the OTP you received");
+
+    try {
+      if (!loginConfirmation) return showOtpError("Click 'Send OTP' first.");
+      await loginConfirmation.confirm(code);
+
+      sessionStorage.setItem(KEY_OTP_VERIFIED, "true");
+      overlay.style.display = "none";
+
+      // Optional: stop persistent auth session (uncomment if you want)
+      // await auth.signOut();
+    } catch (e) {
+      console.error(e);
+      showOtpError("Incorrect OTP. Try again.");
+    }
+  });
+
+  // Enter key support for login
+  [nameEl, phoneEl, codeEl].forEach(el => {
     el.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") validate();
+      if (e.key === "Enter") {
+        if (el === codeEl) verifyLoginBtn.click();
+        else sendLoginBtn.click();
+      }
     });
   });
 
-  // Autofocus
-  setTimeout(() => nameInput.focus(), 50);
-})();
+  // ======= AGREEMENT: Send OTP (to stored phone) =======
+  sendAgreementBtn.addEventListener("click", async () => {
+    hideAgreementError();
+    agreementOtpVerified = false;
 
-/* OPEN PDF */
-function openPDF(file, title){
+    const phone = sessionStorage.getItem(KEY_PHONE) || "";
+    if (!/^\+\d{10,15}$/.test(phone)) {
+      showAgreementError("Phone number missing. Please login again.");
+      document.getElementById("otpLoginOverlay").style.display = "flex";
+      return;
+    }
+
+    try {
+      initAgreementRecaptcha();
+      agreementConfirmation = await signInWithPhoneNumber(auth, phone, agreementRecaptcha);
+      alert("OTP sent to your phone.");
+      document.getElementById("agreementOtp").focus();
+    } catch (e) {
+      console.error(e);
+      showAgreementError("Unable to send OTP for agreement. Check Firebase settings.");
+      try { agreementRecaptcha?.clear(); } catch {}
+      agreementRecaptcha = null;
+    }
+  });
+
+  // ======= AGREEMENT: Verify OTP =======
+  verifyAgreementBtn.addEventListener("click", async () => {
+    hideAgreementError();
+    const code = document.getElementById("agreementOtp").value.trim();
+
+    if (!/^\d{4,8}$/.test(code)) {
+      showAgreementError("Enter the OTP you received.");
+      return;
+    }
+
+    try {
+      if (!agreementConfirmation) {
+        showAgreementError("Click 'Send OTP' first.");
+        return;
+      }
+      await agreementConfirmation.confirm(code);
+      agreementOtpVerified = true;
+      alert("OTP verified. Now click 'Open Agreement'.");
+    } catch (e) {
+      console.error(e);
+      showAgreementError("Incorrect OTP. Try again.");
+      agreementOtpVerified = false;
+    }
+  });
+
+  // expose for normal JS to check
+  window.rsIsLoginVerified = () => sessionStorage.getItem(KEY_OTP_VERIFIED) === "true";
+  window.rsIsAgreementOtpVerified = () => agreementOtpVerified;
+</script>
+
+<script>
+/* =========================
+   AGREEMENT GATE (PASSWORD + OTP)
+========================= */
+function requestAgreementGate(file, title){
+  // Must be logged in (OTP verified)
+  const verified = (window.rsIsLoginVerified && window.rsIsLoginVerified());
+  if (!verified) {
+    document.getElementById("otpLoginOverlay").style.display = "flex";
+    return;
+  }
+
   currentPDF = file;
+  currentTitle = title;
+
+  document.getElementById("aTitle").innerText = title;
+  document.getElementById("agreementPassword").value = "";
+  document.getElementById("agreementOtp").value = "";
+  hideAgreementError();
+
+  // IMPORTANT: user must send OTP for agreement each time (unique OTP)
+  // They must click "Send OTP" inside this popup.
+  document.getElementById("agreementOverlay").style.display = "flex";
+  setTimeout(() => document.getElementById("agreementPassword").focus(), 50);
+}
+
+function closeAgreementGate(){
+  document.getElementById("agreementOverlay").style.display = "none";
+}
+
+document.getElementById("showAgreementPass").addEventListener("change", (e) => {
+  document.getElementById("agreementPassword").type = e.target.checked ? "text" : "password";
+});
+
+document.getElementById("aContinue").addEventListener("click", () => {
+  hideAgreementError();
+
+  const pass = document.getElementById("agreementPassword").value.trim();
+  if (pass !== AGREEMENT_PASSWORD) {
+    showAgreementError("Incorrect agreement password");
+    return;
+  }
+
+  // Must verify agreement OTP before opening
+  if (!(window.rsIsAgreementOtpVerified && window.rsIsAgreementOtpVerified())) {
+    showAgreementError("Please verify OTP (Send OTP → Verify OTP) before opening.");
+    return;
+  }
+
+  closeAgreementGate();
+  openPDF(currentPDF, currentTitle);
+});
+
+// Enter key submits agreement gate
+["agreementPassword","agreementOtp"].forEach(id => {
+  document.getElementById(id).addEventListener("keydown", (e) => {
+    if (e.key === "Enter") document.getElementById("aContinue").click();
+  });
+});
+
+/* =========================
+   PDF MODAL OPEN / DOWNLOAD
+========================= */
+function openPDF(file, title){
   document.getElementById("pdfViewer").src = file;
   document.getElementById("pdfTitle").innerText = title;
   document.getElementById("pdfModal").style.display = "flex";
 }
-
-/* DOWNLOAD */
 function downloadPDF(){
   const a = document.createElement("a");
   a.href = currentPDF;
@@ -743,14 +935,14 @@ function downloadPDF(){
   a.click();
   document.body.removeChild(a);
 }
-
-/* CLOSE */
 function closePDF(){
   document.getElementById("pdfModal").style.display = "none";
   document.getElementById("pdfViewer").src = "";
 }
 
-/* SIGNATURE */
+/* =========================
+   SIGNATURE PAD
+========================= */
 const canvas = document.getElementById("signature");
 const ctx = canvas.getContext("2d");
 
@@ -758,13 +950,17 @@ let drawing = false;
 let lastX = 0;
 let lastY = 0;
 
-/* High DPI support */
 function resizeCanvas(){
   const ratio = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
+
+  // reset transform BEFORE scaling (avoids repeated scaling on resize)
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+
   canvas.width = rect.width * ratio;
   canvas.height = rect.height * ratio;
   ctx.scale(ratio, ratio);
+
   ctx.lineWidth = 2.5;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
@@ -773,25 +969,16 @@ function resizeCanvas(){
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
-/* Get position */
 function getPos(e){
   const rect = canvas.getBoundingClientRect();
   const touch = e.touches ? e.touches[0] : e;
-  return {
-    x: touch.clientX - rect.left,
-    y: touch.clientY - rect.top
-  };
+  return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
 }
-
-/* Start drawing */
 function start(e){
   drawing = true;
   const pos = getPos(e);
-  lastX = pos.x;
-  lastY = pos.y;
+  lastX = pos.x; lastY = pos.y;
 }
-
-/* Draw smoothly */
 function draw(e){
   if(!drawing) return;
   e.preventDefault();
@@ -800,14 +987,9 @@ function draw(e){
   ctx.moveTo(lastX, lastY);
   ctx.lineTo(pos.x, pos.y);
   ctx.stroke();
-  lastX = pos.x;
-  lastY = pos.y;
+  lastX = pos.x; lastY = pos.y;
 }
-
-/* Stop */
-function stop(){
-  drawing = false;
-}
+function stop(){ drawing = false; }
 
 canvas.addEventListener("mousedown", start);
 canvas.addEventListener("mousemove", draw);
@@ -822,12 +1004,9 @@ function clearSignature(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 }
 
-function isSignatureEmpty(){
-  const blank = document.createElement("canvas");
-  blank.width = canvas.width;
-  blank.height = canvas.height;
-  return canvas.toDataURL() === blank.toDataURL();
-}
+/* =========================
+   FILE PREVIEW
+========================= */
 function showFileName(input){
   const preview = document.getElementById("filePreview");
   const label = document.getElementById("fileLabel");
@@ -841,7 +1020,6 @@ function showFileName(input){
   const file = input.files[0];
   label.innerText = "✔ File Selected";
 
-  // IMAGE PREVIEW
   if(file.type.startsWith("image/")){
     const reader = new FileReader();
     reader.onload = function(e){
@@ -853,15 +1031,19 @@ function showFileName(input){
       `;
     };
     reader.readAsDataURL(file);
-  }
-  else{
-    preview.innerHTML = `
-      <strong>Selected File:</strong> ${file.name}
-    `;
+  } else {
+    preview.innerHTML = `<strong>Selected File:</strong> ${file.name}`;
   }
 }
-/* SUBMIT */
+
+/* =========================
+   SUBMIT FORM
+========================= */
 function submitForm(){
+  const agree = document.getElementById("agree");
+  const doc = document.getElementById("doc");
+  const errorMsg = document.getElementById("errorMsg");
+
   if(!agree.checked || !doc.files.length){
     errorMsg.style.display="block";
     errorMsg.innerText="Please agree and upload signed document";
@@ -873,14 +1055,12 @@ function submitForm(){
   canvas.toBlob(function(blob){
     const fd = new FormData();
 
-   fd.append("name", document.getElementById("name").value);
-   fd.append("phone", document.getElementById("phone").value);
-   fd.append("message", document.getElementById("message").value);
+    fd.append("name", document.getElementById("name").value);
+    fd.append("phone", document.getElementById("phone").value);
+    fd.append("message", document.getElementById("message").value);
 
-    // REAL IMAGE FILE
     fd.append("Signature", blob, "signature.png");
 
-    // Optional uploaded agreement
     if(doc.files[0]){
       fd.append("Agreement File", doc.files[0]);
       fd.append("signed_date", new Date().toLocaleString());
@@ -907,9 +1087,6 @@ For support: +91 7550052799
   });
 }
 </script>
-<footer class="rs-footer">
-  © 2026 RS Home Care Pvt Ltd  
-Digital Agreement System • ISO-Style Workflow
-</footer>
+
 </body>
 </html>
