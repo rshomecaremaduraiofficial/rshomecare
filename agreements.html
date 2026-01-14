@@ -262,72 +262,111 @@ iframe{
   color: #555;
   background: #f8f9fa;
 }
-.password-overlay {
+.password-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
   display: none;
-  justify-content: center;
   align-items: center;
-  z-index: 9999;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 99999;
+  padding: 20px;
 }
+
 
 .password-overlay.active {
   display: flex;
 }
 
-.password-modal {
-  background: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 360px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+.password-modal{
+  width: min(420px, 100%);
+  background: rgba(255,255,255,0.96);
+  border-radius: 20px;
+  padding: 26px;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.35);
+  animation: modalPop .35s ease forwards;
+}
+@keyframes modalPop{
+  from{ transform: translateY(14px) scale(.96); opacity: 0; }
+  to{ transform: translateY(0) scale(1); opacity: 1; }
 }
 
-.password-modal h3 {
+.password-modal h3{
   text-align: center;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f4c81;
   margin-bottom: 6px;
 }
-.password-modal p {
-        text-align: center;
-        font-size: 14px;
-        color: #555;
-        margin-bottom: 16px;
-      }
-
-.password-modal input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.password-modal p{
+  text-align: center;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.45;
+  margin-bottom: 18px;
 }
 
-.password-modal button {
+.password-modal input{
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  background: #007bff;
-  color: #fff;
+  padding: 14px 16px;
+  font-size: 15px;
+  border-radius: 14px;
+  border: 1px solid rgba(15,76,129,0.25);
+  outline: none;
+  transition: .2s;
+}
+.password-modal input:focus{
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+}
+.password-actions{
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.password-modal button{
+  flex: 1;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
   border: none;
-  border-radius: 6px;
+  border-radius: 16px;
   cursor: pointer;
+  transition: .25s;
+}
+.password-btn-primary{
+  background: linear-gradient(135deg,#1e3a8a,#2563eb);
+  color: #fff;
+}
+
+.password-btn-primary:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+
+.password-btn-ghost{
+  background: rgba(15,76,129,0.08);
+  color: #0f4c81;
+}
+
+.password-btn-ghost:hover{
+  background: rgba(15,76,129,0.14);
 }
 
 .password-modal button:hover {
   background: #0056b3;
 }
 
-#passwordError {
+#passwordError{
   display: none;
-  color: red;
-  font-size: 14px;
-  margin-bottom: 10px;
+  margin-top: 12px;
+  text-align: center;
+  font-size: 13px;
+  color: #dc2626;
+  font-weight: 600;
 }
-
 </style>
 </head>
 
@@ -438,14 +477,42 @@ Please agree and sign before submitting
 </div>
 <div id="passwordOverlay" class="password-overlay">
   <div class="password-modal">
-    <h3>Enter Agreement Password</h3>
-    <p>If you want the password, please contact an RS Home Care team member.<br>
-      Phone No: <strong>+91 7550052799</strong><br>
+    <h3>Secure Agreement Access</h3>
+
+    <p>
+      Enter the agreement password to continue.<br>
+      For access, contact RS Home Care.
+    </p>
+
+    <input
+      type="password"
+      id="passwordInput"
+      placeholder="Enter agreement password"
+      autocomplete="off"
+    >
+
+    <div id="passwordError">Incorrect password</div>
+
+    <div class="password-actions">
+      <button
+        class="password-btn-ghost"
+        type="button"
+        onclick="document.getElementById('passwordOverlay').classList.remove('active')">
+        Cancel
+      </button>
+
+      <button
+        class="password-btn-primary"
+        id="passwordSubmit"
+        type="button">
+        Continue
+      </button>
+    </div>
+
+    <p style="margin-top:14px;font-size:13px;color:#64748b;text-align:center;">
+      Phone: <strong>+91 7550052799</strong><br>
       Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
-       </p>
-    <input type="password" id="passwordInput" placeholder="Password">
-    <p id="passwordError">Incorrect password</p>
-    <button id="passwordSubmit">Continue</button>
+    </p>
   </div>
 </div>
 
@@ -725,7 +792,55 @@ Please agree and sign before submitting
   // Autofocus
   setTimeout(() => nameInput.focus(), 50);
 })();
+// ===== AGREEMENT PASSWORD POPUP WORKING CODE =====
+const AGREEMENT_PASSWORD = "RShomecare"; // change if needed
+let currentPDF = "";
+let currentTitle = "";
+let attempts = 0;
 
+function requestPassword(file, title) {
+  currentPDF = file;
+  currentTitle = title;
+
+  const overlay = document.getElementById("passwordOverlay");
+  const input = document.getElementById("passwordInput");
+  const error = document.getElementById("passwordError");
+
+  input.value = "";
+  error.style.display = "none";
+  overlay.classList.add("active");
+  setTimeout(() => input.focus(), 50);
+}
+
+function submitPassword() {
+  const input = document.getElementById("passwordInput");
+  const error = document.getElementById("passwordError");
+  const overlay = document.getElementById("passwordOverlay");
+
+  if (input.value !== AGREEMENT_PASSWORD) {
+    attempts++;
+    error.style.display = "block";
+
+    if (attempts >= 3) {
+      alert("Too many attempts. Please contact RS Home Care.");
+      overlay.classList.remove("active");
+      attempts = 0;
+    }
+    return;
+  }
+
+  attempts = 0;
+  overlay.classList.remove("active");
+
+  // ✅ Open in your modal viewer
+  openPDF(currentPDF, currentTitle);
+}
+
+// Buttons / Enter key
+document.getElementById("passwordSubmit").addEventListener("click", submitPassword);
+document.getElementById("passwordInput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") submitPassword();
+});
 /* OPEN PDF */
 function openPDF(file, title){
   currentPDF = file;
