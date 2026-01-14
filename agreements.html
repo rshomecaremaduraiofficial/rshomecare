@@ -10,453 +10,155 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-
-/* BODY */
 body{
   font-family:'Poppins',sans-serif;
   color:#333;
-  scroll-behavior:smooth;
   background:url('oldagecare-bg.jpg') no-repeat center center fixed;
   background-size:cover;
   position:relative;
 }
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:rgba(245,249,255,0.8);
-  z-index:-1;
-}
-
-/* HEADER */
+body::before{content:"";position:fixed;inset:0;background:rgba(245,249,255,0.8);z-index:-1;}
 header{
   background:linear-gradient(135deg,#96ceff,#8cffbc);
-  text-align:center;
-  padding:60px 20px;
+  text-align:center;padding:60px 20px;
 }
 header img{max-width:140px;margin-bottom:15px}
 header h1{font-size:2.8em;color:#243879}
 header p{font-size:1.2em;margin-bottom:10px}
 header h2{color:#0f4c81;margin-top:10px}
 
-/* CONTAINER */
-.container{
-  max-width:720px;
-  margin:50px auto;
-  padding:0 15px;
-}
+.container{max-width:720px;margin:50px auto;padding:0 15px;}
+h2{text-align:center;color:#0f4c81;margin-bottom:18px;}
 
-/* HEADINGS */
-h2{
-  text-align:center;
-  color:#0f4c81;
-  margin-bottom:18px;
-}
-
-/* AGREEMENT SECTION */
 .agreement-section{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  flex-wrap:wrap;
-  margin:30px 0;
+  display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:30px 0;
 }
-
-/* AGREEMENT CARD */
 .card{
-  background:#fff;
-  padding:25px;
-  border-radius:18px;
-  margin:15px auto;
+  background:#fff;padding:25px;border-radius:18px;margin:15px auto;
   box-shadow:0 15px 35px rgba(0,0,0,.08);
-  animation:fadeUp .6s ease;
-  max-width:420px;
-  width:100%;
-  text-align:center;
+  max-width:420px;width:100%;text-align:center;
 }
-.agreement-section .card{ max-width:320px; }
+.agreement-section .card{max-width:320px;}
+.card h3{margin-bottom:15px;color:#0f4c81;}
 
-.card h3{ margin-bottom:15px; color:#0f4c81; }
-
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:none}
-}
-
-/* INPUTS */
 input,textarea{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:1px solid #ccc;
-  font-size:14px;
-  margin-top:12px;
+  width:100%;padding:14px;border-radius:14px;border:1px solid #ccc;
+  font-size:14px;margin-top:12px;
 }
-
-/* BUTTON */
 button{
-  padding:14px 28px;
-  border:none;
-  border-radius:30px;
-  background: linear-gradient(135deg, #1e3a8a, #2563eb);
-  color:#fff;
-  font-weight:600;
-  cursor:pointer;
-  transition:.3s;
+  padding:14px 28px;border:none;border-radius:30px;
+  background:linear-gradient(135deg,#1e3a8a,#2563eb);
+  color:#fff;font-weight:600;cursor:pointer;transition:.3s;
 }
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 25px rgba(0,0,0,.15);
-}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(0,0,0,.15);}
 
-/* FILE UPLOAD */
-.file-wrap{
-  margin-top:14px;
-  position:relative;
-  cursor:pointer;
-}
-.file-wrap input{
-  opacity:0;
-  position:absolute;
-  inset:0;
-}
+.file-wrap{margin-top:14px;position:relative;cursor:pointer;}
+.file-wrap input{opacity:0;position:absolute;inset:0;}
 .file-ui{
-  padding:16px;
-  border:2px dashed #0f4c81;
-  border-radius:14px;
-  text-align:center;
-  color:#0f4c81;
-  font-size:14px;
-  pointer-events:none;
+  padding:16px;border:2px dashed #0f4c81;border-radius:14px;
+  text-align:center;color:#0f4c81;font-size:14px;pointer-events:none;
 }
 
-/* CHECKBOX */
-.checkbox{
-  margin-top:18px;
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  gap:8px;
-  font-size:14px;
-}
-.checkbox input{
-  width:16px;
-  height:16px;
-  margin:0;
-  cursor:pointer;
-}
+.checkbox{margin-top:18px;display:flex;align-items:center;gap:8px;font-size:14px;}
+.checkbox input{width:16px;height:16px;margin:0;cursor:pointer;}
 
-/* ERROR */
-.error{
-  color:#e74c3c;
-  font-size:13px;
-  display:none;
-  text-align:center;
-  margin-top:10px;
-}
+.error{color:#e74c3c;font-size:13px;display:none;text-align:center;margin-top:10px;}
 
-/* SIGNATURE */
 .signature-box{
-  margin-top:20px;
-  border:2px dashed #2ecc71;
-  background: url('logo-light.png') no-repeat center;
-  background-size: 120px;
-  border-radius:14px;
-  padding:12px;
+  margin-top:20px;border:2px dashed #2ecc71;background:url('logo-light.png') no-repeat center;
+  background-size:120px;border-radius:14px;padding:12px;
 }
-canvas{
-  width:100%;
-  height:160px;
-  background:#fff;
-  border-radius:12px;
-  touch-action:none;
-}
-.clear-btn{
-  margin-top:10px;
-  background:#e74c3c;
-}
+canvas{width:100%;height:160px;background:#fff;border-radius:12px;touch-action:none;}
+.clear-btn{margin-top:10px;background:#e74c3c;}
 
-/* PDF MODAL */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-}
-.modal-box{
-  background:#fff;
-  width:95%;
-  max-width:900px;
-  border-radius:16px;
-  overflow:hidden;
-}
-.modal-header{
-  background:#0f4c81;
-  color:#fff;
-  padding:12px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.modal-header span{
-  flex:1;
-  font-weight:600;
-}
-.modal-header button{
-  padding:6px 14px;
-  border-radius:8px;
-  border:none;
-  cursor:pointer;
-  background:#2ecc71;
-  color:#fff;
-}
-.modal-header .close{
-  background:#e74c3c;
-}
-iframe{
-  width:100%;
-  height:75vh;
-  border:none;
-}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:9999;}
+.modal-box{background:#fff;width:95%;max-width:900px;border-radius:16px;overflow:hidden;}
+.modal-header{background:#0f4c81;color:#fff;padding:12px;display:flex;align-items:center;gap:10px;}
+.modal-header span{flex:1;font-weight:600;}
+.modal-header button{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;background:#2ecc71;color:#fff;}
+.modal-header .close{background:#e74c3c;}
+iframe{width:100%;height:75vh;border:none;}
 
-/* MOBILE */
 @media(max-width:768px){
   header h1{font-size:2.2em}
-  .agreement-section{
-    flex-direction:column;
-    align-items:center;
-  }
+  .agreement-section{flex-direction:column;align-items:center;}
 }
 
-/* FOOTER */
-.rs-footer {
-  text-align: center;
-  padding: 15px 10px;
-  font-size: 13px;
-  color: #555;
-  background: #f8f9fa;
-}
-
-/* ---------------------------
-   MODERN OTP LOGIN POPUP
-----------------------------*/
+/* ===== Modern OTP login popup ===== */
 .otp-overlay{
-  position: fixed; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  background: rgba(15, 23, 42, 0.60);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  z-index: 99999;
-  padding: 18px;
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(15,23,42,.60);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  z-index:99999;padding:18px;
 }
 .otp-card{
-  width: min(460px, 100%);
-  border-radius: 18px;
-  background: rgba(255,255,255,0.94);
-  box-shadow: 0 24px 80px rgba(0,0,0,0.35);
-  overflow:hidden;
-  transform: translateY(10px);
-  opacity: 0;
-  animation: otpPop .35s ease forwards;
+  width:min(460px,100%);border-radius:18px;background:rgba(255,255,255,0.94);
+  box-shadow:0 24px 80px rgba(0,0,0,0.35);overflow:hidden;
+  transform:translateY(10px);opacity:0;animation:pop .35s ease forwards;
 }
-@keyframes otpPop{ to{ transform: translateY(0); opacity: 1; } }
-
-.otp-head{
-  padding: 16px 18px;
-  background: linear-gradient(135deg,#96ceff,#8cffbc);
-  color:#0f4c81;
-}
-.otp-head h3{ margin:0; font-size:18px; font-weight:700; }
-.otp-head p{ margin:6px 0 0; font-size:13px; opacity:.9; line-height:1.35; }
-
-.otp-body{ padding: 18px; }
-.otp-grid{ display:flex; gap:10px; }
-.otp-grid .otp-field{ flex:1; }
-
-.otp-field{ margin-bottom: 12px; }
-.otp-field label{
-  display:block; font-size:12px; font-weight:600;
-  margin-bottom:6px; color:#0f172a;
-}
+@keyframes pop{to{transform:translateY(0);opacity:1;}}
+.otp-head{padding:16px 18px;background:linear-gradient(135deg,#96ceff,#8cffbc);color:#0f4c81;}
+.otp-head h3{margin:0;font-size:18px;font-weight:700;}
+.otp-head p{margin:6px 0 0;font-size:13px;opacity:.9;line-height:1.35;}
+.otp-body{padding:18px;}
+.otp-grid{display:flex;gap:10px;}
+.otp-grid .otp-field{flex:1;}
+.otp-field{margin-bottom:12px;}
+.otp-field label{display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:#0f172a;}
 .otp-field input{
-  width:100%;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(15,76,129,0.20);
-  outline:none;
-  font-size: 14px;
+  width:100%;padding:12px;border-radius:12px;border:1px solid rgba(15,76,129,0.20);
+  outline:none;font-size:14px;
 }
-.otp-field input:focus{
-  border-color: rgba(37,99,235,0.7);
-  box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
-}
-
-.otp-actions{ display:flex; gap:10px; margin-top: 10px; }
+.otp-field input:focus{border-color:rgba(37,99,235,0.7);box-shadow:0 0 0 4px rgba(37,99,235,0.12);}
+.otp-actions{display:flex;gap:10px;margin-top:10px;}
 .otp-btn{
-  flex:1;
-  padding: 12px;
-  border:none;
-  border-radius: 14px;
-  font-weight:700;
-  cursor:pointer;
-  transition:.2s;
+  flex:1;padding:12px;border:none;border-radius:14px;font-weight:700;cursor:pointer;transition:.2s;
 }
-.otp-btn.primary{
-  color:#fff;
-  background: linear-gradient(135deg, #1e3a8a, #2563eb);
-}
-.otp-btn.primary:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.15); }
-.otp-btn.ghost{
-  background: rgba(15,76,129,0.08);
-  color:#0f4c81;
-}
-.otp-btn.ghost:hover{ background: rgba(15,76,129,0.12); }
-
-.otp-error{
-  display:none;
-  margin-top: 10px;
-  text-align:center;
-  font-size: 13px;
-  color: #dc2626;
-  font-weight: 600;
-}
+.otp-btn.primary{color:#fff;background:linear-gradient(135deg,#1e3a8a,#2563eb);}
+.otp-btn.ghost{background:rgba(15,76,129,0.08);color:#0f4c81;}
+.otp-error{display:none;margin-top:10px;text-align:center;font-size:13px;color:#dc2626;font-weight:600;}
 .otp-note{
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 14px;
-  background: rgba(15,76,129,0.06);
-  border: 1px solid rgba(15,76,129,0.10);
-  font-size: 12.5px;
-  color: #0f4c81;
-  line-height: 1.35;
+  margin-top:12px;padding:12px;border-radius:14px;background:rgba(15,76,129,0.06);
+  border:1px solid rgba(15,76,129,0.10);font-size:12.5px;color:#0f4c81;line-height:1.35;
 }
-.otp-shake{ animation: otpShake .35s ease; }
-@keyframes otpShake{
-  0%,100%{ transform: translateX(0); }
-  20%{ transform: translateX(-8px); }
-  40%{ transform: translateX(8px); }
-  60%{ transform: translateX(-6px); }
-  80%{ transform: translateX(6px); }
-}
-@media(max-width:520px){
-  .otp-grid{ flex-direction: column; }
-}
+@media(max-width:520px){.otp-grid{flex-direction:column;}}
 
-/* ---------------------------
-   MODERN AGREEMENT GATE POPUP
-----------------------------*/
+/* ===== Agreement gate popup ===== */
 .a-overlay{
-  position:fixed; inset:0;
-  background: rgba(0,0,0,.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:99999;
-  padding:18px;
+  position:fixed;inset:0;background:rgba(0,0,0,.6);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:none;align-items:center;justify-content:center;
+  z-index:99999;padding:18px;
 }
 .a-card{
-  width:min(460px, 100%);
-  background: rgba(255,255,255,0.95);
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 24px 80px rgba(0,0,0,0.35);
-  transform: translateY(10px);
-  opacity:0;
-  animation: aPop .25s ease forwards;
+  width:min(460px,100%);background:rgba(255,255,255,0.95);border-radius:18px;
+  overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.35);
+  transform:translateY(10px);opacity:0;animation:pop2 .25s ease forwards;
 }
-@keyframes aPop{ to{ transform: translateY(0); opacity: 1; } }
-
+@keyframes pop2{to{transform:translateY(0);opacity:1;}}
 .a-head{
-  padding: 14px 16px;
-  background: linear-gradient(135deg,#1e3a8a,#2563eb);
-  color:#fff;
-  display:flex;
-  align-items:center;
-  gap:10px;
+  padding:14px 16px;background:linear-gradient(135deg,#1e3a8a,#2563eb);
+  color:#fff;display:flex;align-items:center;gap:10px;
 }
-.a-head h3{ margin:0; font-size:16px; flex:1; }
-.a-close{
-  border:none; background: rgba(255,255,255,0.15);
-  color:#fff; border-radius:10px;
-  padding:6px 10px; cursor:pointer;
-}
-
-.a-body{ padding:16px; }
-.a-field{ margin-bottom:12px; }
-.a-field label{
-  display:block; font-size:12px; font-weight:600;
-  margin-bottom:6px; color:#0f172a;
-}
+.a-head h3{margin:0;font-size:16px;flex:1;}
+.a-close{border:none;background:rgba(255,255,255,0.15);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer;}
+.a-body{padding:16px;}
+.a-field{margin-bottom:12px;}
+.a-field label{display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:#0f172a;}
 .a-field input{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid rgba(15,76,129,0.20);
-  outline:none;
-  font-size:14px;
+  width:100%;padding:12px;border-radius:12px;border:1px solid rgba(15,76,129,0.20);
+  outline:none;font-size:14px;
 }
-.a-field input:focus{
-  border-color: rgba(37,99,235,0.7);
-  box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
-}
-
-/* checkbox + show text same line */
+.a-field input:focus{border-color:rgba(37,99,235,0.7);box-shadow:0 0 0 4px rgba(37,99,235,0.12);}
 .a-toggle{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  font-size:13px;
-  margin: 2px 0 12px;
-  color:#0f172a;
+  display:inline-flex;align-items:center;gap:8px;font-size:13px;margin:2px 0 12px;color:#0f172a;
 }
-.a-toggle input{ width:16px; height:16px; margin:0; cursor:pointer; }
-.a-toggle label{ cursor:pointer; user-select:none; line-height:1; }
-
-.a-row{
-  display:flex;
-  gap:10px;
-}
-.a-row button{
-  flex:1;
-  border-radius:14px;
-  padding:12px;
-}
-
-.a-btn{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:14px;
-  font-weight:700;
-  cursor:pointer;
-  background: linear-gradient(135deg,#96ceff,#8cffbc);
-  color:#0f4c81;
-}
-.a-btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.15); }
-
-.a-error{
-  display:none;
-  margin: 10px 0;
-  text-align:center;
-  font-size:13px;
-  color:#dc2626;
-  font-weight:600;
-}
-.a-note{
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 14px;
-  background: rgba(15,76,129,0.06);
-  border: 1px solid rgba(15,76,129,0.10);
-  font-size: 12.5px;
-  color: #0f4c81;
-  line-height: 1.35;
-}
+.a-toggle input{width:16px;height:16px;margin:0;cursor:pointer;}
+.a-toggle label{cursor:pointer;user-select:none;line-height:1;}
+.a-row{display:flex;gap:10px;margin-top:8px;}
+.a-row .otp-btn{border-radius:14px;padding:12px;}
+.a-error{display:none;margin:10px 0;text-align:center;font-size:13px;color:#dc2626;font-weight:600;}
+.a-open{width:100%;padding:12px;border:none;border-radius:14px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#96ceff,#8cffbc);color:#0f4c81;}
 </style>
 </head>
 
@@ -523,8 +225,7 @@ iframe{
       <label for="agree">I agree to the Service Agreement</label>
     </div>
 
-    <div class="error" id="errorMsg">Please agree and sign before submitting</div>
-
+    <div class="error" id="errorMsg">Please agree and upload signed document</div>
     <br />
     <button onclick="submitForm()">Submit Agreement</button>
   </div>
@@ -542,7 +243,7 @@ iframe{
   </div>
 </div>
 
-<!-- MODERN OTP LOGIN OVERLAY (PAGE ACCESS) -->
+<!-- OTP LOGIN OVERLAY -->
 <div id="otpLoginOverlay" class="otp-overlay" style="display:none;">
   <div class="otp-card" id="otpCard">
     <div class="otp-head">
@@ -558,13 +259,13 @@ iframe{
         </div>
         <div class="otp-field">
           <label for="otpPhone">Phone Number</label>
-          <input id="otpPhone" type="tel" placeholder="+91 XXXXX XXXXX" />
+          <input id="otpPhone" type="tel" placeholder="+91XXXXXXXXXX or 10-digit" />
         </div>
       </div>
 
       <div class="otp-actions">
         <button class="otp-btn ghost" id="sendLoginOtpBtn" type="button">Send OTP</button>
-        <button class="otp-btn primary" id="verifyLoginOtpBtn" type="button">Verify</button>
+        <button class="otp-btn primary" id="verifyLoginOtpBtn" type="button">Verify OTP</button>
       </div>
 
       <div class="otp-field" style="margin-top:12px;">
@@ -572,10 +273,10 @@ iframe{
         <input id="otpCode" type="text" inputmode="numeric" placeholder="6-digit code" />
       </div>
 
-      <div class="otp-error" id="otpError">Invalid details or OTP</div>
+      <div class="otp-error" id="otpError"></div>
 
       <div class="otp-note">
-        If you want the OTP access, please contact an RS Home Care team member.<br />
+        If you need help, contact RS Home Care.<br />
         Phone: <strong>+91 7550052799</strong><br />
         Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
       </div>
@@ -583,9 +284,9 @@ iframe{
   </div>
 </div>
 
-<!-- MODERN AGREEMENT GATE (PASSWORD + OTP) -->
+<!-- AGREEMENT GATE -->
 <div id="agreementOverlay" class="a-overlay">
-  <div class="a-card" id="aCard">
+  <div class="a-card">
     <div class="a-head">
       <h3 id="aTitle">Open Agreement</h3>
       <button class="a-close" onclick="closeAgreementGate()">✕</button>
@@ -608,152 +309,128 @@ iframe{
       </div>
 
       <div class="a-row">
-        <button class="otp-btn ghost" id="sendAgreementOtpBtn" type="button" style="background: rgba(15,76,129,0.08); color:#0f4c81;">
-          Send OTP
-        </button>
-        <button class="otp-btn primary" id="verifyAgreementOtpBtn" type="button" style="background: linear-gradient(135deg,#1e3a8a,#2563eb); color:#fff;">
-          Verify OTP
-        </button>
+        <button class="otp-btn ghost" id="sendAgreementOtpBtn" type="button">Send OTP</button>
+        <button class="otp-btn primary" id="verifyAgreementOtpBtn" type="button">Verify OTP</button>
       </div>
 
-      <div class="a-error" id="aError">Incorrect password or OTP</div>
+      <div class="a-error" id="aError"></div>
 
-      <button class="a-btn" id="aContinue" type="button">Open Agreement</button>
-
-      <div class="a-note">
-        Need OTP/password? Contact RS Home Care.<br />
-        Phone: <strong>+91 7550052799</strong><br />
-        Email: <strong>rshomecaremaduraiofficial@gmail.com</strong>
-      </div>
+      <button class="a-open" id="openAgreementBtn" type="button">Open Agreement</button>
     </div>
   </div>
 </div>
 
-<footer class="rs-footer">
-  © 2026 RS Home Care Pvt Ltd<br />
-  Digital Agreement System • ISO-Style Workflow
-</footer>
-
-<!-- Firebase needs a container to render (invisible) reCAPTCHA -->
+<!-- Firebase requires a container for reCAPTCHA -->
 <div id="recaptcha-container"></div>
 
-<script>
-/* ============= YOUR SETTINGS ============= */
-/* Agreement password (still visible in page source; for stronger security move to server) */
-const AGREEMENT_PASSWORD = "RShomecare";
-
-/* sessionStorage keys */
-const KEY_OTP_VERIFIED = "rs_otp_verified";
-const KEY_NAME = "rs_name";
-const KEY_PHONE = "rs_phone";
-
-/* internal agreement open state */
-let currentPDF = "";
-let currentTitle = "";
-let agreementOtpVerified = false;
-
-/* ========= Helpers ========= */
-function normalizePhone(raw){
-  let p = (raw || "").trim();
-  if (!p) return "";
-  p = p.replace(/\s+/g, "");
-  if (/^\d{10}$/.test(p)) p = "+91" + p;
-  if (/^91\d{10}$/.test(p)) p = "+" + p;
-  return p;
-}
-function showOtpError(msg){
-  const err = document.getElementById("otpError");
-  const card = document.getElementById("otpCard");
-  err.textContent = msg;
-  err.style.display = "block";
-  card.classList.remove("otp-shake"); void card.offsetWidth; card.classList.add("otp-shake");
-}
-function showAgreementError(msg){
-  const err = document.getElementById("aError");
-  err.textContent = msg;
-  err.style.display = "block";
-}
-function hideAgreementError(){
-  document.getElementById("aError").style.display = "none";
-}
-</script>
-
-<!-- ========= FIREBASE OTP (REAL) ========= -->
+<!-- =============== ALL JS (OTP + Page) =============== -->
 <script type="module">
-  // Use Firebase modular SDK from gstatic.
-  // If you prefer, you can also use cdnjs/jsdelivr, but gstatic is Firebase official host.
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
   import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-  /* =========================
-     1) PASTE YOUR FIREBASE CONFIG HERE
-     from Firebase Console -> Project settings -> Web app
-  ========================= */
-const firebaseConfig = {
-  apiKey: "AIzaSyBq6igCc9A3md3arNpfg5RYr4Yct-W-yJU",
-  authDomain: "rshomecare-a3909.firebaseapp.com",
-  projectId: "rshomecare-a3909",
-  storageBucket: "rshomecare-a3909.firebasestorage.app",
-  messagingSenderId: "313052429999",
-  appId: "1:313052429999:web:6186f2ff07f185b4e65e5a",
-  measurementId: "G-C0PP258H1L"
-};
+  // ✅ YOUR CONFIG (PASTED)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBq6igCc9A3md3arNpfg5RYr4Yct-W-yJU",
+    authDomain: "rshomecare-a3909.firebaseapp.com",
+    projectId: "rshomecare-a3909",
+    storageBucket: "rshomecare-a3909.firebasestorage.app",
+    messagingSenderId: "313052429999",
+    appId: "1:313052429999:web:6186f2ff07f185b4e65e5a",
+    measurementId: "G-C0PP258H1L"
+  };
 
+  // ========= SETTINGS =========
+  // NOTE: This password is still visible in View Source. If you need true security, we must protect PDFs with server rules.
+  const AGREEMENT_PASSWORD = "RShomecare";
+
+  // ========= STORAGE KEYS =========
+  const KEY_VERIFIED = "rs_otp_verified";
+  const KEY_NAME = "rs_name";
+  const KEY_PHONE = "rs_phone";
+
+  // ========= INIT =========
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  // Recaptcha verifiers (one for login, one for agreement OTP)
+  // ========= UI ELEMENTS =========
+  const otpOverlay = document.getElementById("otpLoginOverlay");
+  const otpName = document.getElementById("otpName");
+  const otpPhone = document.getElementById("otpPhone");
+  const otpCode = document.getElementById("otpCode");
+  const otpError = document.getElementById("otpError");
+  const sendLoginOtpBtn = document.getElementById("sendLoginOtpBtn");
+  const verifyLoginOtpBtn = document.getElementById("verifyLoginOtpBtn");
+
+  const agreementOverlay = document.getElementById("agreementOverlay");
+  const aTitle = document.getElementById("aTitle");
+  const agreementPassword = document.getElementById("agreementPassword");
+  const agreementOtp = document.getElementById("agreementOtp");
+  const sendAgreementOtpBtn = document.getElementById("sendAgreementOtpBtn");
+  const verifyAgreementOtpBtn = document.getElementById("verifyAgreementOtpBtn");
+  const openAgreementBtn = document.getElementById("openAgreementBtn");
+  const aError = document.getElementById("aError");
+  const showAgreementPass = document.getElementById("showAgreementPass");
+
+  // ========= STATE =========
   let loginRecaptcha = null;
   let agreementRecaptcha = null;
-
-  // Confirmation results
   let loginConfirmation = null;
   let agreementConfirmation = null;
+  let agreementOtpVerified = false;
 
-  // Elements (login)
-  const overlay = document.getElementById("otpLoginOverlay");
-  const nameEl = document.getElementById("otpName");
-  const phoneEl = document.getElementById("otpPhone");
-  const codeEl = document.getElementById("otpCode");
-  const sendLoginBtn = document.getElementById("sendLoginOtpBtn");
-  const verifyLoginBtn = document.getElementById("verifyLoginOtpBtn");
+  let currentPDF = "";
+  let currentTitle = "";
 
-  // Elements (agreement)
-  const sendAgreementBtn = document.getElementById("sendAgreementOtpBtn");
-  const verifyAgreementBtn = document.getElementById("verifyAgreementOtpBtn");
+  // ========= HELPERS =========
+  function normalizePhone(raw){
+    let p = (raw || "").trim().replace(/\s+/g, "");
+    if (!p) return "";
+    if (/^\d{10}$/.test(p)) p = "+91" + p;
+    if (/^91\d{10}$/.test(p)) p = "+" + p;
+    return p;
+  }
+  function showOtpErr(msg){
+    otpError.textContent = msg;
+    otpError.style.display = "block";
+  }
+  function clearOtpErr(){ otpError.style.display = "none"; otpError.textContent = ""; }
 
-  // Show login overlay unless already verified
+  function showAgreeErr(msg){
+    aError.textContent = msg;
+    aError.style.display = "block";
+  }
+  function clearAgreeErr(){ aError.style.display = "none"; aError.textContent = ""; }
+
+  function isVerified(){
+    return sessionStorage.getItem(KEY_VERIFIED) === "true";
+  }
+
+  // ========= SHOW LOGIN OVERLAY ON LOAD =========
   window.addEventListener("load", () => {
-    const verified = sessionStorage.getItem(KEY_OTP_VERIFIED) === "true";
-    overlay.style.display = verified ? "none" : "flex";
-
-    // preload stored values
-    const storedName = sessionStorage.getItem(KEY_NAME) || "";
-    const storedPhone = sessionStorage.getItem(KEY_PHONE) || "";
-    if (storedName) nameEl.value = storedName;
-    if (storedPhone) phoneEl.value = storedPhone;
+    otpOverlay.style.display = isVerified() ? "none" : "flex";
+    otpName.value = sessionStorage.getItem(KEY_NAME) || "";
+    otpPhone.value = sessionStorage.getItem(KEY_PHONE) || "";
   });
 
+  // ========= RECAPTCHA INIT =========
   function initLoginRecaptcha(){
     if (loginRecaptcha) return;
     loginRecaptcha = new RecaptchaVerifier(auth, "recaptcha-container", { size: "invisible" });
   }
-
   function initAgreementRecaptcha(){
-    // reuse same container; if already rendered, Firebase may complain, so we re-create only when needed.
     if (agreementRecaptcha) return;
     agreementRecaptcha = new RecaptchaVerifier(auth, "recaptcha-container", { size: "invisible" });
   }
 
-  // ======= LOGIN: Send OTP =======
-  sendLoginBtn.addEventListener("click", async () => {
-    document.getElementById("otpError").style.display = "none";
+  // ========= LOGIN: SEND OTP =========
+  sendLoginOtpBtn.addEventListener("click", async () => {
+    clearOtpErr();
 
-    const name = nameEl.value.trim();
-    const phone = normalizePhone(phoneEl.value);
+    const name = otpName.value.trim();
+    const phone = normalizePhone(otpPhone.value);
 
-    if (name.length < 2) return showOtpError("Please enter your full name");
-    if (!/^\+\d{10,15}$/.test(phone)) return showOtpError("Enter valid phone with country code (e.g. +91XXXXXXXXXX)");
+    if (name.length < 2) return showOtpErr("Enter your full name.");
+    if (!/^\+\d{10,15}$/.test(phone)) return showOtpErr("Enter valid phone like +91XXXXXXXXXX (or 10 digits).");
 
     try {
       sessionStorage.setItem(KEY_NAME, name);
@@ -763,56 +440,73 @@ const firebaseConfig = {
       loginConfirmation = await signInWithPhoneNumber(auth, phone, loginRecaptcha);
 
       alert("OTP sent to your phone.");
-      codeEl.focus();
+      otpCode.focus();
     } catch (e) {
-      console.error(e);
-      showOtpError("Unable to send OTP. Check: domain authorized in Firebase, HTTPS, phone format.");
+      console.error("LOGIN send OTP error:", e);
+      showOtpErr("OTP failed. Check: Phone auth enabled + Authorized domain + HTTPS.");
       try { loginRecaptcha?.clear(); } catch {}
       loginRecaptcha = null;
     }
   });
 
-  // ======= LOGIN: Verify OTP =======
-  verifyLoginBtn.addEventListener("click", async () => {
-    document.getElementById("otpError").style.display = "none";
-    const code = codeEl.value.trim();
+  // ========= LOGIN: VERIFY OTP =========
+  verifyLoginOtpBtn.addEventListener("click", async () => {
+    clearOtpErr();
+    const code = otpCode.value.trim();
 
-    if (!/^\d{4,8}$/.test(code)) return showOtpError("Enter the OTP you received");
+    if (!/^\d{4,8}$/.test(code)) return showOtpErr("Enter the OTP you received.");
 
     try {
-      if (!loginConfirmation) return showOtpError("Click 'Send OTP' first.");
+      if (!loginConfirmation) return showOtpErr("Click 'Send OTP' first.");
       await loginConfirmation.confirm(code);
 
-      sessionStorage.setItem(KEY_OTP_VERIFIED, "true");
-      overlay.style.display = "none";
-
-      // Optional: stop persistent auth session (uncomment if you want)
-      // await auth.signOut();
+      sessionStorage.setItem(KEY_VERIFIED, "true");
+      otpOverlay.style.display = "none";
     } catch (e) {
-      console.error(e);
-      showOtpError("Incorrect OTP. Try again.");
+      console.error("LOGIN verify OTP error:", e);
+      showOtpErr("Incorrect OTP. Try again.");
     }
   });
 
-  // Enter key support for login
-  [nameEl, phoneEl, codeEl].forEach(el => {
-    el.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        if (el === codeEl) verifyLoginBtn.click();
-        else sendLoginBtn.click();
-      }
-    });
+  // ========= AGREEMENT: OPEN POPUP =========
+  window.requestAgreementGate = (file, title) => {
+    if (!isVerified()) {
+      otpOverlay.style.display = "flex";
+      return;
+    }
+
+    currentPDF = file;
+    currentTitle = title;
+
+    agreementOtpVerified = false;
+    agreementConfirmation = null;
+
+    aTitle.textContent = title;
+    agreementPassword.value = "";
+    agreementOtp.value = "";
+    clearAgreeErr();
+
+    agreementOverlay.style.display = "flex";
+    setTimeout(() => agreementPassword.focus(), 50);
+  };
+
+  window.closeAgreementGate = () => {
+    agreementOverlay.style.display = "none";
+  };
+
+  showAgreementPass.addEventListener("change", (e) => {
+    agreementPassword.type = e.target.checked ? "text" : "password";
   });
 
-  // ======= AGREEMENT: Send OTP (to stored phone) =======
-  sendAgreementBtn.addEventListener("click", async () => {
-    hideAgreementError();
+  // ========= AGREEMENT: SEND OTP =========
+  sendAgreementOtpBtn.addEventListener("click", async () => {
+    clearAgreeErr();
     agreementOtpVerified = false;
 
     const phone = sessionStorage.getItem(KEY_PHONE) || "";
     if (!/^\+\d{10,15}$/.test(phone)) {
-      showAgreementError("Phone number missing. Please login again.");
-      document.getElementById("otpLoginOverlay").style.display = "flex";
+      showAgreeErr("Phone missing. Please login again.");
+      otpOverlay.style.display = "flex";
       return;
     }
 
@@ -820,147 +514,88 @@ const firebaseConfig = {
       initAgreementRecaptcha();
       agreementConfirmation = await signInWithPhoneNumber(auth, phone, agreementRecaptcha);
       alert("OTP sent to your phone.");
-      document.getElementById("agreementOtp").focus();
+      agreementOtp.focus();
     } catch (e) {
-      console.error(e);
-      showAgreementError("Unable to send OTP for agreement. Check Firebase settings.");
+      console.error("AGREEMENT send OTP error:", e);
+      showAgreeErr("OTP failed. Check Firebase settings / authorized domain.");
       try { agreementRecaptcha?.clear(); } catch {}
       agreementRecaptcha = null;
     }
   });
 
-  // ======= AGREEMENT: Verify OTP =======
-  verifyAgreementBtn.addEventListener("click", async () => {
-    hideAgreementError();
-    const code = document.getElementById("agreementOtp").value.trim();
+  // ========= AGREEMENT: VERIFY OTP =========
+  verifyAgreementOtpBtn.addEventListener("click", async () => {
+    clearAgreeErr();
 
-    if (!/^\d{4,8}$/.test(code)) {
-      showAgreementError("Enter the OTP you received.");
-      return;
-    }
+    const code = agreementOtp.value.trim();
+    if (!/^\d{4,8}$/.test(code)) return showAgreeErr("Enter the OTP you received.");
 
     try {
-      if (!agreementConfirmation) {
-        showAgreementError("Click 'Send OTP' first.");
-        return;
-      }
+      if (!agreementConfirmation) return showAgreeErr("Click 'Send OTP' first.");
       await agreementConfirmation.confirm(code);
+
       agreementOtpVerified = true;
       alert("OTP verified. Now click 'Open Agreement'.");
     } catch (e) {
-      console.error(e);
-      showAgreementError("Incorrect OTP. Try again.");
+      console.error("AGREEMENT verify OTP error:", e);
       agreementOtpVerified = false;
+      showAgreeErr("Incorrect OTP. Try again.");
     }
   });
 
-  // expose for normal JS to check
-  window.rsIsLoginVerified = () => sessionStorage.getItem(KEY_OTP_VERIFIED) === "true";
-  window.rsIsAgreementOtpVerified = () => agreementOtpVerified;
+  // ========= AGREEMENT: OPEN PDF =========
+  openAgreementBtn.addEventListener("click", () => {
+    clearAgreeErr();
+
+    if (agreementPassword.value.trim() !== AGREEMENT_PASSWORD) {
+      showAgreeErr("Incorrect agreement password.");
+      return;
+    }
+    if (!agreementOtpVerified) {
+      showAgreeErr("Please verify OTP first (Send OTP → Verify OTP).");
+      return;
+    }
+
+    agreementOverlay.style.display = "none";
+    openPDF(currentPDF, currentTitle);
+  });
+
+  // ========= PDF MODAL =========
+  window.openPDF = (file, title) => {
+    window.currentPDF = file;
+    document.getElementById("pdfViewer").src = file;
+    document.getElementById("pdfTitle").innerText = title;
+    document.getElementById("pdfModal").style.display = "flex";
+  };
+
+  window.downloadPDF = () => {
+    const a = document.createElement("a");
+    a.href = window.currentPDF;
+    a.download = (window.currentPDF || "").split("/").pop() || "agreement.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  window.closePDF = () => {
+    document.getElementById("pdfModal").style.display = "none";
+    document.getElementById("pdfViewer").src = "";
+  };
 </script>
 
+<!-- ====== Your existing signature + submit JS (non-Firebase) ====== -->
 <script>
-/* =========================
-   AGREEMENT GATE (PASSWORD + OTP)
-========================= */
-function requestAgreementGate(file, title){
-  // Must be logged in (OTP verified)
-  const verified = (window.rsIsLoginVerified && window.rsIsLoginVerified());
-  if (!verified) {
-    document.getElementById("otpLoginOverlay").style.display = "flex";
-    return;
-  }
-
-  currentPDF = file;
-  currentTitle = title;
-
-  document.getElementById("aTitle").innerText = title;
-  document.getElementById("agreementPassword").value = "";
-  document.getElementById("agreementOtp").value = "";
-  hideAgreementError();
-
-  // IMPORTANT: user must send OTP for agreement each time (unique OTP)
-  // They must click "Send OTP" inside this popup.
-  document.getElementById("agreementOverlay").style.display = "flex";
-  setTimeout(() => document.getElementById("agreementPassword").focus(), 50);
-}
-
-function closeAgreementGate(){
-  document.getElementById("agreementOverlay").style.display = "none";
-}
-
-document.getElementById("showAgreementPass").addEventListener("change", (e) => {
-  document.getElementById("agreementPassword").type = e.target.checked ? "text" : "password";
-});
-
-document.getElementById("aContinue").addEventListener("click", () => {
-  hideAgreementError();
-
-  const pass = document.getElementById("agreementPassword").value.trim();
-  if (pass !== AGREEMENT_PASSWORD) {
-    showAgreementError("Incorrect agreement password");
-    return;
-  }
-
-  // Must verify agreement OTP before opening
-  if (!(window.rsIsAgreementOtpVerified && window.rsIsAgreementOtpVerified())) {
-    showAgreementError("Please verify OTP (Send OTP → Verify OTP) before opening.");
-    return;
-  }
-
-  closeAgreementGate();
-  openPDF(currentPDF, currentTitle);
-});
-
-// Enter key submits agreement gate
-["agreementPassword","agreementOtp"].forEach(id => {
-  document.getElementById(id).addEventListener("keydown", (e) => {
-    if (e.key === "Enter") document.getElementById("aContinue").click();
-  });
-});
-
-/* =========================
-   PDF MODAL OPEN / DOWNLOAD
-========================= */
-function openPDF(file, title){
-  document.getElementById("pdfViewer").src = file;
-  document.getElementById("pdfTitle").innerText = title;
-  document.getElementById("pdfModal").style.display = "flex";
-}
-function downloadPDF(){
-  const a = document.createElement("a");
-  a.href = currentPDF;
-  a.download = currentPDF.split("/").pop();
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
-function closePDF(){
-  document.getElementById("pdfModal").style.display = "none";
-  document.getElementById("pdfViewer").src = "";
-}
-
-/* =========================
-   SIGNATURE PAD
-========================= */
 const canvas = document.getElementById("signature");
 const ctx = canvas.getContext("2d");
-
-let drawing = false;
-let lastX = 0;
-let lastY = 0;
+let drawing=false,lastX=0,lastY=0;
 
 function resizeCanvas(){
   const ratio = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
-
-  // reset transform BEFORE scaling (avoids repeated scaling on resize)
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-
+  ctx.setTransform(1,0,0,1,0,0);
   canvas.width = rect.width * ratio;
   canvas.height = rect.height * ratio;
   ctx.scale(ratio, ratio);
-
   ctx.lineWidth = 2.5;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
@@ -971,74 +606,47 @@ window.addEventListener("resize", resizeCanvas);
 
 function getPos(e){
   const rect = canvas.getBoundingClientRect();
-  const touch = e.touches ? e.touches[0] : e;
-  return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+  const t = e.touches ? e.touches[0] : e;
+  return { x: t.clientX - rect.left, y: t.clientY - rect.top };
 }
-function start(e){
-  drawing = true;
-  const pos = getPos(e);
-  lastX = pos.x; lastY = pos.y;
-}
+function start(e){ drawing=true; const p=getPos(e); lastX=p.x; lastY=p.y; }
 function draw(e){
   if(!drawing) return;
   e.preventDefault();
-  const pos = getPos(e);
-  ctx.beginPath();
-  ctx.moveTo(lastX, lastY);
-  ctx.lineTo(pos.x, pos.y);
-  ctx.stroke();
-  lastX = pos.x; lastY = pos.y;
+  const p=getPos(e);
+  ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(p.x,p.y); ctx.stroke();
+  lastX=p.x; lastY=p.y;
 }
-function stop(){ drawing = false; }
+function stop(){ drawing=false; }
 
 canvas.addEventListener("mousedown", start);
 canvas.addEventListener("mousemove", draw);
 canvas.addEventListener("mouseup", stop);
 canvas.addEventListener("mouseleave", stop);
-
 canvas.addEventListener("touchstart", start, {passive:false});
 canvas.addEventListener("touchmove", draw, {passive:false});
 canvas.addEventListener("touchend", stop);
 
-function clearSignature(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-}
+function clearSignature(){ ctx.clearRect(0,0,canvas.width,canvas.height); }
 
-/* =========================
-   FILE PREVIEW
-========================= */
 function showFileName(input){
   const preview = document.getElementById("filePreview");
   const label = document.getElementById("fileLabel");
-
   if(!input.files || !input.files[0]){
-    preview.innerHTML = "";
-    label.innerText = "📎 Upload Image or PDF Agreement";
-    return;
+    preview.innerHTML=""; label.innerText="📎 Upload Image or PDF Agreement"; return;
   }
-
-  const file = input.files[0];
-  label.innerText = "✔ File Selected";
-
+  const file=input.files[0];
+  label.innerText="✔ File Selected";
   if(file.type.startsWith("image/")){
-    const reader = new FileReader();
-    reader.onload = function(e){
-      preview.innerHTML = `
-        <strong>Selected Image:</strong> ${file.name}<br><br>
-        <img src="${e.target.result}"
-             style="max-width:100%;border-radius:12px;
-             box-shadow:0 8px 20px rgba(0,0,0,.15)">
-      `;
+    const r=new FileReader();
+    r.onload = e => {
+      preview.innerHTML = `<strong>Selected Image:</strong> ${file.name}<br><br>
+      <img src="${e.target.result}" style="max-width:100%;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.15)">`;
     };
-    reader.readAsDataURL(file);
-  } else {
-    preview.innerHTML = `<strong>Selected File:</strong> ${file.name}`;
-  }
+    r.readAsDataURL(file);
+  } else preview.innerHTML = `<strong>Selected File:</strong> ${file.name}`;
 }
 
-/* =========================
-   SUBMIT FORM
-========================= */
 function submitForm(){
   const agree = document.getElementById("agree");
   const doc = document.getElementById("doc");
@@ -1049,23 +657,16 @@ function submitForm(){
     errorMsg.innerText="Please agree and upload signed document";
     return;
   }
-
   errorMsg.style.display="none";
 
   canvas.toBlob(function(blob){
     const fd = new FormData();
-
     fd.append("name", document.getElementById("name").value);
     fd.append("phone", document.getElementById("phone").value);
     fd.append("message", document.getElementById("message").value);
-
     fd.append("Signature", blob, "signature.png");
-
-    if(doc.files[0]){
-      fd.append("Agreement File", doc.files[0]);
-      fd.append("signed_date", new Date().toLocaleString());
-    }
-
+    fd.append("Agreement File", doc.files[0]);
+    fd.append("signed_date", new Date().toLocaleString());
     fd.append("_subject", "New Digital Agreement – RS Home Care");
     fd.append("_captcha", "false");
 
@@ -1073,15 +674,7 @@ function submitForm(){
       method: "POST",
       body: fd
     }).then(() => {
-      alert(`
-Thank you for signing with RS Home Care.
-
-✔ Agreement received
-✔ Digital signature recorded
-✔ Confirmation will be sent to you
-
-For support: +91 7550052799
-`);
+      alert("Thank you! Agreement received.");
       location.reload();
     });
   });
