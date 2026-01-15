@@ -331,7 +331,7 @@ h2{text-align:center;color:#4b8fca;margin-bottom:30px}
 }
 .fab.whatsapp{bottom:20px;background:#25d366}
 .fab.call{bottom:90px;background:#0f4c81}
-  a.whatsapp,
+a.whatsapp,
 a.call,
 a.whatsapp:hover,
 a.call:hover,
@@ -358,7 +358,83 @@ a.call:focus {
     margin-bottom:10px;
   }
 }
+/* ✅ Dropdown + time row styling (matches your form fields) */
+.form-group select{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:none;
+  outline:none;
+  font-family:'Poppins',sans-serif;
+}
 
+/* ✅ Modern Time Field Styling */
+.time-row{
+  display:flex;
+  gap:14px;
+  margin-bottom:18px;
+}
+
+.time-row .form-group{
+  flex:1;
+  position:relative;
+}
+
+/* Time input base */
+.time-row input[type="time"]{
+  width:100%;
+  padding:15px 14px 15px 44px; /* space for icon */
+  border-radius:14px;
+  border:none;
+  background:rgba(255,255,255,0.95);
+  font-family:'Poppins',sans-serif;
+  font-size:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  transition:.25s ease;
+  appearance:none;
+}
+
+/* Hover & focus */
+.time-row input[type="time"]:hover{
+  box-shadow:0 8px 24px rgba(0,0,0,0.12);
+}
+
+.time-row input[type="time"]:focus{
+  outline:none;
+  box-shadow:0 0 0 3px rgba(46,204,113,0.35),
+             0 10px 28px rgba(0,0,0,0.15);
+}
+
+/* Floating label */
+.time-row label{
+  position:absolute;
+  top:-8px;
+  left:14px;
+  background:#fff;
+  padding:0 6px;
+  font-size:11px;
+  color:#0f4c81;
+  font-weight:600;
+}
+
+/* Time icon */
+.time-row .form-group::before{
+  content:"⏰";
+  position:absolute;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:16px;
+  opacity:0.6;
+  pointer-events:none;
+}
+
+/* Mobile: stack From / To */
+@media (max-width:768px){
+  .time-row{
+    flex-direction:column;
+  }
+}
 .rs-footer {
   text-align:center;
   padding:15px 10px;
@@ -484,6 +560,35 @@ a.call:focus {
           <label>Phone No</label>
         </div>
 
+        <!-- ✅ Home Care Option (List Field) -->
+<div class="form-group">
+  <select name="Home Care Option" required>
+    <option value="" disabled selected>Select Home Care Option</option>
+    <option>Elderly Care</option>
+    <option>Patient Care</option>
+    <option>Home Nursing</option>
+    <option>Post Surgery Care</option>
+    <option>Baby / Mother Care</option>
+    <option>Attender Service</option>
+    <option>Cooking</option>
+    <option>House Work</option>
+    <option>Other</option>
+  </select>
+</div>
+
+<!-- ✅ Next Work Available Time (From / To) -->
+<div class="time-row">
+  <div class="form-group">
+    <input type="time" name="Next Work Available From" required placeholder=" ">
+    <label>Work From</label>
+  </div>
+
+  <div class="form-group">
+    <input type="time" name="Next Work Available To" required placeholder=" ">
+    <label>Work To</label>
+  </div>
+</div>
+
         <div class="form-group">
           <textarea name="Client Message" required placeholder=" "></textarea>
           <label>How can we help you?</label>
@@ -527,6 +632,3 @@ function closeNav(){
 
 </body>
 </html>
-
-
-
