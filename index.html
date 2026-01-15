@@ -228,12 +228,26 @@ h2{text-align:center;color:#4b8fca;margin-bottom:30px}
 .card:hover{transform:translateY(-8px)}
 .card img{width:100%;height:200px;object-fit:cover}
 .card p{padding:15px;font-size:14px}
-.card-link{
-  text-decoration:none;
-  color:inherit;
-  display:block;
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
+.card-link .card {
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-link:hover .card {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+}
+
+.card-link:focus-visible .card {
+  outline: 3px solid #2ecc71;
+  outline-offset: 4px;
+}
 /* CONTACT */
 #contact{
   padding:90px 20px;
@@ -514,15 +528,13 @@ a.call:focus {
     <p>Compassionate elderly home care.</p>
   </div>
 </a>
-    <div class="gallery">
-   <a href="professional.html" style="text-decoration:none;color:inherit;">
+<a href="professional.html" class="card-link">
   <div class="card">
     <img src="elderly2.jpg" alt="Professional Caregivers at Work">
     <p>Professional caregivers at work.</p>
   </div>
 </a>
     <div class="card"><img src="workers.jpg" alt=""><p>Our trained and trusted care team.</p></div>
-  </div>
   </div>
 </section>
 
@@ -657,6 +669,3 @@ function closeNav(){
 
 </body>
 </html>
-
-
-
