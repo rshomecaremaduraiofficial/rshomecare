@@ -615,6 +615,12 @@ Madurai">
 </section>
 
 <script>
+    document.getElementById("enquiryForm").addEventListener("submit", function () {
+  // Wait a moment to allow FormSubmit to process
+  setTimeout(() => {
+    this.reset();
+  }, 300);
+});
 function toggleNav(){
   document.getElementById("navMenu").classList.toggle("show");
 }
@@ -632,3 +638,4 @@ function closeNav(){
 
 </body>
 </html>
+
