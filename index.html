@@ -6,66 +6,298 @@
 <title>RS Home Nursing Care</title>
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 
-/* ✅ FIX: prevent white bar / horizontal scroll on mobile */
-html, body{
+html,body{
   width:100%;
   overflow-x:hidden;
+  scroll-behavior:smooth;
 }
 
 body{
   font-family:'Poppins',sans-serif;
   color:#333;
-  scroll-behavior:smooth;
   background:url('oldagecare-bg.jpg') no-repeat center center fixed;
   background-size:cover;
   position:relative;
+  line-height:1.65;
+  animation:pageFade .9s ease;
 }
 
-/* ✅ FIX: iOS Safari background fixed gap */
-@media (max-width: 768px){
-  body{
-    background-attachment:scroll;
-  }
+@media (max-width:768px){
+  body{background-attachment:scroll}
 }
 
 body::before{
   content:"";
   position:fixed;
   inset:0;
-  background:rgba(245,249,255,0.8);
-  z-index:-1;
+  background:rgba(245,249,255,0.78);
+  z-index:-4;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:-10%;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(150,206,255,0.22), transparent 26%),
+    radial-gradient(circle at 80% 30%, rgba(140,255,188,0.16), transparent 28%),
+    radial-gradient(circle at 50% 85%, rgba(52,152,219,0.12), transparent 28%);
+  animation:bgFloat 22s ease-in-out infinite alternate;
+  z-index:-3;
+  pointer-events:none;
+}
+
+/* PROGRESS BAR */
+#progressBar{
+  position:fixed;
+  top:0;
+  left:0;
+  height:4px;
+  width:0%;
+  background:linear-gradient(90deg,#2ecc71,#4aa7eb);
+  z-index:100001;
+  box-shadow:0 2px 10px rgba(46,204,113,.35);
+}
+
+/* SNOW - IN FRONT */
+.snowfall{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:99997;
+}
+
+.snowflake{
+  position:absolute;
+  top:-20px;
+  background:rgba(255,255,255,.95);
+  border-radius:50%;
+  box-shadow:0 0 8px rgba(255,255,255,.35);
+  opacity:.9;
+  will-change:transform, opacity;
+  animation-name:snowFall;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+  filter:blur(.4px);
+}
+
+/* EASTER ANIMATION - IN FRONT */
+.easter-eggs{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:99996;
+}
+
+.easter-egg{
+  position:absolute;
+  top:-60px;
+  width:28px;
+  height:38px;
+  border-radius:50% 50% 48% 48%;
+  opacity:.88;
+  box-shadow:
+    inset -4px -8px 12px rgba(255,255,255,.25),
+    inset 3px 6px 10px rgba(0,0,0,.05),
+    0 8px 18px rgba(0,0,0,.08);
+  animation:eggFloat linear infinite, eggWobble ease-in-out infinite;
+}
+
+.easter-egg::before,
+.easter-egg::after{
+  content:"";
+  position:absolute;
+  left:12%;
+  width:76%;
+  border-radius:999px;
+}
+
+.easter-egg::before{
+  height:6px;
+  top:10px;
+  background:rgba(255,255,255,.55);
+}
+
+.easter-egg::after{
+  height:5px;
+  top:22px;
+  background:rgba(255,255,255,.35);
+}
+
+.easter-bunny{
+  position:fixed;
+  left:18px;
+  bottom:18px;
+  width:74px;
+  height:74px;
+  pointer-events:none;
+  z-index:100000;
+  animation:bunnyHop 4.4s ease-in-out infinite;
+  filter:drop-shadow(0 8px 14px rgba(0,0,0,.18));
+}
+
+.bunny-face{
+  position:absolute;
+  left:17px;
+  bottom:8px;
+  width:42px;
+  height:36px;
+  background:#fff;
+  border-radius:50%;
+}
+
+.bunny-ear{
+  position:absolute;
+  width:16px;
+  height:34px;
+  background:#fff;
+  border-radius:50px;
+  top:3px;
+}
+
+.bunny-ear.left{left:18px; transform:rotate(-12deg)}
+.bunny-ear.right{right:18px; transform:rotate(12deg)}
+
+.bunny-ear::after{
+  content:"";
+  position:absolute;
+  inset:5px 4px;
+  background:#ffd4e5;
+  border-radius:50px;
+}
+
+.bunny-eye{
+  position:absolute;
+  width:5px;
+  height:5px;
+  background:#333;
+  border-radius:50%;
+  top:18px;
+}
+
+.bunny-eye.left{left:12px}
+.bunny-eye.right{right:12px}
+
+.bunny-nose{
+  position:absolute;
+  left:50%;
+  top:22px;
+  transform:translateX(-50%);
+  width:8px;
+  height:6px;
+  background:#ff9db9;
+  border-radius:50%;
+}
+
+.bunny-mouth{
+  position:absolute;
+  left:50%;
+  top:28px;
+  width:16px;
+  height:8px;
+  transform:translateX(-50%);
+  border-bottom:2px solid #888;
+  border-radius:0 0 16px 16px;
 }
 
 /* HEADER */
 header{
   background:linear-gradient(135deg,#96ceff,#8cffbc);
   text-align:center;
-  padding:60px 20px;
+  padding:70px 20px 80px;
+  position:relative;
+  overflow:hidden;
 }
-header img{max-width:140px;margin-bottom:15px}
-header h1{font-size:2.8em;color:#243879}
-header p{font-size:1.2em;margin-bottom:20px}
+
+header::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-120%;
+  width:50%;
+  height:100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
+  transform:skewX(-25deg);
+  animation:headerShine 8s linear infinite;
+}
+
+.hero-badges{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:18px 0 22px;
+}
+
+.hero-badge{
+  background:rgba(255,255,255,0.45);
+  color:#123f6d;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+  backdrop-filter:blur(8px);
+  box-shadow:0 10px 22px rgba(0,0,0,.08);
+}
+
+header img{
+  max-width:140px;
+  margin-bottom:15px;
+  animation:logoFloat 5s ease-in-out infinite;
+}
+
+header h1{
+  font-size:3em;
+  color:#243879;
+  animation:fadeDown 1s ease;
+}
+
+header p{
+  font-size:1.1em;
+  margin:0 auto 20px;
+  max-width:900px;
+  animation:fadeUp 1.25s ease;
+}
+
 .cta{
   background:#fff;
   color:#0f4c81;
-  padding:12px 28px;
+  padding:13px 30px;
   border-radius:30px;
   text-decoration:none;
-  font-weight:600;
+  font-weight:700;
+  box-shadow:0 10px 24px rgba(15,76,129,.18);
+  transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease, background .35s ease;
 }
 
+.cta:hover{
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:0 16px 34px rgba(15,76,129,.22);
+}
+
+/* NAV */
 .rs-nav{
   position:sticky;
   top:0;
-  background:#fff;
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
   z-index:1000;
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  border-bottom:1px solid rgba(255,255,255,.35);
+  transition:background .35s ease, box-shadow .35s ease, padding .35s ease;
+}
+
+.rs-nav.scrolled{
+  background:rgba(255,255,255,.95);
+  box-shadow:0 6px 18px rgba(0,0,0,.12);
 }
 
 .nav-inner{
@@ -77,11 +309,6 @@ header p{font-size:1.2em;margin-bottom:20px}
   justify-content:space-between;
 }
 
-.nav-brand img{
-  height:42px;
-}
-
-/* Desktop menu */
 .nav-menu{
   display:flex;
   align-items:center;
@@ -91,65 +318,62 @@ header p{font-size:1.2em;margin-bottom:20px}
 .nav-menu a{
   text-decoration:none;
   color:#0f4c81;
-  font-weight:500;
-}
-
-/* Action buttons */
-.nav-actions{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.get-care{
   font-weight:600;
+  position:relative;
+  transition:color .3s ease;
 }
 
-.nav-btn{
+.nav-menu a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-5px;
+  width:0;
+  height:2px;
   background:#2ecc71;
-  color:#fff !important;
-  padding:8px 18px;
-  border-radius:30px;
-  font-weight:600;
+  transition:width .35s ease;
 }
 
-/* Mobile */
+.nav-menu a:hover::after{
+  width:100%;
+}
+
 .nav-toggle{
   display:none;
   font-size:26px;
   cursor:pointer;
+  transition:transform .3s ease;
 }
 
-/* Mobile Styles */
-@media (max-width: 768px){
-  .nav-actions{
-    display:none; /* hide desktop buttons */
-  }
+.nav-toggle:hover{
+  transform:scale(1.08);
+}
 
-  .nav-toggle{
-    display:block;
-  }
+@media (max-width:768px){
+  .nav-toggle{display:block}
 
   .nav-menu{
     position:absolute;
     top:64px;
     left:0;
     width:100%;
-    background:#fff;
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(12px);
     flex-direction:column;
     gap:0;
     display:none;
     box-shadow:0 8px 20px rgba(0,0,0,.15);
+    animation:menuDrop .35s ease;
   }
 
   .nav-menu a{
     padding:14px;
     border-bottom:1px solid #eee;
+    width:100%;
+    text-align:center;
   }
 
-  .nav-menu.show{
-    display:flex;
-  }
+  .nav-menu.show{display:flex}
 }
 
 .header-buttons{
@@ -163,183 +387,731 @@ header p{font-size:1.2em;margin-bottom:20px}
   display:inline-block;
   background:#2ecc71;
   color:#fff;
-  padding:12px 28px;
+  padding:13px 30px;
   border-radius:30px;
   text-decoration:none;
-  font-weight:600;
-  box-shadow:0 8px 20px rgba(0,0,0,.2);
-  transition:.3s;
+  font-weight:700;
+  box-shadow:0 10px 24px rgba(46,204,113,.26);
+  transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease, background .35s ease;
 }
 
 .appointment-btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 12px 25px rgba(0,0,0,.25);
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:0 16px 34px rgba(46,204,113,.32);
 }
 
-/* SECTIONS */
-section{padding:70px 10%}
-h2{text-align:center;color:#4b8fca;margin-bottom:30px}
-
-/* ABOUT */
-.about{
-  max-width:800px;
-  margin:auto;
-  text-align:center;
-  animation:fadeUp 1.2s ease;
-}
 .review-btn{
- background:#fff;
+  background:#fff;
   color:#0f4c81;
-  padding:12px 28px;
+  padding:13px 30px;
   border-radius:30px;
   text-decoration:none;
-  font-weight:600;
+  font-weight:700;
+  box-shadow:0 10px 24px rgba(15,76,129,.16);
+  transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease, background .35s ease;
 }
 
 .review-btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 12px 25px rgba(0,0,0,.25);
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:0 16px 34px rgba(0,0,0,.18);
 }
-/* SERVICES */
-.services-marquee{
-  overflow:hidden;
-  width:100%; /* ✅ FIX */
-  background:rgba(245,249,255,0.6);
-  padding:20px 0;
-}
-.services-track{
-  display:flex;
-  gap:20px;
-  width:max-content;
-  animation:marquee 40s linear infinite;
-}
-.services-track .card{
-  width:220px;
-  background:#fff;
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 6px 18px rgba(0,0,0,0.1);
-}
-.services-track img{width:100%;height:150px;object-fit:cover}
-.services-track p{text-align:center;font-size:14px;padding:10px}
 
-/* WORK */
+/* SECTIONS */
+section{
+  padding:80px 10%;
+}
+
+h2{
+  text-align:center;
+  color:#4b8fca;
+  margin-bottom:18px;
+  position:relative;
+  font-size:2.1rem;
+}
+
+.section-subtitle{
+  max-width:820px;
+  margin:0 auto 34px;
+  text-align:center;
+  color:#586474;
+}
+
+h2::after{
+  content:"";
+  display:block;
+  width:84px;
+  height:4px;
+  margin:12px auto 0;
+  border-radius:999px;
+  background:linear-gradient(90deg,#96ceff,#2ecc71);
+  animation:pulseBar 2.8s infinite;
+}
+
+/* ABOUT */
+.about{
+  max-width:900px;
+  margin:auto;
+  text-align:center;
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(10px);
+  border-radius:24px;
+  padding:34px;
+  box-shadow:0 14px 32px rgba(0,0,0,.08);
+}
+
+.about p + p{margin-top:18px}
+
+.about-highlights{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:16px;
+  margin-top:28px;
+}
+
+.mini-box{
+  background:#fff;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 10px 24px rgba(0,0,0,.08);
+  transition:transform .55s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+}
+
+.mini-box:hover{
+  transform:translateY(-8px);
+  box-shadow:0 18px 32px rgba(0,0,0,.12);
+}
+
+.mini-box h3{
+  color:#0f4c81;
+  font-size:1rem;
+  margin-bottom:8px;
+}
+
+/* SERVICES */
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:24px;
+}
+
+.service-card{
+  position:relative;
+  background:rgba(255,255,255,.88);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 14px 34px rgba(0,0,0,.09);
+  transition:transform .55s cubic-bezier(.22,1,.36,1), box-shadow .45s ease, border-color .4s ease;
+  border:1px solid rgba(255,255,255,.55);
+  backdrop-filter:blur(8px);
+  transform:translateY(0);
+}
+
+.service-card:hover{
+  transform:translateY(-12px);
+  box-shadow:0 22px 46px rgba(0,0,0,.16), 0 0 30px rgba(46,204,113,.18);
+}
+
+.service-image{
+  position:relative;
+  height:220px;
+  overflow:hidden;
+}
+
+.service-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform 1.2s cubic-bezier(.22,1,.36,1);
+}
+
+.service-card:hover .service-image img{
+  transform:scale(1.08);
+}
+
+.service-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,.08), transparent);
+}
+
+.service-body{
+  padding:22px 22px 24px;
+}
+
+.service-body h3{
+  color:#123f6d;
+  font-size:1.2rem;
+  margin-bottom:10px;
+}
+
+.service-body p{
+  color:#5d6978;
+  font-size:14px;
+  margin-bottom:14px;
+}
+
+.service-line{
+  width:58px;
+  height:4px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#96ceff,#2ecc71);
+  transition:width .45s ease;
+}
+
+.service-card:hover .service-line{
+  width:90px;
+}
+
+/* WHY CHOOSE */
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+}
+
+.feature-card{
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(8px);
+  border-radius:22px;
+  padding:24px;
+  box-shadow:0 14px 30px rgba(0,0,0,.08);
+  transition:transform .55s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+  border:1px solid rgba(255,255,255,.45);
+}
+
+.feature-card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 20px 40px rgba(0,0,0,.13);
+}
+
+.feature-icon{
+  width:58px;
+  height:58px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  margin-bottom:14px;
+  background:linear-gradient(135deg,#96ceff,#8cffbc);
+  box-shadow:0 12px 24px rgba(0,0,0,.08);
+}
+
+.feature-card h3{
+  color:#123f6d;
+  margin-bottom:10px;
+  font-size:1.1rem;
+}
+
+/* STORY */
+.story-wrap{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:28px;
+  align-items:center;
+}
+
+.story-text{
+  background:rgba(255,255,255,.62);
+  backdrop-filter:blur(10px);
+  border-radius:24px;
+  padding:32px;
+  box-shadow:0 12px 28px rgba(0,0,0,.08);
+}
+
+.story-text h3{
+  color:#123f6d;
+  font-size:1.6rem;
+  margin-bottom:14px;
+}
+
+.story-text p + p{margin-top:14px}
+
+.story-points{
+  margin-top:20px;
+  display:grid;
+  gap:12px;
+}
+
+.story-point{
+  background:#fff;
+  border-radius:16px;
+  padding:14px 16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+
+.story-image{
+  position:relative;
+  min-height:480px;
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:0 18px 40px rgba(0,0,0,.14);
+}
+
+.story-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.story-badge{
+  position:absolute;
+  left:20px;
+  bottom:20px;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(8px);
+  color:#123f6d;
+  padding:16px 18px;
+  border-radius:18px;
+  box-shadow:0 10px 24px rgba(0,0,0,.12);
+  max-width:260px;
+}
+
+@media (max-width:900px){
+  .story-wrap{
+    grid-template-columns:1fr;
+  }
+  .story-image{min-height:320px}
+}
+
+/* GALLERY */
 .gallery{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:22px;
 }
+
+.gallery-card,
 .card{
   background:#fff;
-  border-radius:15px;
+  border-radius:22px;
   overflow:hidden;
-  box-shadow:0 8px 20px rgba(0,0,0,0.1);
-  transition:.3s;
-   cursor:pointer;
-}
-.card:hover{transform:translateY(-8px)}
-.card img{width:100%;height:200px;object-fit:cover}
-.card p{padding:15px;font-size:14px}
-.card-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
+  box-shadow:0 10px 24px rgba(0,0,0,0.1);
+  transition:transform .55s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+  cursor:pointer;
+  position:relative;
 }
 
-.card-link .card {
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.gallery-card:hover,
+.card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 18px 36px rgba(0,0,0,0.18);
 }
 
-.card-link:hover .card {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+.gallery-card img,
+.card img{
+  width:100%;
+  height:240px;
+  object-fit:cover;
+  transition:transform 1.1s cubic-bezier(.22,1,.36,1);
 }
 
-.card-link:focus-visible .card {
-  outline: 3px solid #2ecc71;
-  outline-offset: 4px;
+.gallery-card:hover img,
+.card:hover img{
+  transform:scale(1.08);
 }
+
+.gallery-overlay{
+  position:absolute;
+  inset:auto 0 0 0;
+  padding:22px 18px 16px;
+  background:linear-gradient(to top, rgba(0,0,0,.7), rgba(0,0,0,.15), transparent);
+  color:#fff;
+}
+
+.gallery-overlay h3{
+  font-size:1.05rem;
+  margin-bottom:6px;
+}
+
+.gallery-overlay p{
+  font-size:13px;
+  opacity:.95;
+}
+
+.card p{
+  padding:16px;
+  font-size:14px;
+}
+
+.card-link{
+  text-decoration:none;
+  color:inherit;
+  display:block;
+}
+
+.card-link:focus-visible .card{
+  outline:3px solid #2ecc71;
+  outline-offset:4px;
+}
+
+/* TESTIMONIALS */
+.testimonial-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+
+.testimonial-card{
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(8px);
+  border-radius:22px;
+  padding:24px;
+  box-shadow:0 14px 30px rgba(0,0,0,.08);
+  position:relative;
+  transition:transform .55s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+}
+
+.testimonial-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 18px 34px rgba(0,0,0,.12);
+}
+
+.quote-mark{
+  font-size:42px;
+  line-height:1;
+  color:#8bc8ff;
+  margin-bottom:12px;
+}
+
+.testimonial-card h4{
+  margin-top:14px;
+  color:#123f6d;
+}
+
+/* CHECKLIST */
+.checklist-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
+}
+
+.check-item{
+  background:#fff;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 10px 24px rgba(0,0,0,.07);
+  transition:transform .5s cubic-bezier(.22,1,.36,1), box-shadow .4s ease;
+}
+
+.check-item:hover{
+  transform:translateY(-6px);
+  box-shadow:0 16px 28px rgba(0,0,0,.11);
+}
+
+.check-item strong{
+  display:block;
+  color:#123f6d;
+  margin-bottom:8px;
+}
+
 /* CONTACT */
 #contact{
   padding:90px 20px;
   display:flex;
   justify-content:center;
 }
+
 .contact-box{
-  max-width:1100px;
-  height:100%;
+  max-width:1200px;
   width:100%;
   background:linear-gradient(135deg,#0f4c81,#123f6d);
   color:#fff;
-  border-radius:24px;
-  padding:55px;
-  display:flex;
-  gap:50px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.25);
+  border-radius:30px;
+  padding:20px;
+  display:grid;
+  grid-template-columns:1fr 1.1fr;
+  gap:24px;
+  box-shadow:0 22px 50px rgba(0,0,0,0.25);
+  position:relative;
+  overflow:hidden;
 }
-.contact-details{flex:1}
-.contact-details p{font-size:13.5px;margin-bottom:10px}
-.contact-form{flex:1}
 
-/* FORM */
-.form-group{position:relative;margin-bottom:18px}
-.form-group input,.form-group textarea{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:none;
+.contact-box::before{
+  content:"";
+  position:absolute;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  top:-90px;
+  right:-70px;
 }
+
+.contact-box::after{
+  content:"";
+  position:absolute;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  background:rgba(46,204,113,.08);
+  bottom:-60px;
+  left:-60px;
+}
+
+.contact-details,
+.contact-form{
+  position:relative;
+  z-index:1;
+}
+
+.contact-details{
+  background:rgba(255,255,255,.08);
+  border-radius:24px;
+  padding:34px;
+  backdrop-filter:blur(8px);
+}
+
+.contact-details h2{
+  color:#fff;
+  text-align:left;
+}
+
+.contact-details h2::after{
+  margin:12px 0 0;
+}
+
+.contact-details h3{
+  margin:18px 0 12px;
+  font-size:1.1rem;
+}
+
+.contact-details p{
+  font-size:14px;
+  margin-bottom:10px;
+}
+
+.contact-stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:20px;
+}
+
+.contact-stat{
+  background:rgba(255,255,255,.1);
+  border-radius:16px;
+  padding:16px;
+  transition:transform .45s cubic-bezier(.22,1,.36,1), background .35s ease;
+}
+
+.contact-stat:hover{
+  transform:translateY(-4px);
+  background:rgba(255,255,255,.14);
+}
+
+.contact-stat strong{
+  display:block;
+  font-size:1.3rem;
+  color:#8cffbc;
+}
+
+.contact-form{
+  background:rgba(255,255,255,.12);
+  border-radius:24px;
+  padding:34px;
+  backdrop-filter:blur(10px);
+}
+
+.form-title{
+  margin-bottom:18px;
+}
+
+.form-title h3{
+  font-size:1.6rem;
+  margin-bottom:6px;
+}
+
+.form-title p{
+  color:rgba(255,255,255,.88);
+  font-size:14px;
+}
+
+.form-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.form-group{
+  position:relative;
+  margin-bottom:18px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+  width:100%;
+  padding:16px 16px 16px 48px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.96);
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  font-family:'Poppins',sans-serif;
+  font-size:14px;
+  color:#243879;
+}
+
+.form-group textarea{
+  min-height:140px;
+  resize:vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus{
+  outline:none;
+  transform:translateY(-1px);
+  box-shadow:0 0 0 4px rgba(46,204,113,0.22),0 16px 30px rgba(0,0,0,.14);
+}
+
 .form-group label{
   position:absolute;
   top:50%;
-  left:14px;
+  left:48px;
   transform:translateY(-50%);
   font-size:13px;
   color:#666;
   transition:.3s;
+  pointer-events:none;
 }
+
+.form-group textarea + label{
+  top:22px;
+  transform:none;
+}
+
 .form-group input:focus+label,
 .form-group textarea:focus+label,
 .form-group input:not(:placeholder-shown)+label,
 .form-group textarea:not(:placeholder-shown)+label{
-  top:-6px;
+  top:-8px;
+  left:16px;
+  transform:none;
   font-size:11px;
   background:#fff;
-  padding:0 6px;
-}
-.contact-form button{
-  padding:14px 28px;
-  border:none;
-  border-radius:30px;
-  background:#2ecc71;
-  color:#fff;
-  text-align:center;
-  font-weight:600;
-  font-size:14px;
-  cursor:pointer;
-  margin-right:10px;
-}
-.contact-form .view-agreement{
-  padding:14px 28px;
-  border:none;
-  border-radius:30px;
-  background:#3498db;
-  color:#fff;
-  text-align:center;
-  font-weight:600;
-  text-decoration:none;
-  display:inline-block;
-  margin-right:10px;
+  padding:2px 8px;
+  border-radius:999px;
+  color:#0f4c81;
+  font-weight:700;
 }
 
-/* AGREEMENT CHECKBOX */
-.form-group.agreement {
-  display:flex;
-  align-items:center;
-  gap:5px;
-  margin-bottom:10px;
+.form-group .field-icon{
+  position:absolute;
+  left:16px;
+  top:16px;
+  font-size:17px;
+  opacity:.65;
+}
+
+.form-group.select-wrap label{
+  display:none;
+}
+
+.time-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-bottom:18px;
+}
+
+.contact-form button{
+  padding:15px 28px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,#2ecc71,#1fb860);
+  color:#fff;
+  font-weight:700;
+  font-size:15px;
+  cursor:pointer;
+  transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+  box-shadow:0 14px 28px rgba(46,204,113,.28);
+}
+
+.contact-form button:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 18px 36px rgba(46,204,113,.36);
+}
+
+.contact-form .view-agreement{
+  padding:15px 28px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,#4aa7eb,#2980d9);
+  color:#fff;
+  text-align:center;
+  font-weight:700;
+  text-decoration:none;
+  display:inline-block;
+  transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+  box-shadow:0 14px 28px rgba(52,152,219,.25);
+}
+
+.contact-form .view-agreement:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 18px 36px rgba(52,152,219,.33);
+}
+
+#successMessage{
+  display:none;
+  margin-top:15px;
+  padding:16px;
+  border-radius:16px;
+  background:rgba(46,204,113,0.15);
+  color:#d8ffe5;
+  font-size:14px;
+  font-weight:600;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.12);
+}
+
+/* CHAT POPUP */
+.chat-popup{
+  position:fixed;
+  right:20px;
+  bottom:160px;
+  width:240px;
+  background:rgba(255,255,255,.96);
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 16px 34px rgba(0,0,0,.18);
+  z-index:99998;
+  animation:fadeUp .9s ease;
+  border:1px solid rgba(255,255,255,.8);
+  backdrop-filter:blur(10px);
+}
+
+.chat-popup p{
+  font-size:14px;
+  color:#123f6d;
+  margin-bottom:12px;
+  font-weight:600;
+}
+
+.chat-popup a{
+  display:inline-block;
+  text-decoration:none;
+  background:linear-gradient(135deg,#2ecc71,#1fb860);
+  color:#fff;
+  font-weight:700;
+  padding:10px 16px;
+  border-radius:999px;
   font-size:13px;
+  box-shadow:0 10px 20px rgba(46,204,113,.25);
+}
+
+.chat-popup .close-chat{
+  position:absolute;
+  top:8px;
+  right:10px;
+  background:none;
+  border:none;
+  font-size:18px;
+  cursor:pointer;
+  color:#678;
 }
 
 /* FLOATING BUTTONS */
@@ -354,135 +1126,210 @@ h2{text-align:center;color:#4b8fca;margin-bottom:30px}
   justify-content:center;
   color:#fff;
   font-size:26px;
-  z-index:99999; /* ✅ FIX: always on top */
+  z-index:99999;
+  box-shadow:0 14px 28px rgba(0,0,0,.22);
+  transition:transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease;
+  animation:fabFloat 3.2s ease-in-out infinite;
 }
+
+.fab:hover{
+  transform:scale(1.08);
+}
+
 .fab.whatsapp{bottom:20px;background:#25d366}
 .fab.call{bottom:90px;background:#0f4c81}
+
 a.whatsapp,
 a.call,
 a.whatsapp:hover,
 a.call:hover,
 a.whatsapp:focus,
-a.call:focus {
-  text-decoration: none;
+a.call:focus{
+  text-decoration:none;
 }
 
-/* ANIMATIONS */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(40px)}
-  to{opacity:1;transform:none}
-}
-@keyframes marquee{
-  from{transform:translateX(0)}
-  to{transform:translateX(-50%)}
+/* REVEAL */
+.reveal{
+  opacity:0;
+  transform:translateY(34px);
+  transition:opacity 1.05s ease, transform 1.05s cubic-bezier(.22,1,.36,1);
 }
 
-/* MOBILE */
-@media(max-width:768px){
-  .contact-box{flex-direction:column;padding:40px 25px}
-  .contact-form button,.contact-form .view-agreement{
-    width:100%;
-    margin-bottom:10px;
-  }
-}
-/* ✅ Dropdown + time row styling (matches your form fields) */
-.form-group select{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:none;
-  outline:none;
-  font-family:'Poppins',sans-serif;
+.reveal.active{
+  opacity:1;
+  transform:translateY(0);
 }
 
-/* ✅ Modern Time Field Styling */
-.time-row{
-  display:flex;
-  gap:14px;
-  margin-bottom:18px;
-}
-
-.time-row .form-group{
-  flex:1;
-  position:relative;
-}
-
-/* Time input base */
-.time-row input[type="time"]{
-  width:100%;
-  padding:15px 14px 15px 44px; /* space for icon */
-  border-radius:14px;
-  border:none;
-  background:rgba(255,255,255,0.95);
-  font-family:'Poppins',sans-serif;
-  font-size:14px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-  transition:.25s ease;
-  appearance:none;
-}
-
-/* Hover & focus */
-.time-row input[type="time"]:hover{
-  box-shadow:0 8px 24px rgba(0,0,0,0.12);
-}
-
-.time-row input[type="time"]:focus{
-  outline:none;
-  box-shadow:0 0 0 3px rgba(46,204,113,0.35),
-             0 10px 28px rgba(0,0,0,0.15);
-}
-
-/* Floating label */
-.time-row label{
-  position:absolute;
-  top:-8px;
-  left:14px;
-  background:#fff;
-  padding:0 6px;
-  font-size:11px;
-  color:#0f4c81;
-  font-weight:600;
-}
-
-/* Time icon */
-.time-row .form-group::before{
-  content:"⏰";
-  position:absolute;
-  left:14px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:16px;
-  opacity:0.6;
-  pointer-events:none;
-}
-
-/* Mobile: stack From / To */
-@media (max-width:768px){
-  .time-row{
-    flex-direction:column;
-  }
-}
-.rs-footer {
+/* FOOTER */
+.rs-footer{
   text-align:center;
   padding:15px 10px;
   font-size:13px;
   color:#555;
   background:#f8f9fa;
 }
+
+/* MOBILE */
+@media (max-width:900px){
+  .contact-box{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width:768px){
+  header h1{font-size:2.3em}
+  section{padding:70px 6%}
+  .form-row,
+  .time-row{
+    grid-template-columns:1fr;
+  }
+  .contact-stats{
+    grid-template-columns:1fr;
+  }
+  .contact-form button,
+  .contact-form .view-agreement{
+    width:100%;
+  }
+  .easter-bunny{
+    transform:scale(.85);
+    left:8px;
+    bottom:10px;
+  }
+  .chat-popup{
+    right:12px;
+    bottom:150px;
+    width:210px;
+  }
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(36px)}
+  to{opacity:1;transform:none}
+}
+
+@keyframes fadeDown{
+  from{opacity:0;transform:translateY(-28px)}
+  to{opacity:1;transform:none}
+}
+
+@keyframes headerShine{
+  from{left:-120%}
+  to{left:140%}
+}
+
+@keyframes logoFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+@keyframes pulseBar{
+  0%,100%{transform:scaleX(1);opacity:1}
+  50%{transform:scaleX(1.08);opacity:.8}
+}
+
+@keyframes fabFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+@keyframes bgFloat{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  100%{transform:translate3d(2%,-2%,0) scale(1.05)}
+}
+
+@keyframes menuDrop{
+  from{opacity:0;transform:translateY(-10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes pageFade{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+@keyframes snowFall{
+  0%{
+    transform:translate3d(0,0,0);
+    opacity:0;
+  }
+  10%{
+    opacity:.9;
+  }
+  100%{
+    transform:translate3d(var(--drift), 110vh, 0);
+    opacity:.2;
+  }
+}
+
+@keyframes eggFloat{
+  0%{
+    transform:translate3d(0,-10vh,0) rotate(0deg);
+    opacity:0;
+  }
+  10%{
+    opacity:.92;
+  }
+  100%{
+    transform:translate3d(var(--egg-drift),110vh,0) rotate(360deg);
+    opacity:.15;
+  }
+}
+
+@keyframes eggWobble{
+  0%,100%{margin-left:0}
+  50%{margin-left:8px}
+}
+
+@keyframes bunnyHop{
+  0%,100%{transform:translateY(0)}
+  20%{transform:translateY(-4px)}
+  30%{transform:translateY(-16px)}
+  40%{transform:translateY(-4px)}
+  60%{transform:translateY(0)}
+}
 </style>
 </head>
 
 <body>
 
+<div id="progressBar"></div>
+
+<div class="snowfall" id="snowfall" aria-hidden="true"></div>
+<div class="easter-eggs" id="easterEggs" aria-hidden="true"></div>
+
+<div class="easter-bunny" aria-hidden="true">
+  <div class="bunny-ear left"></div>
+  <div class="bunny-ear right"></div>
+  <div class="bunny-face">
+    <div class="bunny-eye left"></div>
+    <div class="bunny-eye right"></div>
+    <div class="bunny-nose"></div>
+    <div class="bunny-mouth"></div>
+  </div>
+</div>
+
+<div class="chat-popup" id="chatPopup">
+  <button class="close-chat" onclick="document.getElementById('chatPopup').style.display='none'">×</button>
+  <p>👋 Need help choosing the right care service?</p>
+  <a href="#contact">Talk to Us</a>
+</div>
+
 <header>
   <img src="logo.png" alt="RS Home Care Logo">
   <h1>RS Home Nursing Care</h1>
-  <p>Trusted Care • Comfort • Compassion</p>
+  <p> Professional home nursing, elderly support, patient care, childcare, cooking, and household assistance delivered with dignity and heart.</p>
+
+  <div class="hero-badges">
+    <span class="hero-badge">Trusted Care Team</span>
+    <span class="hero-badge">Compassionate Service</span>
+    <span class="hero-badge">Home Comfort First</span>
+  </div>
 
   <div class="header-buttons">
     <a href="#contact" class="cta">Get Care Today</a>
     <a href="appointment.html" class="appointment-btn">Book Appointment</a>
-    <a href="review.html" class="review-btn">Leave a Review </a>
+    <a href="review.html" class="review-btn">Leave a Review</a>
   </div>
 </header>
 
@@ -493,184 +1340,586 @@ a.call:focus {
     <div class="nav-menu" id="navMenu">
       <a href="#about" onclick="closeNav()">About</a>
       <a href="#services" onclick="closeNav()">Services</a>
-      <a href="#work" onclick="closeNav()">Our Work</a>
+      <a href="#why-choose" onclick="closeNav()">Why Choose Us</a>
+      <a href="#story" onclick="closeNav()">Care Story</a>
+      <a href="#work" onclick="closeNav()">Gallery</a>
+      <a href="#testimonials" onclick="closeNav()">Testimonials</a>
       <a href="#contact" onclick="closeNav()">Contact</a>
     </div>
   </div>
 </nav>
 
-<section id="about">
+<section id="about" class="reveal">
   <h2>About Us</h2>
+  <p class="section-subtitle">We are committed to helping families find dependable, compassionate, and personalized support at home.</p>
+
   <div class="about">
     <p>
-      RS Home Nursing Care is dedicated to delivering compassionate, professional, and personalized care that addresses the unique needs of every client.
-      We understand that each individual requires a different level of attention, support, and care, which is why our services are carefully tailored to ensure comfort,
-      dignity, and well-being. Our main branch in Theni and our second branch in Madurai allow us to provide accessible,
-      community-focused care to families across the region.
+      RS Home Nursing Care is dedicated to delivering compassionate, professional, and personalized care that addresses the unique needs of every client. We understand that each individual requires a different level of attention, support, and care, which is why our services are carefully tailored to ensure comfort, dignity, and well-being.
     </p>
     <p>
-      Under the guidance of our experienced management team, led by Subasini, we combine years of expertise with a deeply personal approach,
-      ensuring that every client feels valued, respected, and supported. From routine daily assistance to specialized healthcare support,
-      RS Home Care prioritizes safety, reliability, and the highest standards of professional care. Our team is trained to handle a wide range of needs,
-      including elderly care, post-hospital recovery, and chronic condition support,
-      making us a trusted partner for families seeking peace of mind and exceptional home care services.
+      Our main branch in Theni and our second branch in Madurai allow us to provide accessible, community-focused care to families across the region. Under the guidance of our experienced management team, led by Subasini, we combine years of expertise with a deeply personal approach so every client feels valued, respected, and supported.
     </p>
-  </div>
-</section>
+    <p>
+      From routine daily assistance to specialized healthcare support, RS Home Care prioritizes safety, reliability, and the highest standards of professional care. Our team is trained to support elderly care, post-hospital recovery, chronic condition support, childcare assistance, cooking support, and household help—making us a trusted partner for families seeking peace of mind.
+    </p>
 
-<section id="services">
-  <h2>Our Services</h2>
-  <div class="services-marquee">
-    <div class="services-track">
-      <div class="card"><img src="service1.jpg" alt=""><p><strong>Elderly Care:</strong> Daily assistance.</p></div>
-      <div class="card"><img src="service2.jpg" alt=""><p><strong>Home Nursing:</strong> Medication support.</p></div>
-      <div class="card"><img src="service3.jpg" alt=""><p><strong>Patient Care:</strong> Post-hospital care.</p></div>
-      <div class="card"><img src="childcare.jpg" alt=""><p><strong>Childcare:</strong> Reliable support.</p></div>
-      <div class="card"><img src="cooking.jpg" alt=""><p><strong>Cooking:</strong> Healthy meals.</p></div>
-      <div class="card"><img src="housework.jpg" alt=""><p><strong>House Work:</strong> Daily chores.</p></div>
+    <div class="about-highlights">
+      <div class="mini-box">
+        <h3>Personalized Plans</h3>
+        <p>Care support tailored to the real needs of each family and individual.</p>
+      </div>
+      <div class="mini-box">
+        <h3>Experienced Team</h3>
+        <p>Trained caregivers who lead with professionalism, patience, and kindness.</p>
+      </div>
+      <div class="mini-box">
+        <h3>Home Comfort</h3>
+        <p>Helping clients remain safe, calm, and comfortable in familiar surroundings.</p>
+      </div>
+      <div class="mini-box">
+        <h3>Reliable Support</h3>
+        <p>Dependable service families can trust every day, every week, and every season.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="work">
-  <h2>Our Care in Action</h2>
-  <div class="gallery">
-    <a href="compassionate-elderly-care.html" style="text-decoration:none;color:inherit;">
-  <div class="card">
-    <img src="elderly1.jpg" alt="Compassionate Elderly Home Care">
-    <p>Compassionate elderly home care.</p>
-  </div>
-</a>
-<a href="professional.html" class="card-link">
-  <div class="card">
-    <img src="elderly2.jpg" alt="Professional Caregivers at Work">
-    <p>Professional caregivers at work.</p>
-  </div>
-</a>
-    <div class="card"><img src="workers.jpg" alt=""><p>Our trained and trusted care team.</p></div>
+<section id="services" class="reveal">
+  <h2>Our Services</h2>
+  <p class="section-subtitle">Professional home care services designed with comfort, safety, and dignity in mind.</p>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-image">
+        <img src="service1.jpg" alt="Elderly Care">
+      </div>
+      <div class="service-body">
+        <h3>Elderly Care</h3>
+        <p>Supportive daily care for seniors including companionship, mobility help, routine assistance, personal attention, and a safe home environment.</p>
+        <div class="service-line"></div>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-image">
+        <img src="service2.jpg" alt="Home Nursing">
+      </div>
+      <div class="service-body">
+        <h3>Home Nursing</h3>
+        <p>Professional in-home nursing support for medication assistance, monitoring, recovery care, and health-focused attention in familiar surroundings.</p>
+        <div class="service-line"></div>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-image">
+        <img src="service3.jpg" alt="Patient Care">
+      </div>
+      <div class="service-body">
+        <h3>Patient Care</h3>
+        <p>Reliable support for patients who need attentive care after hospitalization, illness, or during long-term recovery at home.</p>
+        <div class="service-line"></div>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-image">
+        <img src="childcare.jpg" alt="Childcare">
+      </div>
+      <div class="service-body">
+        <h3>Childcare</h3>
+        <p>Warm and responsible childcare support to help families manage daily routines while keeping children safe, comfortable, and cared for.</p>
+        <div class="service-line"></div>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-image">
+        <img src="cooking.jpg" alt="Cooking">
+      </div>
+      <div class="service-body">
+        <h3>Cooking Support</h3>
+        <p>Fresh meal preparation and kitchen assistance designed to make daily life easier while supporting health, routine, and home comfort.</p>
+        <div class="service-line"></div>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-image">
+        <img src="housework.jpg" alt="House Work">
+      </div>
+      <div class="service-body">
+        <h3>House Work Assistance</h3>
+        <p>Practical help with daily household tasks to maintain cleanliness, organization, and a more manageable living environment.</p>
+        <div class="service-line"></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<section id="contact">
+<section id="why-choose" class="reveal">
+  <h2>Why Families Choose RS Home Care</h2>
+  <p class="section-subtitle">We believe great care is built on trust, fast response, consistency, and genuine compassion.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">💚</div>
+      <h3>Compassion First</h3>
+      <p>We treat every client with dignity, patience, kindness, and respect in every interaction.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏡</div>
+      <h3>Care at Home</h3>
+      <p>We help clients remain in familiar surroundings where comfort, routine, and emotional well-being are stronger.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👩‍⚕️</div>
+      <h3>Skilled Team</h3>
+      <p>Our caregivers are selected and trained to deliver practical support and attentive service.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⏱️</div>
+      <h3>Responsive Support</h3>
+      <p>Families can reach us easily and expect clear communication and dependable assistance.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤝</div>
+      <h3>Family Partnership</h3>
+      <p>We work together with families so loved ones feel secure, heard, and cared for every day.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✨</div>
+      <h3>Personalized Service</h3>
+      <p>Every family is different, so each care arrangement is shaped around real day-to-day needs.</p>
+    </div>
+  </div>
+</section>
+
+<section id="story" class="reveal">
+  <h2>Care That Makes Everyday Life Easier</h2>
+  <p class="section-subtitle">Our goal is not only to help with tasks, but also to bring calm, confidence, and comfort into the home.</p>
+
+  <div class="story-wrap">
+    <div class="story-text">
+      <h3>Support with heart, skill, and consistency</h3>
+      <p>
+        Whether a family needs elderly support, patient recovery assistance, childcare help, cooking support, or everyday home assistance, RS Home Nursing Care focuses on making each day smoother and safer. We know that quality care is about more than routine help—it is about preserving dignity, reducing stress, and creating a sense of reassurance for both the client and the family.
+      </p>
+      <p>
+        Our approach is warm, practical, and professional. We aim to build trust quickly, communicate clearly, and provide care that feels respectful and comforting from the very first visit.
+      </p>
+
+      <div class="story-points">
+        <div class="story-point"><strong>Comfort:</strong> Familiar surroundings can improve peace of mind and emotional stability.</div>
+        <div class="story-point"><strong>Routine:</strong> Daily support helps life feel more manageable and organized.</div>
+        <div class="story-point"><strong>Confidence:</strong> Families gain reassurance knowing a trusted team is there to help.</div>
+      </div>
+    </div>
+
+    <div class="story-image">
+      <img src="elderly1.jpg" alt="Caregiver supporting elderly person at home">
+      <div class="story-badge">
+        <strong>Trusted Home Care</strong><br>
+        Helping families feel supported, secure, and cared for every step of the way.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work" class="reveal">
+  <h2>Our Care Gallery</h2>
+  <p class="section-subtitle">A closer look at the people, moments, and daily care environments that reflect our commitment.</p>
+
+  <div class="gallery">
+    <a href="compassionate-elderly-care.html" class="card-link">
+      <div class="gallery-card">
+        <img src="elderly1.jpg" alt="Compassionate elderly home care">
+        <div class="gallery-overlay">
+          <h3>Compassionate Elderly Care</h3>
+          <p>Gentle support focused on comfort, dignity, and daily well-being.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="professional.html" class="card-link">
+      <div class="gallery-card">
+        <img src="elderly2.jpg" alt="Professional caregivers at work">
+        <div class="gallery-overlay">
+          <h3>Professional Caregivers</h3>
+          <p>Experienced team members providing attentive and respectful care.</p>
+        </div>
+      </div>
+    </a>
+
+    <div class="gallery-card">
+      <img src="workers.jpg" alt="Trusted care team">
+      <div class="gallery-overlay">
+        <h3>Trusted Care Team</h3>
+        <p>A dependable group dedicated to service quality and family trust.</p>
+      </div>
+    </div>
+
+    <div class="gallery-card">
+      <img src="service1.jpg" alt="Senior care at home">
+      <div class="gallery-overlay">
+        <h3>Senior Support at Home</h3>
+        <p>Helping older adults feel safe, respected, and comfortable every day.</p>
+      </div>
+    </div>
+
+    <div class="gallery-card">
+      <img src="service2.jpg" alt="Home nursing support">
+      <div class="gallery-overlay">
+        <h3>Home Nursing Visits</h3>
+        <p>Reliable attention for medication support, recovery, and monitoring.</p>
+      </div>
+    </div>
+
+    <div class="gallery-card">
+      <img src="service3.jpg" alt="Patient care support">
+      <div class="gallery-overlay">
+        <h3>Patient Recovery Care</h3>
+        <p>Practical help after hospital discharge and during healing periods.</p>
+      </div>
+    </div>
+
+    <div class="gallery-card">
+      <img src="childcare.jpg" alt="Childcare support">
+      <div class="gallery-overlay">
+        <h3>Childcare Assistance</h3>
+        <p>Supportive, dependable help for families balancing care and routine.</p>
+      </div>
+    </div>
+
+    <div class="gallery-card">
+      <img src="cooking.jpg" alt="Meal preparation">
+      <div class="gallery-overlay">
+        <h3>Healthy Meal Support</h3>
+        <p>Fresh and thoughtful cooking assistance for daily nourishment.</p>
+      </div>
+    </div>
+
+    <div class="gallery-card">
+      <img src="housework.jpg" alt="Home help">
+      <div class="gallery-overlay">
+        <h3>Home Help Services</h3>
+        <p>Light housework and practical support to keep daily life running smoothly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials" class="reveal">
+  <h2>What Families Say</h2>
+  <p class="section-subtitle">Kind words from families inspire us to keep delivering dependable and compassionate care.</p>
+
+  <div class="testimonial-grid">
+    <div class="testimonial-card">
+      <div class="quote-mark">“</div>
+      <p>We felt supported from the very beginning. The caregiver was respectful, calm, and truly caring. Our family had peace of mind knowing help was always there when needed.</p>
+      <h4>Family Member</h4>
+    </div>
+    <div class="testimonial-card">
+      <div class="quote-mark">“</div>
+      <p>The team made recovery at home much easier. Their patience, kindness, and regular support helped our loved one feel comfortable and secure every day.</p>
+      <h4>Client Family</h4>
+    </div>
+    <div class="testimonial-card">
+      <div class="quote-mark">“</div>
+      <p>Professional, warm, and dependable. They did more than help with routine tasks—they brought confidence and calm back into our home.</p>
+      <h4>Happy Customer</h4>
+    </div>
+  </div>
+</section>
+
+<section id="care-checklist" class="reveal">
+  <h2>What Good Home Care Should Include</h2>
+  <p class="section-subtitle">A few important things families often look for when choosing the right care support.</p>
+
+  <div class="checklist-grid">
+    <div class="check-item"><strong>Clear communication</strong> Families should always know what support is being provided.</div>
+    <div class="check-item"><strong>Safety and dignity</strong> Every task should be handled with care and respect.</div>
+    <div class="check-item"><strong>Consistent routine</strong> A calm and reliable daily structure matters.</div>
+    <div class="check-item"><strong>Qualified support</strong> Caregivers should be trained and dependable.</div>
+    <div class="check-item"><strong>Personal attention</strong> Care should fit the person, not the other way around.</div>
+    <div class="check-item"><strong>Family confidence</strong> Good care supports the whole household, not only the client.</div>
+  </div>
+</section>
+
+<section id="contact" class="reveal">
   <div class="contact-box">
     <div class="contact-details">
       <h2>Contact Us</h2>
+      <p>Tell us what kind of support you need and our team will get in touch with you shortly.</p>
+
       <h3>Main Branch</h3>
       <p><strong>Phone:</strong> +91 9500041539</p>
       <p><strong>Email:</strong> rshomecaretheniofficial@gmail.com</p>
       <p><strong>Address:</strong> Bodinayakanur, Theni - 625513</p>
-      <p>----------------------------------------</p>
+
       <h3>Second Branch</h3>
       <p><strong>Phone:</strong> +91 7550052799</p>
       <p><strong>Email:</strong> rshomecaremaduraiofficial@gmail.com</p>
-      <p><strong>Address:</strong> 2-3, 22/2 3rd street, Koodal Nagar, Madurai – 625 018.</p>
+      <p><strong>Address:</strong> 2-3, 22/2 3rd street, Koodal Nagar, Madurai – 625018</p>
+
+      <div class="contact-stats">
+        <div class="contact-stat">
+          <strong class="counter" data-target="2">2</strong>
+          Branch Locations
+        </div>
+        <div class="contact-stat">
+          <strong>Monday to Saturday (10am to 6pm)</strong>
+          Responsive Support
+        </div>
+        <div class="contact-stat">
+          <strong class="counter" data-target="100">100</strong>
+          Client-Focused Care
+        </div>
+        <div class="contact-stat">
+          <strong>Care</strong>
+          With Compassion
+        </div>
+      </div>
     </div>
 
     <div class="contact-form">
-      <form action="https://formsubmit.co/rshomecaremaduraiofficial@gmail.com" method="POST">
+      <div class="form-title">
+        <h3>Begin Your Care Journey</h3>
+        <p>Fill in your details and let us know the service you are looking for.</p>
+      </div>
+
+      <form id="enquiryForm" action="https://formsubmit.co/rshomecaremaduraiofficial@gmail.com" method="POST">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_subject" value="New Enquiry – RS Home Care Website">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" value="https://rshomecare.vercel.app/thankyou.html">
 
-        <div class="form-group">
-          <input type="text" name="Client Name" required placeholder=" ">
-          <label>Your Name</label>
+        <div class="form-row">
+          <div class="form-group">
+            <span class="field-icon">👤</span>
+            <input type="text" name="Client Name" required placeholder=" ">
+            <label>Your Name</label>
+          </div>
+
+          <div class="form-group">
+            <span class="field-icon">📞</span>
+            <input type="text" name="Client Phone No" required placeholder=" ">
+            <label>Phone Number</label>
+          </div>
         </div>
 
         <div class="form-group">
+          <span class="field-icon">✉️</span>
           <input type="email" name="Client Email" required placeholder=" ">
           <label>Your Email</label>
         </div>
 
-        <div class="form-group">
-          <input type="text" name="Client Phone No" required placeholder=" ">
-          <label>Phone No</label>
+        <div class="form-group select-wrap">
+          <span class="field-icon">🩺</span>
+          <select name="Home Care Option" required>
+            <option value="" disabled selected>Select Home Care Option</option>
+            <option>Elderly Care</option>
+            <option>Patient Care</option>
+            <option>Home Nursing</option>
+            <option>Post Surgery Care</option>
+            <option>Baby / Mother Care</option>
+            <option>Attender Service</option>
+            <option>Cooking</option>
+            <option>House Work</option>
+            <option>Childcare</option>
+            <option>Companionship Care</option>
+            <option>Other</option>
+          </select>
         </div>
 
-        <!-- ✅ Home Care Option (List Field) -->
-<div class="form-group">
-  <select name="Home Care Option" required>
-    <option value="" disabled selected>Select Home Care Option</option>
-    <option>Elderly Care</option>
-    <option>Patient Care</option>
-    <option>Home Nursing</option>
-    <option>Post Surgery Care</option>
-    <option>Baby / Mother Care</option>
-    <option>Attender Service</option>
-    <option>Cooking</option>
-    <option>House Work</option>
-    <option>Other</option>
-  </select>
-</div>
+        <div class="time-row">
+          <div class="form-group">
+            <span class="field-icon">⏰</span>
+            <input type="time" name="Next Work Available From" required placeholder=" ">
+            <label>Work From</label>
+          </div>
 
-<!-- ✅ Next Work Available Time (From / To) -->
-<div class="time-row">
-  <div class="form-group">
-    <input type="time" name="Next Work Available From" required placeholder=" ">
-    <label>Work From</label>
-  </div>
-
-  <div class="form-group">
-    <input type="time" name="Next Work Available To" required placeholder=" ">
-    <label>Work To</label>
-  </div>
-</div>
+          <div class="form-group">
+            <span class="field-icon">⏳</span>
+            <input type="time" name="Next Work Available To" required placeholder=" ">
+            <label>Work To</label>
+          </div>
+        </div>
 
         <div class="form-group">
+          <span class="field-icon">💬</span>
           <textarea name="Client Message" required placeholder=" "></textarea>
           <label>How can we help you?</label>
         </div>
 
-<div id="successMessage" style="
-  display:none;
-  margin-top:15px;
-  padding:14px;
-  border-radius:12px;
-  background:rgba(46,204,113,0.15);
-  color:#1e7e34;
-  font-size:14px;
-  font-weight:600;
-  text-align:center;
-">
-  ✅ Your enquiry is successfully submitted.<br>
-  Our team will contact you shortly.
-</div>
+        <div id="successMessage">
+          ✅ Your enquiry is successfully submitted.<br>
+          Our team will contact you shortly.
+        </div>
 
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;">
           <button type="submit">Send Enquiry</button>
           <a href="agreements.html" target="_blank" class="view-agreement">View Agreement</a>
         </div>
       </form>
     </div>
-
   </div>
 </section>
 
 <script>
+const easterEggs = document.getElementById("easterEggs");
 const form = document.getElementById("enquiryForm");
 const successMsg = document.getElementById("successMessage");
+const snowfall = document.getElementById("snowfall");
+const progressBar = document.getElementById("progressBar");
+const nav = document.querySelector(".rs-nav");
 
-form.addEventListener("submit", function () {
-  // Show success message
-  successMsg.style.display = "block";
+function createEasterEggs(count = 14){
+  if(!easterEggs) return;
 
-  // Clear form after submit
-  setTimeout(() => {
-    form.reset();
-  }, 300);
+  const colors = [
+    "linear-gradient(180deg,#ffd6e7,#ffb6d2)",
+    "linear-gradient(180deg,#fff0b8,#ffe181)",
+    "linear-gradient(180deg,#d6f7ff,#9fe8ff)",
+    "linear-gradient(180deg,#e4dbff,#c7b7ff)",
+    "linear-gradient(180deg,#daf8d8,#a8efaa)"
+  ];
 
-  // Hide message after 6 seconds (optional)
-  setTimeout(() => {
-    successMsg.style.display = "none";
-  }, 6000);
-});
+  for(let i = 0; i < count; i++){
+    const egg = document.createElement("span");
+    egg.className = "easter-egg";
+
+    const left = Math.random() * 100;
+    const duration = Math.random() * 18 + 18;
+    const delay = Math.random() * -30;
+    const drift = `${(Math.random() * 160 - 80).toFixed(0)}px`;
+    const size = Math.random() * 16 + 22;
+
+    egg.style.left = `${left}%`;
+    egg.style.width = `${size}px`;
+    egg.style.height = `${size * 1.32}px`;
+    egg.style.background = colors[Math.floor(Math.random() * colors.length)];
+    egg.style.animationDuration = `${duration}s, ${Math.random() * 3 + 2.8}s`;
+    egg.style.animationDelay = `${delay}s, ${Math.random() * 2}s`;
+    egg.style.setProperty("--egg-drift", drift);
+
+    easterEggs.appendChild(egg);
+  }
+}
+
+function createSnowflakes(count = 55){
+  if(!snowfall) return;
+
+  for(let i = 0; i < count; i++){
+    const flake = document.createElement("span");
+    flake.className = "snowflake";
+
+    const size = Math.random() * 6 + 4;
+    const left = Math.random() * 100;
+    const duration = Math.random() * 10 + 10;
+    const delay = Math.random() * -20;
+    const drift = `${(Math.random() * 120 - 60).toFixed(0)}px`;
+
+    flake.style.width = `${size}px`;
+    flake.style.height = `${size}px`;
+    flake.style.left = `${left}%`;
+    flake.style.opacity = (Math.random() * 0.5 + 0.35).toFixed(2);
+    flake.style.animationDuration = `${duration}s`;
+    flake.style.animationDelay = `${delay}s`;
+    flake.style.setProperty("--drift", drift);
+
+    snowfall.appendChild(flake);
+  }
+}
+
+if(form){
+  form.addEventListener("submit", function () {
+    successMsg.style.display = "block";
+
+    setTimeout(() => {
+      form.reset();
+    }, 300);
+
+    setTimeout(() => {
+      successMsg.style.display = "none";
+    }, 6000);
+  });
+}
+
 function toggleNav(){
   document.getElementById("navMenu").classList.toggle("show");
 }
+
 function closeNav(){
   document.getElementById("navMenu").classList.remove("show");
 }
+
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach((entry)=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("active");
+    }
+  });
+},{threshold:0.14});
+
+document.querySelectorAll(".reveal").forEach((el)=>{
+  observer.observe(el);
+});
+
+window.addEventListener("scroll",()=>{
+  if(window.scrollY > 50){
+    nav.classList.add("scrolled");
+  }else{
+    nav.classList.remove("scrolled");
+  }
+
+  const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+  progressBar.style.width = scrolled + "%";
+});
+
+function animateCounters(){
+  const counters = document.querySelectorAll(".counter");
+  counters.forEach(counter=>{
+    const target = +counter.getAttribute("data-target");
+    let started = false;
+
+    const runCounter = () => {
+      if(started) return;
+      started = true;
+      let count = 0;
+      const increment = Math.max(1, Math.ceil(target / 60));
+
+      const update = () => {
+        count += increment;
+        if(count < target){
+          counter.innerText = count;
+          requestAnimationFrame(update);
+        }else{
+          counter.innerText = target;
+        }
+      };
+      update();
+    };
+
+    const counterObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          runCounter();
+          counterObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.5 });
+
+    counterObserver.observe(counter);
+  });
+}
+
+createEasterEggs();
+createSnowflakes();
+animateCounters();
 </script>
 
 <a href="https://wa.me/917550052799" class="fab whatsapp" aria-label="WhatsApp">💬</a>
@@ -682,4 +1931,3 @@ function closeNav(){
 
 </body>
 </html>
-
