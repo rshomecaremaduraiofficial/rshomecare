@@ -17,13 +17,18 @@
 
     :root{
       --primary:#0f4c81;
+      --primary-dark:#123f6d;
       --secondary:#2ecc71;
+      --secondary-dark:#1fb860;
       --light-blue:#96ceff;
       --light-green:#8cffbc;
       --text:#333;
       --muted:#5d6978;
       --white:#fff;
       --radius:24px;
+      --shadow:0 18px 40px rgba(0,0,0,.10);
+      --shadow-soft:0 12px 28px rgba(0,0,0,.08);
+      --transition:.45s cubic-bezier(.22,1,.36,1);
     }
 
     html,body{
@@ -38,8 +43,12 @@
       background:url('oldagecare-bg.jpg') no-repeat center center fixed;
       background-size:cover;
       position:relative;
-      line-height:1.65;
-      animation:pageFade .9s ease;
+      line-height:1.7;
+      animation:pageFade .7s ease;
+    }
+
+    body.loading{
+      overflow:hidden;
     }
 
     @media (max-width:768px){
@@ -52,7 +61,7 @@
       content:"";
       position:fixed;
       inset:0;
-      background:rgba(245,249,255,0.78);
+      background:rgba(245,249,255,0.82);
       z-index:-4;
     }
 
@@ -64,7 +73,7 @@
         radial-gradient(circle at 20% 20%, rgba(150,206,255,0.22), transparent 26%),
         radial-gradient(circle at 80% 30%, rgba(140,255,188,0.16), transparent 28%),
         radial-gradient(circle at 50% 85%, rgba(52,152,219,0.12), transparent 28%);
-      animation:bgFloat 22s ease-in-out infinite alternate;
+      animation:bgFloat 18s ease-in-out infinite alternate;
       z-index:-3;
       pointer-events:none;
     }
@@ -72,6 +81,83 @@
     img{
       max-width:100%;
       display:block;
+    }
+
+    /* PAGE LOADER */
+    .page-loader{
+      position:fixed;
+      inset:0;
+      background:linear-gradient(135deg,#eef7ff,#f7fffb);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:200000;
+      transition:opacity .7s ease, visibility .7s ease;
+    }
+
+    .page-loader.hidden{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+
+    .loader-box{
+      width:min(92%,420px);
+      text-align:center;
+      padding:34px 26px;
+      background:rgba(255,255,255,.74);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,.8);
+      border-radius:28px;
+      box-shadow:0 24px 60px rgba(15,76,129,.12);
+    }
+
+    .loader-logo{
+      width:92px;
+      margin:0 auto 18px;
+      animation:loaderFloat 2.2s ease-in-out infinite;
+      filter:drop-shadow(0 10px 20px rgba(15,76,129,.14));
+    }
+
+    .loader-box h2{
+      color:#243879;
+      font-size:1.7rem;
+      margin-bottom:8px;
+    }
+
+    .loader-box h2::after{
+      display:none;
+    }
+
+    .loader-box p{
+      color:#587083;
+      font-size:14px;
+      margin-bottom:18px;
+    }
+
+    .loader-track{
+      width:100%;
+      height:10px;
+      border-radius:999px;
+      background:rgba(15,76,129,.08);
+      overflow:hidden;
+      margin-bottom:12px;
+    }
+
+    .loader-bar{
+      width:0%;
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,#2ecc71,#4aa7eb);
+      box-shadow:0 4px 14px rgba(46,204,113,.24);
+      transition:width .22s ease;
+    }
+
+    .loader-percent{
+      color:#123f6d;
+      font-weight:700;
+      font-size:14px;
+      letter-spacing:.4px;
     }
 
     /* PROGRESS BAR */
@@ -84,170 +170,95 @@
       background:linear-gradient(90deg,#2ecc71,#4aa7eb);
       z-index:100001;
       box-shadow:0 2px 10px rgba(46,204,113,.35);
+      transition:width .12s linear;
     }
 
-    /* SNOW */
-    .snowfall{
+    .cursor-glow{
       position:fixed;
-      inset:0;
+      width:180px;
+      height:180px;
+      border-radius:50%;
       pointer-events:none;
-      overflow:hidden;
-      z-index:99997;
+      background:radial-gradient(circle, rgba(150,206,255,0.22), rgba(150,206,255,0.08) 40%, transparent 70%);
+      transform:translate(-50%,-50%);
+      z-index:-1;
+      filter:blur(8px);
+      opacity:0;
+      transition:opacity .35s ease;
     }
 
-    .snowflake{
-      position:absolute;
-      top:-20px;
-      background:rgba(255,255,255,.95);
-      border-radius:50%;
-      box-shadow:0 0 8px rgba(255,255,255,.35);
-      opacity:.9;
-      will-change:transform, opacity;
-      animation-name:snowFall;
-      animation-timing-function:linear;
-      animation-iteration-count:infinite;
-      filter:blur(.4px);
-    }
-
-    /* EASTER */
-    .easter-eggs{
-      position:fixed;
-      inset:0;
-      overflow:hidden;
-      pointer-events:none;
-      z-index:99996;
-    }
-
-    .easter-egg{
-      position:absolute;
-      top:-60px;
-      width:28px;
-      height:38px;
-      border-radius:50% 50% 48% 48%;
-      opacity:.88;
-      box-shadow:
-        inset -4px -8px 12px rgba(255,255,255,.25),
-        inset 3px 6px 10px rgba(0,0,0,.05),
-        0 8px 18px rgba(0,0,0,.08);
-      animation:eggFloat linear infinite, eggWobble ease-in-out infinite;
-    }
-
-    .easter-egg::before,
-    .easter-egg::after{
-      content:"";
-      position:absolute;
-      left:12%;
-      width:76%;
-      border-radius:999px;
-    }
-
-    .easter-egg::before{
-      height:6px;
-      top:10px;
-      background:rgba(255,255,255,.55);
-    }
-
-    .easter-egg::after{
-      height:5px;
-      top:22px;
-      background:rgba(255,255,255,.35);
-    }
-
-    .easter-bunny{
-      position:fixed;
-      left:18px;
-      bottom:18px;
-      width:74px;
-      height:74px;
-      pointer-events:none;
-      z-index:100000;
-      animation:bunnyHop 4.4s ease-in-out infinite;
-      filter:drop-shadow(0 8px 14px rgba(0,0,0,.18));
-    }
-
-    .bunny-face{
-      position:absolute;
-      left:17px;
-      bottom:8px;
-      width:42px;
-      height:36px;
-      background:#fff;
-      border-radius:50%;
-    }
-
-    .bunny-ear{
-      position:absolute;
-      width:16px;
-      height:34px;
-      background:#fff;
-      border-radius:50px;
-      top:3px;
-    }
-
-    .bunny-ear.left{left:18px; transform:rotate(-12deg);}
-    .bunny-ear.right{right:18px; transform:rotate(12deg);}
-
-    .bunny-ear::after{
-      content:"";
-      position:absolute;
-      inset:5px 4px;
-      background:#ffd4e5;
-      border-radius:50px;
-    }
-
-    .bunny-eye{
-      position:absolute;
-      width:5px;
-      height:5px;
-      background:#333;
-      border-radius:50%;
-      top:18px;
-    }
-
-    .bunny-eye.left{left:12px;}
-    .bunny-eye.right{right:12px;}
-
-    .bunny-nose{
-      position:absolute;
-      left:50%;
-      top:22px;
-      transform:translateX(-50%);
-      width:8px;
-      height:6px;
-      background:#ff9db9;
-      border-radius:50%;
-    }
-
-    .bunny-mouth{
-      position:absolute;
-      left:50%;
-      top:28px;
-      width:16px;
-      height:8px;
-      transform:translateX(-50%);
-      border-bottom:2px solid #888;
-      border-radius:0 0 16px 16px;
+    @media (hover:hover) and (pointer:fine){
+      .cursor-glow.active{
+        opacity:1;
+      }
     }
 
     /* HEADER */
     header{
-      background:linear-gradient(135deg,#96ceff,#8cffbc);
+      background:linear-gradient(135deg,rgba(150,206,255,.92),rgba(140,255,188,.88));
       text-align:center;
-      padding:70px 20px 80px;
+      padding:84px 20px 92px;
       position:relative;
       overflow:hidden;
+      isolation:isolate;
     }
 
     header::before{
       content:"";
       position:absolute;
+      inset:auto -10% -120px -10%;
+      height:220px;
+      background:radial-gradient(circle at center, rgba(255,255,255,.75), transparent 65%);
+      filter:blur(22px);
+      opacity:.6;
+      z-index:-1;
+    }
+
+    header::after{
+      content:"";
+      position:absolute;
       top:0;
       left:-120%;
-      width:50%;
+      width:44%;
       height:100%;
       background:linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
       transform:skewX(-25deg);
-      animation:headerShine 8s linear infinite;
+      animation:headerShine 7s linear infinite;
+      z-index:0;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:1;
+      max-width:1000px;
+      margin:0 auto;
+    }
+
+    .hero-bg-orb{
+      position:absolute;
+      border-radius:50%;
+      filter:blur(2px);
+      opacity:.38;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .hero-bg-orb.one{
+      width:180px;
+      height:180px;
+      top:45px;
+      left:10%;
+      background:radial-gradient(circle,#fff,transparent 70%);
+      animation:floatSoft 7s ease-in-out infinite;
+    }
+
+    .hero-bg-orb.two{
+      width:220px;
+      height:220px;
+      right:8%;
+      top:90px;
+      background:radial-gradient(circle,rgba(255,255,255,.85),transparent 70%);
+      animation:floatSoft 9s ease-in-out infinite reverse;
     }
 
     .hero-badges{
@@ -255,39 +266,51 @@
       justify-content:center;
       flex-wrap:wrap;
       gap:10px;
-      margin:18px 0 22px;
+      margin:22px 0 26px;
     }
 
     .hero-badge{
-      background:rgba(255,255,255,0.45);
+      background:rgba(255,255,255,.44);
       color:#123f6d;
-      padding:8px 14px;
+      padding:9px 15px;
       border-radius:999px;
       font-size:13px;
-      font-weight:600;
-      backdrop-filter:blur(8px);
-      box-shadow:0 10px 22px rgba(0,0,0,.08);
+      font-weight:700;
+      backdrop-filter:blur(10px);
+      box-shadow:0 10px 22px rgba(0,0,0,.07);
+      transition:transform var(--transition), box-shadow .35s ease;
+      animation:badgePop .8s ease backwards;
+    }
+
+    .hero-badge:nth-child(2){animation-delay:.1s}
+    .hero-badge:nth-child(3){animation-delay:.2s}
+
+    .hero-badge:hover{
+      transform:translateY(-4px);
+      box-shadow:0 16px 26px rgba(0,0,0,.10);
     }
 
     header img{
-      max-width:140px;
-      margin:0 auto 15px;
+      max-width:150px;
+      margin:0 auto 18px;
       animation:logoFloat 5s ease-in-out infinite;
+      filter:drop-shadow(0 12px 24px rgba(15,76,129,.16));
     }
 
     header h1{
-      font-size:3em;
+      font-size:clamp(2.2rem,5vw,3.6rem);
       color:#243879;
       animation:fadeDown 1s ease;
-      line-height:1.2;
+      line-height:1.15;
     }
 
     header p{
-      font-size:1.1em;
-      margin:0 auto 20px;
+      font-size:1.08rem;
+      margin:18px auto 22px;
       max-width:900px;
-      animation:fadeUp 1.25s ease;
+      animation:fadeUp 1.15s ease;
       padding:0 10px;
+      color:#274b66;
     }
 
     .header-buttons{
@@ -305,18 +328,41 @@
       align-items:center;
       justify-content:center;
       min-width:180px;
-      padding:13px 26px;
+      padding:14px 26px;
       border-radius:30px;
       text-decoration:none;
       font-weight:700;
       text-align:center;
-      transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease, background .35s ease;
+      transition:transform var(--transition), box-shadow .45s ease, background .35s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .cta::before,
+    .appointment-btn::before,
+    .review-btn::before,
+    .contact-form button::before,
+    .contact-form .view-agreement::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent 20%, rgba(255,255,255,.24), transparent 80%);
+      transform:translateX(-120%);
+      transition:transform .7s ease;
+    }
+
+    .cta:hover::before,
+    .appointment-btn:hover::before,
+    .review-btn:hover::before,
+    .contact-form button:hover::before,
+    .contact-form .view-agreement:hover::before{
+      transform:translateX(120%);
     }
 
     .cta{
       background:#fff;
       color:#0f4c81;
-      box-shadow:0 10px 24px rgba(15,76,129,.18);
+      box-shadow:0 12px 28px rgba(15,76,129,.18);
     }
 
     .cta:hover{
@@ -327,7 +373,7 @@
     .appointment-btn{
       background:#2ecc71;
       color:#fff;
-      box-shadow:0 10px 24px rgba(46,204,113,.26);
+      box-shadow:0 12px 28px rgba(46,204,113,.28);
     }
 
     .appointment-btn:hover{
@@ -338,7 +384,7 @@
     .review-btn{
       background:#fff;
       color:#0f4c81;
-      box-shadow:0 10px 24px rgba(15,76,129,.16);
+      box-shadow:0 12px 28px rgba(15,76,129,.16);
     }
 
     .review-btn:hover{
@@ -354,14 +400,14 @@
       backdrop-filter:blur(14px);
       -webkit-backdrop-filter:blur(14px);
       z-index:1000;
-      box-shadow:0 4px 12px rgba(0,0,0,.08);
+      box-shadow:0 4px 12px rgba(0,0,0,.06);
       border-bottom:1px solid rgba(255,255,255,.35);
       transition:background .35s ease, box-shadow .35s ease;
     }
 
     .rs-nav.scrolled{
       background:rgba(255,255,255,.96);
-      box-shadow:0 6px 18px rgba(0,0,0,.12);
+      box-shadow:0 8px 22px rgba(0,0,0,.10);
     }
 
     .nav-inner{
@@ -397,7 +443,7 @@
       color:#0f4c81;
       font-weight:600;
       position:relative;
-      transition:color .3s ease;
+      transition:color .3s ease, transform .3s ease;
       padding:8px 0;
     }
 
@@ -412,13 +458,21 @@
       transition:width .35s ease;
     }
 
-    .nav-menu a:hover::after{
+    .nav-menu a:hover,
+    .nav-menu a.active-link{
+      color:#123f6d;
+      transform:translateY(-1px);
+    }
+
+    .nav-menu a:hover::after,
+    .nav-menu a.active-link::after{
       width:100%;
     }
 
     /* SECTIONS */
     section{
-      padding:80px 8%;
+      padding:84px 8%;
+      position:relative;
     }
 
     h2{
@@ -426,7 +480,7 @@
       color:#4b8fca;
       margin-bottom:18px;
       position:relative;
-      font-size:2.1rem;
+      font-size:clamp(1.8rem,4vw,2.3rem);
       line-height:1.2;
     }
 
@@ -454,11 +508,12 @@
       max-width:900px;
       margin:auto;
       text-align:center;
-      background:rgba(255,255,255,.55);
-      backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.68);
+      backdrop-filter:blur(12px);
       border-radius:24px;
       padding:34px;
-      box-shadow:0 14px 32px rgba(0,0,0,.08);
+      box-shadow:var(--shadow-soft);
+      border:1px solid rgba(255,255,255,.6);
     }
 
     .about p + p{
@@ -477,7 +532,8 @@
       border-radius:18px;
       padding:18px;
       box-shadow:0 10px 24px rgba(0,0,0,.08);
-      transition:transform .55s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+      transition:transform var(--transition), box-shadow .45s ease;
+      will-change:transform;
     }
 
     .mini-box:hover{
@@ -504,14 +560,15 @@
       border-radius:24px;
       overflow:hidden;
       box-shadow:0 14px 34px rgba(0,0,0,.09);
-      transition:transform .55s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+      transition:transform var(--transition), box-shadow .45s ease;
       border:1px solid rgba(255,255,255,.55);
       backdrop-filter:blur(8px);
+      will-change:transform;
     }
 
     .service-card:hover{
       transform:translateY(-12px);
-      box-shadow:0 22px 46px rgba(0,0,0,.16), 0 0 30px rgba(46,204,113,.18);
+      box-shadow:0 22px 46px rgba(0,0,0,.16), 0 0 30px rgba(46,204,113,.16);
     }
 
     .service-image{
@@ -524,11 +581,12 @@
       width:100%;
       height:100%;
       object-fit:cover;
-      transition:transform 1.2s cubic-bezier(.22,1,.36,1);
+      transition:transform 1.2s cubic-bezier(.22,1,.36,1), filter .7s ease;
     }
 
     .service-card:hover .service-image img{
       transform:scale(1.08);
+      filter:saturate(1.06);
     }
 
     .service-image::after{
@@ -563,7 +621,7 @@
     }
 
     .service-card:hover .service-line{
-      width:90px;
+      width:92px;
     }
 
     /* WHY CHOOSE */
@@ -579,8 +637,9 @@
       border-radius:22px;
       padding:24px;
       box-shadow:0 14px 30px rgba(0,0,0,.08);
-      transition:transform .55s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+      transition:transform var(--transition), box-shadow .45s ease;
       border:1px solid rgba(255,255,255,.45);
+      will-change:transform;
     }
 
     .feature-card:hover{
@@ -599,6 +658,11 @@
       margin-bottom:14px;
       background:linear-gradient(135deg,#96ceff,#8cffbc);
       box-shadow:0 12px 24px rgba(0,0,0,.08);
+      transition:transform var(--transition);
+    }
+
+    .feature-card:hover .feature-icon{
+      transform:rotate(-4deg) scale(1.04);
     }
 
     .feature-card h3{
@@ -616,11 +680,12 @@
     }
 
     .story-text{
-      background:rgba(255,255,255,.62);
+      background:rgba(255,255,255,.64);
       backdrop-filter:blur(10px);
       border-radius:24px;
       padding:32px;
-      box-shadow:0 12px 28px rgba(0,0,0,.08);
+      box-shadow:var(--shadow-soft);
+      will-change:transform;
     }
 
     .story-text h3{
@@ -645,20 +710,31 @@
       border-radius:16px;
       padding:14px 16px;
       box-shadow:0 8px 20px rgba(0,0,0,.06);
+      transition:transform .35s ease;
+    }
+
+    .story-point:hover{
+      transform:translateX(6px);
     }
 
     .story-image{
       position:relative;
-      min-height:480px;
+      min-height:500px;
       border-radius:28px;
       overflow:hidden;
       box-shadow:0 18px 40px rgba(0,0,0,.14);
+      will-change:transform;
     }
 
     .story-image img{
       width:100%;
       height:100%;
       object-fit:cover;
+      transition:transform 1.4s cubic-bezier(.22,1,.36,1);
+    }
+
+    .story-image:hover img{
+      transform:scale(1.06);
     }
 
     .story-badge{
@@ -672,6 +748,7 @@
       border-radius:18px;
       box-shadow:0 10px 24px rgba(0,0,0,.12);
       max-width:260px;
+      animation:floatSoft 4s ease-in-out infinite;
     }
 
     /* GALLERY */
@@ -686,17 +763,18 @@
       background:#fff;
       border-radius:22px;
       overflow:hidden;
-      box-shadow:0 10px 24px rgba(0,0,0,0.1);
-      transition:transform .55s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+      box-shadow:0 10px 24px rgba(0,0,0,.1);
+      transition:transform var(--transition), box-shadow .45s ease;
       cursor:pointer;
       position:relative;
       height:100%;
+      will-change:transform;
     }
 
     .gallery-card:hover,
     .card:hover{
       transform:translateY(-10px);
-      box-shadow:0 18px 36px rgba(0,0,0,0.18);
+      box-shadow:0 18px 36px rgba(0,0,0,.18);
     }
 
     .gallery-card img,
@@ -704,12 +782,13 @@
       width:100%;
       height:240px;
       object-fit:cover;
-      transition:transform 1.1s cubic-bezier(.22,1,.36,1);
+      transition:transform 1.1s cubic-bezier(.22,1,.36,1), filter .7s ease;
     }
 
     .gallery-card:hover img,
     .card:hover img{
       transform:scale(1.08);
+      filter:brightness(1.03);
     }
 
     .gallery-overlay{
@@ -756,7 +835,8 @@
       padding:24px;
       box-shadow:0 14px 30px rgba(0,0,0,.08);
       position:relative;
-      transition:transform .55s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+      transition:transform var(--transition), box-shadow .45s ease;
+      will-change:transform;
     }
 
     .testimonial-card:hover{
@@ -789,6 +869,7 @@
       padding:18px;
       box-shadow:0 10px 24px rgba(0,0,0,.07);
       transition:transform .5s cubic-bezier(.22,1,.36,1), box-shadow .4s ease;
+      will-change:transform;
     }
 
     .check-item:hover{
@@ -804,7 +885,7 @@
 
     /* CONTACT */
     #contact{
-      padding:90px 20px;
+      padding:96px 20px;
       display:flex;
       justify-content:center;
     }
@@ -833,6 +914,7 @@
       background:rgba(255,255,255,.08);
       top:-90px;
       right:-70px;
+      animation:floatSoft 6s ease-in-out infinite;
     }
 
     .contact-box::after{
@@ -844,12 +926,14 @@
       background:rgba(46,204,113,.08);
       bottom:-60px;
       left:-60px;
+      animation:floatSoft 8s ease-in-out infinite reverse;
     }
 
     .contact-details,
     .contact-form{
       position:relative;
       z-index:1;
+      will-change:transform;
     }
 
     .contact-details{
@@ -1020,8 +1104,10 @@
       font-weight:700;
       font-size:15px;
       cursor:pointer;
-      transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+      transition:transform var(--transition), box-shadow .45s ease;
       box-shadow:0 14px 28px rgba(46,204,113,.28);
+      position:relative;
+      overflow:hidden;
     }
 
     .contact-form button:hover{
@@ -1039,8 +1125,10 @@
       font-weight:700;
       text-decoration:none;
       display:inline-block;
-      transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+      transition:transform var(--transition), box-shadow .45s ease;
       box-shadow:0 14px 28px rgba(52,152,219,.25);
+      position:relative;
+      overflow:hidden;
     }
 
     .contact-form .view-agreement:hover{
@@ -1059,6 +1147,7 @@
       font-weight:600;
       text-align:center;
       border:1px solid rgba(255,255,255,.12);
+      animation:fadeUp .45s ease;
     }
 
     /* CHAT POPUP */
@@ -1075,6 +1164,13 @@
       animation:fadeUp .9s ease;
       border:1px solid rgba(255,255,255,.8);
       backdrop-filter:blur(10px);
+      transition:transform .35s ease, opacity .35s ease;
+    }
+
+    .chat-popup.hide{
+      opacity:0;
+      transform:translateY(20px);
+      pointer-events:none;
     }
 
     .chat-popup p{
@@ -1142,15 +1238,30 @@
     }
 
     /* REVEAL */
-    .reveal{
+    .reveal,
+    .reveal-left,
+    .reveal-right{
       opacity:0;
-      transform:translateY(34px);
-      transition:opacity 1.05s ease, transform 1.05s cubic-bezier(.22,1,.36,1);
+      transition:opacity 1s ease, transform 1s cubic-bezier(.22,1,.36,1);
     }
 
-    .reveal.active{
+    .reveal{
+      transform:translateY(34px) scale(.98);
+    }
+
+    .reveal-left{
+      transform:translateX(-36px);
+    }
+
+    .reveal-right{
+      transform:translateX(36px);
+    }
+
+    .reveal.active,
+    .reveal-left.active,
+    .reveal-right.active{
       opacity:1;
-      transform:translateY(0);
+      transform:translate(0,0) scale(1);
     }
 
     /* FOOTER */
@@ -1180,11 +1291,7 @@
     /* MOBILE */
     @media (max-width:768px){
       header{
-        padding:55px 16px 70px;
-      }
-
-      header h1{
-        font-size:2.2em;
+        padding:60px 16px 76px;
       }
 
       header p{
@@ -1201,7 +1308,7 @@
       }
 
       section{
-        padding:65px 5%;
+        padding:68px 5%;
       }
 
       .nav-toggle{
@@ -1210,7 +1317,7 @@
 
       .nav-menu{
         position:absolute;
-        top:100%;
+        top:calc(100% + 8px);
         left:12px;
         right:12px;
         width:auto;
@@ -1272,12 +1379,6 @@
         height:220px;
       }
 
-      .easter-bunny{
-        transform:scale(.85);
-        left:8px;
-        bottom:10px;
-      }
-
       .chat-popup{
         right:12px;
         bottom:150px;
@@ -1294,16 +1395,12 @@
         bottom:84px;
       }
 
-      h2{
-        font-size:1.8rem;
+      .hero-bg-orb{
+        display:none;
       }
     }
 
     @media (max-width:480px){
-      header h1{
-        font-size:1.9rem;
-      }
-
       .hero-badge{
         font-size:12px;
         padding:7px 12px;
@@ -1322,6 +1419,25 @@
       .contact-details,
       .contact-form{
         border-radius:18px;
+      }
+
+      .loader-box{
+        padding:28px 18px;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      *, *::before, *::after{
+        animation:none !important;
+        transition:none !important;
+        scroll-behavior:auto !important;
+      }
+
+      .reveal,
+      .reveal-left,
+      .reveal-right{
+        opacity:1 !important;
+        transform:none !important;
       }
     }
 
@@ -1371,87 +1487,65 @@
       to{opacity:1}
     }
 
-    @keyframes snowFall{
-      0%{
-        transform:translate3d(0,0,0);
-        opacity:0;
-      }
-      10%{
-        opacity:.9;
-      }
-      100%{
-        transform:translate3d(var(--drift), 110vh, 0);
-        opacity:.2;
-      }
-    }
-
-    @keyframes eggFloat{
-      0%{
-        transform:translate3d(0,-10vh,0) rotate(0deg);
-        opacity:0;
-      }
-      10%{
-        opacity:.92;
-      }
-      100%{
-        transform:translate3d(var(--egg-drift),110vh,0) rotate(360deg);
-        opacity:.15;
-      }
-    }
-
-    @keyframes eggWobble{
-      0%,100%{margin-left:0}
-      50%{margin-left:8px}
-    }
-
-    @keyframes bunnyHop{
+    @keyframes floatSoft{
       0%,100%{transform:translateY(0)}
-      20%{transform:translateY(-4px)}
-      30%{transform:translateY(-16px)}
-      40%{transform:translateY(-4px)}
-      60%{transform:translateY(0)}
+      50%{transform:translateY(-8px)}
+    }
+
+    @keyframes loaderFloat{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-8px)}
+    }
+
+    @keyframes badgePop{
+      from{opacity:0;transform:translateY(16px) scale(.95)}
+      to{opacity:1;transform:translateY(0) scale(1)}
     }
   </style>
 </head>
 
-<body>
-  <div id="progressBar"></div>
-
-  <div class="snowfall" id="snowfall" aria-hidden="true"></div>
-  <div class="easter-eggs" id="easterEggs" aria-hidden="true"></div>
-
-  <div class="easter-bunny" aria-hidden="true">
-    <div class="bunny-ear left"></div>
-    <div class="bunny-ear right"></div>
-    <div class="bunny-face">
-      <div class="bunny-eye left"></div>
-      <div class="bunny-eye right"></div>
-      <div class="bunny-nose"></div>
-      <div class="bunny-mouth"></div>
+<body class="loading">
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-box">
+      <img src="logo.png" alt="RS Home Care Logo" class="loader-logo" />
+      <h2>RS Home Nursing Care</h2>
+      <p>Loading care services experience...</p>
+      <div class="loader-track">
+        <div class="loader-bar" id="loaderBar"></div>
+      </div>
+      <div class="loader-percent" id="loaderPercent">0%</div>
     </div>
   </div>
 
+  <div id="progressBar"></div>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
   <div class="chat-popup" id="chatPopup">
-    <button class="close-chat" onclick="document.getElementById('chatPopup').style.display='none'">×</button>
+    <button class="close-chat" id="closeChat">×</button>
     <p>👋 Need help choosing the right care service?</p>
     <a href="#contact">Talk to Us</a>
   </div>
 
   <header>
-    <img src="logo.png" alt="RS Home Care Logo" />
-    <h1>RS Home Nursing Care</h1>
-    <p>Professional home nursing, elderly support, patient care, childcare, cooking, and household assistance delivered with dignity and heart.</p>
+    <span class="hero-bg-orb one"></span>
+    <span class="hero-bg-orb two"></span>
 
-    <div class="hero-badges">
-      <span class="hero-badge">Trusted Care Team</span>
-      <span class="hero-badge">Compassionate Service</span>
-      <span class="hero-badge">Home Comfort First</span>
-    </div>
+    <div class="hero-content">
+      <img src="logo.png" alt="RS Home Care Logo" />
+      <h1>RS Home Nursing Care</h1>
+      <p>Professional home nursing, elderly support, patient care, childcare, cooking, and household assistance delivered with dignity and heart.</p>
 
-    <div class="header-buttons">
-      <a href="#contact" class="cta">Get Care Today</a>
-      <a href="appointment.html" class="appointment-btn">Book Appointment</a>
-      <a href="review.html" class="review-btn">Leave a Review</a>
+      <div class="hero-badges">
+        <span class="hero-badge">Trusted Care Team</span>
+        <span class="hero-badge">Compassionate Service</span>
+        <span class="hero-badge">Home Comfort First</span>
+      </div>
+
+      <div class="header-buttons">
+        <a href="#contact" class="cta">Get Care Today</a>
+        <a href="appointment.html" class="appointment-btn">Book Appointment</a>
+        <a href="review.html" class="review-btn">Leave a Review</a>
+      </div>
     </div>
   </header>
 
@@ -1512,7 +1606,7 @@
     <p class="section-subtitle">Professional home care services designed with comfort, safety, and dignity in mind.</p>
 
     <div class="services-grid">
-      <div class="service-card">
+      <div class="service-card reveal">
         <div class="service-image">
           <img src="service1.jpg" alt="Elderly Care" />
         </div>
@@ -1523,7 +1617,7 @@
         </div>
       </div>
 
-      <div class="service-card">
+      <div class="service-card reveal">
         <div class="service-image">
           <img src="service2.jpg" alt="Home Nursing" />
         </div>
@@ -1534,7 +1628,7 @@
         </div>
       </div>
 
-      <div class="service-card">
+      <div class="service-card reveal">
         <div class="service-image">
           <img src="service3.jpg" alt="Patient Care" />
         </div>
@@ -1545,7 +1639,7 @@
         </div>
       </div>
 
-      <div class="service-card">
+      <div class="service-card reveal">
         <div class="service-image">
           <img src="childcare.jpg" alt="Childcare" />
         </div>
@@ -1556,7 +1650,7 @@
         </div>
       </div>
 
-      <div class="service-card">
+      <div class="service-card reveal">
         <div class="service-image">
           <img src="cooking.jpg" alt="Cooking" />
         </div>
@@ -1567,7 +1661,7 @@
         </div>
       </div>
 
-      <div class="service-card">
+      <div class="service-card reveal">
         <div class="service-image">
           <img src="housework.jpg" alt="House Work" />
         </div>
@@ -1585,32 +1679,32 @@
     <p class="section-subtitle">We believe great care is built on trust, fast response, consistency, and genuine compassion.</p>
 
     <div class="features-grid">
-      <div class="feature-card">
+      <div class="feature-card reveal">
         <div class="feature-icon">💚</div>
         <h3>Compassion First</h3>
         <p>We treat every client with dignity, patience, kindness, and respect in every interaction.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card reveal">
         <div class="feature-icon">🏡</div>
         <h3>Care at Home</h3>
         <p>We help clients remain in familiar surroundings where comfort, routine, and emotional well-being are stronger.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card reveal">
         <div class="feature-icon">👩‍⚕️</div>
         <h3>Skilled Team</h3>
         <p>Our caregivers are selected and trained to deliver practical support and attentive service.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card reveal">
         <div class="feature-icon">⏱️</div>
         <h3>Responsive Support</h3>
         <p>Families can reach us easily and expect clear communication and dependable assistance.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card reveal">
         <div class="feature-icon">🤝</div>
         <h3>Family Partnership</h3>
         <p>We work together with families so loved ones feel secure, heard, and cared for every day.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card reveal">
         <div class="feature-icon">✨</div>
         <h3>Personalized Service</h3>
         <p>Every family is different, so each care arrangement is shaped around real day-to-day needs.</p>
@@ -1623,7 +1717,7 @@
     <p class="section-subtitle">Our goal is not only to help with tasks, but also to bring calm, confidence, and comfort into the home.</p>
 
     <div class="story-wrap">
-      <div class="story-text">
+      <div class="story-text reveal-left">
         <h3>Support with heart, skill, and consistency</h3>
         <p>
           Whether a family needs elderly support, patient recovery assistance, childcare help, cooking support, or everyday home assistance, RS Home Nursing Care focuses on making each day smoother and safer. We know that quality care is about more than routine help—it is about preserving dignity, reducing stress, and creating a sense of reassurance for both the client and the family.
@@ -1639,7 +1733,7 @@
         </div>
       </div>
 
-      <div class="story-image">
+      <div class="story-image reveal-right" id="storyImage">
         <img src="elderly1.jpg" alt="Caregiver supporting elderly person at home" />
         <div class="story-badge">
           <strong>Trusted Home Care</strong><br />
@@ -1653,42 +1747,29 @@
     <h2>Our Gallery</h2>
 
     <div class="gallery">
-      <a href="" class="card-link">
-        <div class="gallery-card">
-          <img src="team 1.jpeg" alt="Compassionate elderly home care" />
-          <div class="gallery-overlay">
-          </div>
-        </div>
-      </a>
+      <div class="gallery-card reveal">
+        <img src="team 1.jpeg" alt="Compassionate elderly home care" />
+        <div class="gallery-overlay"></div>
+      </div>
 
-      <a href="" class="card-link">
-        <div class="gallery-card">
-          <img src="team 2.jpeg" alt="Professional caregivers at work" />
-          <div class="gallery-overlay">
-            
-          </div>
-        </div>
-      </a>
+      <div class="gallery-card reveal">
+        <img src="team 2.jpeg" alt="Professional caregivers at work" />
+        <div class="gallery-overlay"></div>
+      </div>
 
-      <div class="gallery-card">
+      <div class="gallery-card reveal">
         <img src="team 3.jpeg" alt="Trusted care team" />
-        <div class="gallery-overlay">
-     
-        </div>
+        <div class="gallery-overlay"></div>
       </div>
 
-      <div class="gallery-card">
+      <div class="gallery-card reveal">
         <img src="team 4.jpeg" alt="Senior care at home" />
-        <div class="gallery-overlay">
-      
-        </div>
+        <div class="gallery-overlay"></div>
       </div>
 
-      <div class="gallery-card">
+      <div class="gallery-card reveal">
         <img src="team 5.jpeg" alt="Home nursing support" />
-        <div class="gallery-overlay">
-       
-        </div>
+        <div class="gallery-overlay"></div>
       </div>
     </div>
   </section>
@@ -1698,17 +1779,17 @@
     <p class="section-subtitle">Kind words from families inspire us to keep delivering dependable and compassionate care.</p>
 
     <div class="testimonial-grid">
-      <div class="testimonial-card">
+      <div class="testimonial-card reveal">
         <div class="quote-mark">“</div>
         <p>We felt supported from the very beginning. The caregiver was respectful, calm, and truly caring. Our family had peace of mind knowing help was always there when needed.</p>
         <h4>Family Member</h4>
       </div>
-      <div class="testimonial-card">
+      <div class="testimonial-card reveal">
         <div class="quote-mark">“</div>
         <p>The team made recovery at home much easier. Their patience, kindness, and regular support helped our loved one feel comfortable and secure every day.</p>
         <h4>Client Family</h4>
       </div>
-      <div class="testimonial-card">
+      <div class="testimonial-card reveal">
         <div class="quote-mark">“</div>
         <p>Professional, warm, and dependable. They did more than help with routine tasks—they brought confidence and calm back into our home.</p>
         <h4>Happy Customer</h4>
@@ -1721,18 +1802,18 @@
     <p class="section-subtitle">A few important things families often look for when choosing the right care support.</p>
 
     <div class="checklist-grid">
-      <div class="check-item"><strong>Clear communication</strong> Families should always know what support is being provided.</div>
-      <div class="check-item"><strong>Safety and dignity</strong> Every task should be handled with care and respect.</div>
-      <div class="check-item"><strong>Consistent routine</strong> A calm and reliable daily structure matters.</div>
-      <div class="check-item"><strong>Qualified support</strong> Caregivers should be trained and dependable.</div>
-      <div class="check-item"><strong>Personal attention</strong> Care should fit the person, not the other way around.</div>
-      <div class="check-item"><strong>Family confidence</strong> Good care supports the whole household, not only the client.</div>
+      <div class="check-item reveal"><strong>Clear communication</strong> Families should always know what support is being provided.</div>
+      <div class="check-item reveal"><strong>Safety and dignity</strong> Every task should be handled with care and respect.</div>
+      <div class="check-item reveal"><strong>Consistent routine</strong> A calm and reliable daily structure matters.</div>
+      <div class="check-item reveal"><strong>Qualified support</strong> Caregivers should be trained and dependable.</div>
+      <div class="check-item reveal"><strong>Personal attention</strong> Care should fit the person, not the other way around.</div>
+      <div class="check-item reveal"><strong>Family confidence</strong> Good care supports the whole household, not only the client.</div>
     </div>
   </section>
 
   <section id="contact" class="reveal">
     <div class="contact-box">
-      <div class="contact-details">
+      <div class="contact-details reveal-left">
         <h2>Contact Us</h2>
         <p>Tell us what kind of support you need and our team will get in touch with you shortly.</p>
 
@@ -1748,7 +1829,7 @@
 
         <div class="contact-stats">
           <div class="contact-stat">
-            <strong class="counter" data-target="2">2</strong>
+            <strong class="counter" data-target="2">0</strong>
             Branch Locations
           </div>
           <div class="contact-stat">
@@ -1756,7 +1837,7 @@
             Responsive Support
           </div>
           <div class="contact-stat">
-            <strong class="counter" data-target="100">100</strong>
+            <strong class="counter" data-target="100">0</strong>
             Client-Focused Care
           </div>
           <div class="contact-stat">
@@ -1766,7 +1847,7 @@
         </div>
       </div>
 
-      <div class="contact-form">
+      <div class="contact-form reveal-right">
         <div class="form-title">
           <h3>Begin Your Care Journey</h3>
           <p>Fill in your details and let us know the service you are looking for.</p>
@@ -1842,7 +1923,7 @@
           </div>
 
           <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;">
-            <button type="submit">Send Enquiry</button>
+            <button type="submit" id="submitBtn">Send Enquiry</button>
             <a href="agreements.html" target="_blank" class="view-agreement">View Agreement</a>
           </div>
         </form>
@@ -1858,71 +1939,45 @@
   </footer>
 
   <script>
-    const easterEggs = document.getElementById("easterEggs");
     const form = document.getElementById("enquiryForm");
     const successMsg = document.getElementById("successMessage");
-    const snowfall = document.getElementById("snowfall");
     const progressBar = document.getElementById("progressBar");
     const nav = document.querySelector(".rs-nav");
     const navToggle = document.getElementById("navToggle");
     const navMenu = document.getElementById("navMenu");
+    const chatPopup = document.getElementById("chatPopup");
+    const closeChat = document.getElementById("closeChat");
+    const cursorGlow = document.getElementById("cursorGlow");
+    const loader = document.getElementById("pageLoader");
+    const loaderBar = document.getElementById("loaderBar");
+    const loaderPercent = document.getElementById("loaderPercent");
+    const submitBtn = document.getElementById("submitBtn");
+    const storyImage = document.getElementById("storyImage");
+    const allSections = [...document.querySelectorAll("section[id]")];
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function createEasterEggs(count = 14){
-      if(!easterEggs) return;
+    function startLoader(){
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 12 + 6;
+        if(progress >= 92){
+          progress = 92;
+          clearInterval(interval);
+        }
+        loaderBar.style.width = progress + "%";
+        loaderPercent.textContent = Math.floor(progress) + "%";
+      }, 120);
 
-      const colors = [
-        "linear-gradient(180deg,#ffd6e7,#ffb6d2)",
-        "linear-gradient(180deg,#fff0b8,#ffe181)",
-        "linear-gradient(180deg,#d6f7ff,#9fe8ff)",
-        "linear-gradient(180deg,#e4dbff,#c7b7ff)",
-        "linear-gradient(180deg,#daf8d8,#a8efaa)"
-      ];
+      window.addEventListener("load", () => {
+        clearInterval(interval);
+        loaderBar.style.width = "100%";
+        loaderPercent.textContent = "100%";
 
-      for(let i = 0; i < count; i++){
-        const egg = document.createElement("span");
-        egg.className = "easter-egg";
-
-        const left = Math.random() * 100;
-        const duration = Math.random() * 18 + 18;
-        const delay = Math.random() * -30;
-        const drift = `${(Math.random() * 160 - 80).toFixed(0)}px`;
-        const size = Math.random() * 16 + 22;
-
-        egg.style.left = `${left}%`;
-        egg.style.width = `${size}px`;
-        egg.style.height = `${size * 1.32}px`;
-        egg.style.background = colors[Math.floor(Math.random() * colors.length)];
-        egg.style.animationDuration = `${duration}s, ${Math.random() * 3 + 2.8}s`;
-        egg.style.animationDelay = `${delay}s, ${Math.random() * 2}s`;
-        egg.style.setProperty("--egg-drift", drift);
-
-        easterEggs.appendChild(egg);
-      }
-    }
-
-    function createSnowflakes(count = 55){
-      if(!snowfall) return;
-
-      for(let i = 0; i < count; i++){
-        const flake = document.createElement("span");
-        flake.className = "snowflake";
-
-        const size = Math.random() * 6 + 4;
-        const left = Math.random() * 100;
-        const duration = Math.random() * 10 + 10;
-        const delay = Math.random() * -20;
-        const drift = `${(Math.random() * 120 - 60).toFixed(0)}px`;
-
-        flake.style.width = `${size}px`;
-        flake.style.height = `${size}px`;
-        flake.style.left = `${left}%`;
-        flake.style.opacity = (Math.random() * 0.5 + 0.35).toFixed(2);
-        flake.style.animationDuration = `${duration}s`;
-        flake.style.animationDelay = `${delay}s`;
-        flake.style.setProperty("--drift", drift);
-
-        snowfall.appendChild(flake);
-      }
+        setTimeout(() => {
+          loader.classList.add("hidden");
+          document.body.classList.remove("loading");
+        }, 450);
+      });
     }
 
     function toggleNav(){
@@ -1947,18 +2002,31 @@
     }
 
     document.addEventListener("click", function(e){
-      if(!nav.contains(e.target)){
+      if(nav && !nav.contains(e.target)){
         closeNav();
       }
     });
 
+    if(closeChat && chatPopup){
+      closeChat.addEventListener("click", () => {
+        chatPopup.classList.add("hide");
+      });
+    }
+
     if(form){
-      form.addEventListener("submit", function () {
+      form.addEventListener("submit", function(){
+        if(submitBtn){
+          submitBtn.textContent = "Sending...";
+        }
+
         successMsg.style.display = "block";
 
         setTimeout(() => {
           form.reset();
-        }, 300);
+          if(submitBtn){
+            submitBtn.textContent = "Send Enquiry";
+          }
+        }, 500);
 
         setTimeout(() => {
           successMsg.style.display = "none";
@@ -1966,7 +2034,7 @@
       });
     }
 
-    const observer = new IntersectionObserver((entries)=>{
+    const revealObserver = new IntersectionObserver((entries)=>{
       entries.forEach((entry)=>{
         if(entry.isIntersecting){
           entry.target.classList.add("active");
@@ -1974,11 +2042,30 @@
       });
     }, { threshold:0.14 });
 
-    document.querySelectorAll(".reveal").forEach((el)=>{
-      observer.observe(el);
+    document.querySelectorAll(".reveal, .reveal-left, .reveal-right").forEach((el, index)=>{
+      el.style.transitionDelay = `${Math.min(index % 6, 5) * 70}ms`;
+      revealObserver.observe(el);
     });
 
-    window.addEventListener("scroll", ()=>{
+    function updateActiveNav(){
+      let current = "";
+
+      allSections.forEach(section => {
+        const sectionTop = section.offsetTop - 140;
+        if(window.scrollY >= sectionTop){
+          current = section.getAttribute("id");
+        }
+      });
+
+      document.querySelectorAll(".nav-menu a").forEach(link => {
+        link.classList.remove("active-link");
+        if(link.getAttribute("href") === `#${current}`){
+          link.classList.add("active-link");
+        }
+      });
+    }
+
+    function updateScrollUI(){
       if(window.scrollY > 50){
         nav.classList.add("scrolled");
       }else{
@@ -1989,12 +2076,16 @@
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
       progressBar.style.width = scrolled + "%";
-    });
+      updateActiveNav();
+    }
+
+    window.addEventListener("scroll", updateScrollUI, { passive:true });
+    window.addEventListener("load", updateScrollUI);
 
     function animateCounters(){
       const counters = document.querySelectorAll(".counter");
 
-      counters.forEach(counter=>{
+      counters.forEach(counter => {
         const target = +counter.getAttribute("data-target");
         let started = false;
 
@@ -2002,24 +2093,26 @@
           if(started) return;
           started = true;
 
-          let count = 0;
-          const increment = Math.max(1, Math.ceil(target / 60));
+          const duration = 1400;
+          const start = performance.now();
 
-          const update = () => {
-            count += increment;
-            if(count < target){
-              counter.innerText = count;
+          const update = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            counter.innerText = Math.floor(target * eased);
+
+            if(progress < 1){
               requestAnimationFrame(update);
             }else{
               counter.innerText = target;
             }
           };
 
-          update();
+          requestAnimationFrame(update);
         };
 
         const counterObserver = new IntersectionObserver((entries)=>{
-          entries.forEach(entry=>{
+          entries.forEach(entry => {
             if(entry.isIntersecting){
               runCounter();
               counterObserver.disconnect();
@@ -2031,9 +2124,59 @@
       });
     }
 
-    createEasterEggs();
-    createSnowflakes();
+    function initCursorGlow(){
+      if(prefersReducedMotion || !cursorGlow) return;
+
+      window.addEventListener('mousemove', (e) => {
+        cursorGlow.classList.add('active');
+        cursorGlow.style.left = e.clientX + 'px';
+        cursorGlow.style.top = e.clientY + 'px';
+      });
+
+      window.addEventListener('mouseout', () => {
+        cursorGlow.classList.remove('active');
+      });
+    }
+
+    function initTiltCards(){
+      if(prefersReducedMotion) return;
+
+      document.querySelectorAll('.service-card, .feature-card, .mini-box, .testimonial-card, .check-item, .gallery-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          if(window.innerWidth <= 768) return;
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const rotateY = ((x / rect.width) - 0.5) * 6;
+          const rotateX = ((y / rect.height) - 0.5) * -6;
+          card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+    }
+
+    function initStoryParallax(){
+      if(prefersReducedMotion || !storyImage) return;
+
+      window.addEventListener('scroll', () => {
+        const rect = storyImage.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+
+        if(rect.top < viewportHeight && rect.bottom > 0){
+          const offset = (rect.top - viewportHeight / 2) * -0.03;
+          storyImage.style.transform = `translateY(${offset}px)`;
+        }
+      }, { passive:true });
+    }
+
+    startLoader();
     animateCounters();
+    initCursorGlow();
+    initTiltCards();
+    initStoryParallax();
   </script>
 </body>
 </html>
