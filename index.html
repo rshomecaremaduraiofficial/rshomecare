@@ -46,6 +46,9 @@
             position: relative;
             line-height: 1.7;
             animation: pageFade .7s ease;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
 
             body.loading {
@@ -79,7 +82,29 @@
         img {
             max-width: 100%;
             display: block;
+            -webkit-user-drag: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            pointer-events: none;
         }
+
+        /* IMAGE PROTECTION */
+        .protected-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+            .protected-image .image-shield {
+                position: absolute;
+                inset: 0;
+                z-index: 5;
+                background: transparent;
+                cursor: default;
+            }
+
+            .protected-image img {
+                pointer-events: none;
+            }
 
         /* PAGE LOADER */
         .page-loader {
@@ -293,7 +318,7 @@
                 box-shadow: 0 16px 26px rgba(0,0,0,.10);
             }
 
-        header img {
+        header .hero-logo {
             max-width: 150px;
             margin: 0 auto 18px;
             animation: logoFloat 5s ease-in-out infinite;
@@ -597,6 +622,8 @@
             position: absolute;
             inset: 0;
             background: linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,.08), transparent);
+            z-index: 1;
+            pointer-events: none;
         }
 
         .service-body {
@@ -752,6 +779,7 @@
             box-shadow: 0 10px 24px rgba(0,0,0,.12);
             max-width: 260px;
             animation: floatSoft 4s ease-in-out infinite;
+            z-index: 6;
         }
 
         /* GALLERY */
@@ -800,6 +828,8 @@
             padding: 22px 18px 16px;
             background: linear-gradient(to top, rgba(0,0,0,.7), rgba(0,0,0,.15), transparent);
             color: #fff;
+            z-index: 1;
+            pointer-events: none;
         }
 
             .gallery-overlay h3 {
@@ -964,6 +994,8 @@
                 font-size: 14px;
                 margin-bottom: 10px;
                 word-break: break-word;
+                -webkit-user-select: text;
+                user-select: text;
             }
 
         .contact-stats {
@@ -1039,6 +1071,8 @@
                 font-size: 14px;
                 color: #243879;
                 appearance: none;
+                -webkit-user-select: text;
+                user-select: text;
             }
 
             .form-group textarea {
@@ -1668,10 +1702,13 @@
     </style>
 </head>
 
-<body class="loading">
+<body class="loading" oncontextmenu="return false">
     <div class="page-loader" id="pageLoader">
         <div class="loader-box">
-            <img src="logo.png" alt="RS Home Care Logo" class="loader-logo" />
+            <div class="protected-image" style="display:inline-block;">
+                <img src="logo.png" alt="RS Home Care Logo" class="loader-logo" draggable="false" />
+                <span class="image-shield"></span>
+            </div>
             <h2>RS Home Nursing Care</h2>
             <p>Loading care services experience...</p>
             <div class="loader-track">
@@ -1695,7 +1732,11 @@
         <span class="hero-bg-orb two"></span>
 
         <div class="hero-content">
-            <img src="logo.png" alt="RS Home Care Logo" />
+            <div class="protected-image" style="display:inline-block;">
+                <img src="logo.png" alt="RS Home Care Logo" class="hero-logo" draggable="false" />
+                <span class="image-shield"></span>
+            </div>
+
             <h1>RS Home Nursing Care</h1>
             <p>Professional home nursing, elderly support, patient care, childcare, cooking, and household assistance delivered with dignity and heart.</p>
 
@@ -1771,8 +1812,9 @@
 
         <div class="services-grid">
             <div class="service-card reveal">
-                <div class="service-image">
-                    <img src="service1.jpg" alt="Elderly Care" />
+                <div class="service-image protected-image">
+                    <img src="service1.jpg" alt="Elderly Care" draggable="false" />
+                    <span class="image-shield"></span>
                 </div>
                 <div class="service-body">
                     <h3>Elderly Care</h3>
@@ -1782,8 +1824,9 @@
             </div>
 
             <div class="service-card reveal">
-                <div class="service-image">
-                    <img src="service2.jpg" alt="Home Nursing" />
+                <div class="service-image protected-image">
+                    <img src="service2.jpg" alt="Home Nursing" draggable="false" />
+                    <span class="image-shield"></span>
                 </div>
                 <div class="service-body">
                     <h3>Home Nursing</h3>
@@ -1793,8 +1836,9 @@
             </div>
 
             <div class="service-card reveal">
-                <div class="service-image">
-                    <img src="service3.jpg" alt="Patient Care" />
+                <div class="service-image protected-image">
+                    <img src="service3.jpg" alt="Patient Care" draggable="false" />
+                    <span class="image-shield"></span>
                 </div>
                 <div class="service-body">
                     <h3>Patient Care</h3>
@@ -1804,8 +1848,9 @@
             </div>
 
             <div class="service-card reveal">
-                <div class="service-image">
-                    <img src="childcare.jpg" alt="Childcare" />
+                <div class="service-image protected-image">
+                    <img src="childcare.jpg" alt="Childcare" draggable="false" />
+                    <span class="image-shield"></span>
                 </div>
                 <div class="service-body">
                     <h3>Childcare</h3>
@@ -1815,8 +1860,9 @@
             </div>
 
             <div class="service-card reveal">
-                <div class="service-image">
-                    <img src="cooking.jpg" alt="Cooking" />
+                <div class="service-image protected-image">
+                    <img src="cooking.jpg" alt="Cooking" draggable="false" />
+                    <span class="image-shield"></span>
                 </div>
                 <div class="service-body">
                     <h3>Cooking Support</h3>
@@ -1826,8 +1872,9 @@
             </div>
 
             <div class="service-card reveal">
-                <div class="service-image">
-                    <img src="housework.jpg" alt="House Work" />
+                <div class="service-image protected-image">
+                    <img src="housework.jpg" alt="House Work" draggable="false" />
+                    <span class="image-shield"></span>
                 </div>
                 <div class="service-body">
                     <h3>House Work Assistance</h3>
@@ -1897,8 +1944,9 @@
                 </div>
             </div>
 
-            <div class="story-image reveal-right" id="storyImage">
-                <img src="elderly1.jpg" alt="Caregiver supporting elderly person at home" />
+            <div class="story-image reveal-right protected-image" id="storyImage">
+                <img src="elderly1.jpg" alt="Caregiver supporting elderly person at home" draggable="false" />
+                <span class="image-shield"></span>
                 <div class="story-badge">
                     <strong>Trusted Home Care</strong><br />
                     Helping families feel supported, secure, and cared for every step of the way.
@@ -1911,28 +1959,33 @@
         <h2>Our Gallery</h2>
 
         <div class="gallery">
-            <div class="gallery-card reveal">
-                <img src="team 1.jpeg" alt="Compassionate elderly home care" />
+            <div class="gallery-card reveal protected-image">
+                <img src="team 1.jpeg" alt="Compassionate elderly home care" draggable="false" />
+                <span class="image-shield"></span>
                 <div class="gallery-overlay"></div>
             </div>
 
-            <div class="gallery-card reveal">
-                <img src="team 2.jpeg" alt="Professional caregivers at work" />
+            <div class="gallery-card reveal protected-image">
+                <img src="team 2.jpeg" alt="Professional caregivers at work" draggable="false" />
+                <span class="image-shield"></span>
                 <div class="gallery-overlay"></div>
             </div>
 
-            <div class="gallery-card reveal">
-                <img src="team 3.jpeg" alt="Trusted care team" />
+            <div class="gallery-card reveal protected-image">
+                <img src="team 3.jpeg" alt="Trusted care team" draggable="false" />
+                <span class="image-shield"></span>
                 <div class="gallery-overlay"></div>
             </div>
 
-            <div class="gallery-card reveal">
-                <img src="team 4.jpeg" alt="Senior care at home" />
+            <div class="gallery-card reveal protected-image">
+                <img src="team 4.jpeg" alt="Senior care at home" draggable="false" />
+                <span class="image-shield"></span>
                 <div class="gallery-overlay"></div>
             </div>
 
-            <div class="gallery-card reveal">
-                <img src="team 5.jpeg" alt="Home nursing support" />
+            <div class="gallery-card reveal protected-image">
+                <img src="team 5.jpeg" alt="Home nursing support" draggable="false" />
+                <span class="image-shield"></span>
                 <div class="gallery-overlay"></div>
             </div>
         </div>
@@ -2345,11 +2398,60 @@
             }, { passive: true });
         }
 
+        /* IMAGE PROTECTION */
+        function initImageProtection() {
+            document.querySelectorAll("img").forEach(img => {
+                img.setAttribute("draggable", "false");
+                img.addEventListener("dragstart", e => e.preventDefault());
+                img.addEventListener("contextmenu", e => e.preventDefault());
+            });
+
+            document.querySelectorAll(".image-shield").forEach(shield => {
+                shield.addEventListener("contextmenu", e => e.preventDefault());
+                shield.addEventListener("dragstart", e => e.preventDefault());
+                shield.addEventListener("mousedown", e => {
+                    if (e.button === 2) e.preventDefault();
+                });
+                shield.addEventListener("touchstart", e => {
+                    if (e.touches.length > 1) e.preventDefault();
+                }, { passive: false });
+            });
+
+            document.addEventListener("contextmenu", function (e) {
+                e.preventDefault();
+            });
+
+            document.addEventListener("dragstart", function (e) {
+                e.preventDefault();
+            });
+
+            document.addEventListener("selectstart", function (e) {
+                const allowed = e.target.closest("input, textarea, select, p");
+                if (!allowed) {
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener("keydown", function (e) {
+                const key = e.key.toLowerCase();
+
+                if (
+                    e.key === "F12" ||
+                    (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(key)) ||
+                    (e.ctrlKey && ["s", "u", "p"].includes(key)) ||
+                    (e.metaKey && ["s", "p"].includes(key))
+                ) {
+                    e.preventDefault();
+                }
+            });
+        }
+
         startLoader();
         animateCounters();
         initCursorGlow();
         initTiltCards();
         initStoryParallax();
+        initImageProtection();
     </script>
 </body>
 </html>
